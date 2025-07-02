@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <title>sing_Up</title>
+</head>
+<body>
+<div class="header-contents">
+    <h1>-New Registration-</h1>
+</div><br/>
+
+<div th:if="${errorMessageForm}" class="alert-error" role="alert">
+    <strong style="color:red;" th:text="${errorMessageForm}"></strong>
+</div>
+
+<div class="main-contents-register">
+    <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
+    <form th:action="@{/insert}" th:object="${formModel}" th:method="post">
+        <!--  ユーザー登録 -->
+        <label>アカウント<br/>
+            <input type="text" th:field="*{account}" class="form-control"></label><br/>
+        <div th:if="${#fields.hasErrors('account')}" style="color:red;" th:errors="*{account}"></div>
+
+        <label>パスワード<br/>
+            <input type="password" th:field="*{password}" class="form-control"></label><br/>
+        <div th:if="${#fields.hasErrors('password')}" style="color:red;" th:errors="*{password}"></div>
+
+        <label>パスワード確認<br/>
+            <input type="password" th:field="*{passwordConfirm}" />
+        </label><br/>
+        <div th:if="${#fields.hasErrors('passwordConfirm')}" style="color:red;" th:errors="*{passwordConfirm}"></div>
+
+        <label>氏名<br/>
+            <input type="text" th:field="*{name}" class="form-control"></label><br/>
+        <div th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}"></div>
+
+        <label>役職<br/>
+            <select th:field="*{postId}" class="form-control">
+                <option value="" disabled selected>選択してください</option>
+                <option th:each="entry : ${postOptions}"
+                        th:value="${entry.key}"
+                        th:text="${entry.value}"></option>
+            </select>
+        </label><br/>
+        <div th:if="${#fields.hasErrors('postId')}" style="color:red;" th:errors="*{postId}"></div>
+
+        <div class="button-signup">
+            <button type="submit" class="submit-btn2">決定</button>
+        </div>
+    </form>
+    <form th:action="@{/management}">
+        <div class="button-signup">
+            <button type="submit" class="submit-btn2">戻る</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
