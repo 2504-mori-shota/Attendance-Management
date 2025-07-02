@@ -20,7 +20,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public ModelAndView view(){
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
