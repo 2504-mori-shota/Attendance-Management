@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>ログイン画面</title>
 </head>
 <body>
+<!--エラーメッセージリストが送られてきたときに表示-->
+<th:block th:if="${errorMessages != null && !errorMessages.isEmpty()}">
+    <div th:each="errorMessage:${errorMessages}">
+        <span th:text="${errorMessage}" style="color:red"></span>
+    </div>
+</th:block>
+<div class="login-icon">
+    <!--  ログイン情報をコントローラーに渡す-->
+    <form th:method="post" th:action="@{/login}">
+        <div class="form-area">
+            <label>アカウント</label>
+            <!--      入力されたアカウント名をコントローラーに渡す-->
+            <input type="text" th:name="account" th:value="${account}" placeholder="アカウント名を入力">
+        </div>
 
+        <div class="form-area">
+            <label>パスワード</label>
+            <!--      入力されたパスワードをコントローラーに渡す-->
+            <input type="password" name="password" placeholder="パスワードを入力">
+        </div>
+        <input type="submit" value="ログイン" class="btn"/>
+    </form>
+</div>
 </body>
 </html>
