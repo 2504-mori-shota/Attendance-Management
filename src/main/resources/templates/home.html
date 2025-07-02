@@ -24,8 +24,152 @@
             <button type="submit">ユーザー管理</button>
         </form>
 
+        <form th:action="@{/signup}">
+            <button type="submit">ユーザー登録画面</button>
+        </form>
+
     </div>
 </div>
+<form name="myform"
+      style="text-align: center;">
+    <header style="background: #FFEEEE;">
+        <div style="text-align: left;">
+            <div class="block_header">会社名</div>
+            <div class="block__element" th:text="${companyName}"></div>
+            <div class="block_header">氏名</div>
+            <div class="block__element" th:text="${userName}"></div>
+        </div>
+    </header>
+
+
+    <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
+        <div style="text-align: left;">
+            <input type="hidden" th:id="hYerId" th:name="'hYer'" th:value="${yer}">
+            <input type="hidden" th:id="hMonthId" th:name="'hMonth'"th:value="${month}">
+
+            <div class="block__element"><p th:name="'yermon'" th:text=" ${yer} + '年　' + ${month} + '月'">
+            </div>
+            <div class="block__element">
+                <input type="button" id="bMonth" value="前月" onclick='onClickMonth(-1);'>
+                <input type="button" id="aMonth" value="次月" onclick='onClickMonth(1);'>
+            </div>
+        </div>
+
+        <thead>
+        <tr>
+            <th style="width: 20px;">日</th>
+            <th style="width: 40px;">曜日</th>
+            <th style="width: 60px;">区分</th>
+            <th style="width: 60px;">出社</th>
+            <th style="width: 60px;">退社</th>
+            <th style="width: 50px;">休憩<br>時間
+            </th>
+            <th style="width: 60px;">就業<br>時間
+            </th>
+            <th style="width: 200px;">備考</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row, stat : ${attendance}" th:style="'background-color:' + @{(${row.week == '1' || row.week == '7'} ? '#dda0dd' : '#FFFFFF')} + ''">
+            <td th:text="${row.day}"></td>
+            <td th:text="${row.week_name}"></td>
+            <td>
+                <input type="hidden" th:id="hLogid"
+                       th:name="'hLogid[' + ${stat.index} + ']'"
+                       th:value="${row.logid}">
+                <input type="hidden" th:id="hDay"
+                       th:name="'hDay[' + ${stat.index} + ']'"
+                       th:value="${row.day}">
+                <select id="singleSelectId"
+                        th:id="'singleSelect[' + ${stat.index} + ']'" name="status"
+                        th:name="'status[' + ${stat.index} + ']'"
+                >
+                    <option th:value="${row.status}"></option>
+                    <option th:each="item : ${statusItems}" th:value="${item.key}"
+                            th:text="${item.value}"
+                            th:selected="${item.key} == *{row.status}"></option>
+                </select>
+                <input type="hidden" th:id="hStatusId"
+                       th:name="'hStatus[' + ${stat.index} + ']'"
+                       th:value="${row.status}">
+            </td>
+            <td><input type="time"
+                       name="start_time" th:name="'start_time[' + ${stat.index} + ']'"
+                       th:value="${row.start_time}" pattern="[0-9:]{1,}"
+                       onblur="myFnc(' + ${stat.index} + ');">
+                <input type="hidden" th:id="hStart_timeId"
+                       th:name="'hStart_time[' + ${stat.index} + ']'"
+                       th:value="${row.start_time}">
+            </td>
+            <td><input type="time"
+                       name="end_time" th:name="'end_time[' + ${stat.index} + ']'"
+                       th:value="${row.end_time}" pattern="[0-9:]{1,}"
+                       onblur="myFnc(' + ${stat.index} + ');">
+                <input type="hidden" th:id="hEnd_timeId"
+                       th:name="'hEnd_time[' + ${stat.index} + ']'"
+                       th:value="${row.end_time}">
+            </td>
+            <td><input type="time"
+                       name="break_time" th:name="'break_time[' + ${stat.index} + ']'"
+                       th:value="${row.break_time}" pattern="[0-9:]{1,}"
+                       onblur="myFnc(' + ${stat.index} + ');">
+                <input type="hidden" th:id="hBreak_timeId"
+                       th:name="'hBreak_time[' + ${stat.index} + ']'"
+                       th:value="${row.break_time}">
+            </td>
+            <td><input type="text" style="width: 60px;" maxlength='5'
+                       name="work_time" th:name="'work_time[' + ${stat.index} + ']'"
+                       pattern="[0-9:]{1,}">
+                <input type="hidden" th:id="hWork_timeId"
+                       th:name="'hWork_time[' + ${stat.index} + ']'" >
+            </td>
+            <td><input type="text" style="width: 180px;" maxlength='10'
+                       name="memo" th:name="'memo[' + ${stat.index} + ']'"
+                       th:value="${row.memo}">
+                <input type="hidden" th:id="hMemoId"
+                       th:name="'hMemo[' + ${stat.index} + ']'"
+                       th:value="${row.memo}">
+
+                <!-- hiddnChk -->
+                <input type="hidden" th:id="hRegist_id"
+                       th:name="'hRegist_id[' + ${stat.index} + ']'"
+                       th:value="${row.regist_id}">
+                <input type="hidden" th:id="hRegist_dt"
+                       th:name="'hRegist_dt[' + ${stat.index} + ']'"
+                       th:value="${row.regist_dt}">
+                <input type="hidden" th:id="hUpdate_id"
+                       th:name="'hUpdate_id[' + ${stat.index} + ']'"
+                       th:value="${row.update_id}">
+                <input type="hidden" th:id="hUpdate_dt"
+                       th:name="'hUpdate_dt[' + ${stat.index} + ']'"
+                       th:value="${row.update_dt}">
+                <input type="hidden" th:id="hInsUpdChekVal"
+                       th:name="'hInsUpdChekVal[' + ${stat.index} + ']'"
+                       th:value="SKIP">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="list" border="1">
+        <tr>
+            <th style="width: 245px;"></th>
+            <th style="width: 50px;">休憩<br>時間
+            </th>
+            <th style="width: 50px;">就業<br>時間
+            </th>
+
+        </tr>
+        <tr>
+            <td></td>
+            <td id="total_breakId" style="width: 100px;"></td>
+            <td id="total_WorkId" style="width: 100px;"></td>
+
+        </tr>
+
+    </table>
+    <input type="button" name="send" value="送信" onclick='setSubmit();'>
+</form>
 
 </body>
 </html>
