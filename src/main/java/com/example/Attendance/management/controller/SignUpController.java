@@ -31,7 +31,7 @@ public class SignUpController {
 //    @Autowired
 //    HttpSession session;
 
-    @GetMapping("/signUp")
+    @GetMapping("/signup")
     public ModelAndView newContent(
             HttpServletRequest request,
             HttpServletResponse response,
