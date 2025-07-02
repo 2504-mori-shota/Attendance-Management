@@ -6,12 +6,26 @@
     <title>勤怠管理</title>
 </head>
 <body>
+<div class="kotei">
+    <div class="header-contents">
+        <h1>勤怠管理</h1>
+        <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
+            <strong th:text="${errorMessageForm}"></strong>
+        </div>
+        <p>本日の日付: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
+    </div>
+    <div class="button-rightTop">
+        <form th:action="@{/logout}">
+            <button type="submit">ログアウト</button>
+        </form>
+
+        <form th:action="@{/management}" th:method="get" th:object="${user}">
+<!--              th:if="${session.user.branchId == 1 and session.user.departmentId == 1}">-->
+            <button type="submit">ユーザー管理</button>
+        </form>
+
+    </div>
 </div>
-<p>本日の日付: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
-</div>
-
-
-
 
 </body>
 </html>
