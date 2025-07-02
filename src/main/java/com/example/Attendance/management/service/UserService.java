@@ -74,4 +74,19 @@ public class UserService {
         report.setIsStopped(reqUser.getIsStopped());
         return report;
     }
+
+    public UserForm login(String account, String password) {
+
+        List<User> results = userRepository.findByAccount(account);
+
+        if(results.size() == 0) {
+            return null;
+        }
+        if (passwordEncoder.matches(password,results.get(0).getPassword())){
+            List<UserForm> users = setUserForm(results);
+            return users.get(0);
+        } else {
+            return null;
+        }
+    }
 }
