@@ -26,12 +26,12 @@ public class LoginController {
         // form用の空のentityを準備
         UserForm userForm = new UserForm();
         // ログインフィルターのエラーメッセージをセッションから受け取る
-        //List<String> errorMessages = (List<String>) session.getAttribute("errorMessages");
+        List<String> errorMessages = (List<String>) session.getAttribute("errorMessages");
         // エラーメッセージがnullじゃなかったらViewに渡す
-//        if(errorMessages != null){
-//            mav.addObject("errorMessages", errorMessages);
-//        }
-//        session.removeAttribute("errorMessages");
+        if(errorMessages != null){
+            mav.addObject("errorMessages", errorMessages);
+        }
+        session.removeAttribute("errorMessages");
         // 画面遷移先を指定
         mav.setViewName("/login");
         // 準備した空のFormを保管
@@ -55,13 +55,13 @@ public class LoginController {
             errorMessages.add("アカウントを入力してください");
             mav.setViewName("/login");
             // 半角英数字かつ文字数チェック
-//        }else if(!account.matches("^[a-zA-Z0-9]{6,20}+$")) {
-//            errorMessages.add("アカウントは半角英数字かつ6文字以上20文字以下で入力してください");
-//            mav.setViewName("/login");
-//        // 半角文字かつ文字数チェック
-//        }else if(!password.matches("^[!-~]{6,20}+$")) {
-//            errorMessages.add("パスワードは半角文字かつ6文字以上20文字以下で入力してください");
-//            mav.setViewName("/login");
+        }else if(!account.matches("^[a-zA-Z0-9]{6,20}+$")) {
+            errorMessages.add("アカウントは半角英数字かつ6文字以上20文字以下で入力してください");
+            mav.setViewName("/login");
+        // 半角文字かつ文字数チェック
+        }else if(!password.matches("^[!-~]{6,20}+$")) {
+            errorMessages.add("パスワードは半角文字かつ6文字以上20文字以下で入力してください");
+            mav.setViewName("/login");
         }else{
             // アカウント情報とパスワード情報で指定のアカウントを探しに行く
             UserForm user = userService.login(account, password);
@@ -79,11 +79,8 @@ public class LoginController {
             // ホーム画面にリダイレクト処理
             mav.setViewName("redirect:/home");
         }
-        //下記　要るか分からん
-//        // エラーメッセージのリストをViewに渡す
-//        mav.addObject("errorMessages", errorMessages);
-//        // ログインに失敗した場合にアカウント情報が保持されるように
-//        mav.addObject("account", account);
+        // エラーメッセージのリストをViewに渡す
+        mav.addObject("errorMessages", errorMessages);
         return mav;
     }
 
