@@ -44,6 +44,7 @@
     </thead>
     <tbody>
     <tr th:each="row : ${attendances}" th:if="${row != null}">
+        <form th:action="@{/attendanceedit}" th:object="${formModel}" th:method="post">
         <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'M/dd') : '-'}"></td>
         <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'HH:mm') : '-'}"></td>
         <td th:text="${row.leave != null       ? #temporals.format(row.leave, 'HH:mm')      : '-'}"></td>
@@ -51,7 +52,10 @@
 <!--        ${T(java.time.Duration).between(row.attendance, row.leave).minusHours(1).toHoursPart()}-->
         <td th:text="|${#numbers.formatInteger(T(java.time.Duration).between(row.attendance, row.leave).minusHours(1).toHoursPart(),2)} :
         ${#numbers.formatInteger(T(java.time.Duration).between(row.attendance, row.leave).minusHours(1).toMinutesPart(),2)}|"></td>
-
+            <td class="button-signup">
+                <input type="submit" class="submit-btn2" value="編集"/>
+            </td>
+        </form>
     </tr>
     </tbody>
 </table>
