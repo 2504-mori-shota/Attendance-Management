@@ -2,46 +2,44 @@ package com.example.Attendance.management.controller;
 
 
 import com.example.Attendance.management.controller.form.UserForm;
+import com.example.Attendance.management.repository.entity.Attendance;
+import com.example.Attendance.management.service.AttendanceService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HomeController {
 
 
+
+    @Autowired
+    private AttendanceService attendanceService;
+
+    // ホーム画面に月間勤怠情報を表示
     @GetMapping("/home")
-    public ModelAndView newContent(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            RedirectAttributes redirectAttributes,
-            Model model) {
-        //session = request.getSession();
-        // UserForm user = (UserForm) session.getAttribute("user");
-        //List<UserForm> users = userService.findByIdWithDepartmentAndBranch(user.getId());
-        //UserForm userInfoForm =  users.get(0);
-
-        /*if (userInfoForm.getDepartment().getId() != 1 && userInfoForm.getDepartmentId() != 1) {
-            //フラッシュメッセージをセット
-            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なアクセスです");
-            return new ModelAndView("redirect:/home");
-        }*/
-
-
-        ModelAndView mav = new ModelAndView();
-        UserForm userForm = new UserForm();
-        mav.addObject("formModel", userForm);
-        //プルダウンで使用
-
-        // 画面遷移先を指定
-        mav.setViewName("/home");
-        return mav;
+    public String home(@RequestParam(value = "userId", required = false) Long userId, Model model) {
+        if (userId == null) {
+            // userId が指定されていない場合、空の勤怠情報を設定
+            model.addAttribute("attendances", List.of(new Attendance()));
+        } else {
+            // userId が指定されている場合、勤怠情報を取得
+            model.addAttribute("attendances", attendanceService.getMonthlyAttendance(userId, LocalDate.now()));
+        }
+        return "home";
     }
 
     @RequestMapping("/logout")

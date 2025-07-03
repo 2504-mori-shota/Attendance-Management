@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -34,11 +35,12 @@ public class Attendance {
     @Column
     private String comment;
 
-    @Column
-    private String state;
+    @Column(nullable = false)
+    private short state = 0;
 
-    @Column(insertable = false, updatable = false)
-    private Date createdDate;
-    @Column(insertable = false)
-    private Date updatedDate;
+    @Column(nullable = false)
+    private LocalDateTime createdDate = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private LocalDateTime updatedDate = LocalDateTime.now();
 }
