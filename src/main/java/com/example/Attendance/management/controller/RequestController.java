@@ -17,8 +17,8 @@ public class RequestController {
 
     @GetMapping("/request/list")
     public String view (Model model){
-//        List<RequestForm> requestForms = requestService.findRequest();
-//        model.addAttribute("requests",requestForms);
+        List<RequestForm> requestForms = requestService.findRequest();
+        model.addAttribute("requests",requestForms);
         return "request_list";
     }
 }
