@@ -50,11 +50,7 @@ public class AttendanceService {
             LocalDateTime endOfMonth = month.withDayOfMonth(month.lengthOfMonth())
                     .atTime(23, 59, 59);
 
-            return attendanceRepository.findByUserIdAndAttendanceBetween(
-                    userId,
-                    startOfMonth,
-                    endOfMonth
-            );
+            return attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
         }
 
 

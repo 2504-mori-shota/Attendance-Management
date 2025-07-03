@@ -28,12 +28,9 @@
 
 </div>
 
-
-<section>
-    <h3 th:text="${yer} + '年 ' + ${month} + '月'"></h3>
+<p>2025年7月</p>
     <button onclick="onClickMonth(-1)">前月</button>
     <button onclick="onClickMonth(1)">次月</button>
-</section>
 
 <table >
     <thead>
@@ -46,12 +43,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ron : ${attendances}">
-        <td th:text="${ron.id}"></td>
-        <td th:text="${ron.attendance}"></td>
-        <td th:text="${ron.leave}"></td>
-        <td th:text="${ron.comment}"></td>
-        <td th:text="${ron.stateId}"></td>
+    <tr th:each="row : ${attendances}" th:if="${row != null}">
+        <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'yyyy-MM-dd') : '-'}"></td>
+        <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'HH:mm') : '-'}"></td>
+        <td th:text="${row.leave != null       ? #temporals.format(row.leave, 'HH:mm')      : '-'}"></td>
+        <td th:text="${row.comment}"></td>
+        <td th:text="${row.stateId}"></td>
     </tr>
     </tbody>
 </table>
