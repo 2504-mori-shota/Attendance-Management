@@ -6,6 +6,7 @@ import com.example.Attendance.management.repository.entity.User;
 import com.example.Attendance.management.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,8 @@ public class SignUpController {
 
     @Autowired
     UserService userService;
-//    @Autowired
-//    HttpSession session;
+    @Autowired
+    HttpSession session;
 
     @GetMapping("/signup")
     public ModelAndView newContent(
@@ -37,16 +38,16 @@ public class SignUpController {
             HttpServletResponse response,
             RedirectAttributes redirectAttributes,
             Model model) {
-        //session = request.getSession();
-       // UserForm user = (UserForm) session.getAttribute("user");
-        //List<UserForm> users = userService.findByIdWithDepartmentAndBranch(user.getId());
-        //UserForm userInfoForm =  users.get(0);
+        session = request.getSession();
+        UserForm user = (UserForm) session.getAttribute("loginUser");
+        List<UserForm> users = userService.findByIdWithPost(user.getId());
+        UserForm userInfoForm =  users.get(0);
 
-        /*if (userInfoForm.getDepartment().getId() != 1 && userInfoForm.getDepartmentId() != 1) {
+        if (userInfoForm.getPostId() != 3) {
             //フラッシュメッセージをセット
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なアクセスです");
             return new ModelAndView("redirect:/home");
-        }*/
+        }
 
 
         ModelAndView mav = new ModelAndView();

@@ -1,6 +1,7 @@
 package com.example.Attendance.management.controller;
 
 
+import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.service.AttendanceService;
@@ -28,16 +29,24 @@ public class HomeController {
 
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    HttpSession session;
+
+
 
     // ホーム画面に月間勤怠情報を表示
     @GetMapping("/home")
-    public String home(@RequestParam(value = "userId", required = false) Long userId, Model model) {
-        if (userId == null) {
+    public String home(@RequestParam(value = "userId", required = false) Long userId, Model model,HttpServletRequest request) {
+
+        session = request.getSession();
+        UserForm user = (UserForm) session.getAttribute("loginUser");
+        if (user ==  null) {
             // userId が指定されていない場合、空の勤怠情報を設定
             model.addAttribute("attendances", List.of(new Attendance()));
         } else {
             // userId が指定されている場合、勤怠情報を取得
-            model.addAttribute("attendances", attendanceService.getMonthlyAttendance(userId, LocalDate.now()));
+            List<Attendance> attendance = attendanceService.getMonthlyAttendance(user.getId(),LocalDate.now());
+            model.addAttribute("attendances", attendanceService.getMonthlyAttendance(user.getId(), LocalDate.now()));
         }
         return "home";
     }
@@ -48,7 +57,7 @@ public class HomeController {
         if(session != null) {
             session.invalidate();//セッション破棄
         }
-        return "redirect:/login";
+        return "redirect:/";
     }
 
 }

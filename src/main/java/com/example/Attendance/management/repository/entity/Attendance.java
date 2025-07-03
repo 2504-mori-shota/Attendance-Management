@@ -27,20 +27,23 @@ public class Attendance {
     private  int userId;
 
     @Column
-    private LocalDate attendance;
+    private LocalDateTime attendance;
 
     @Column
-    private LocalDate leave;
+    private LocalDateTime leave;
 
     @Column
     private String comment;
 
-    @Column(nullable = false)
-    private short state = 0;
+    @Column(name="state")
+    private int stateId;
 
-    @Column(nullable = false)
-    private LocalDateTime createdDate = LocalDateTime.now();
+    @Column(insertable = false, updatable = false)
+    private Date createdDate;
+    @Column(insertable = false)
+    private Date updatedDate;
 
-    @Column(nullable = false)
-    private LocalDateTime updatedDate = LocalDateTime.now();
+    public enum Status {
+        未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
+    }
 }

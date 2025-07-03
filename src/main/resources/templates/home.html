@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -7,50 +7,57 @@
 </head>
 <body>
 
-    <div class="header-contents">
-        <h1>ユーザー ID: <span th:text="${userId != null ? userId : '未指定'}"></span> の月間勤怠情報</h1>
-        <div th:if="${attendances.isEmpty()}">
-            <p>現在、勤怠情報はありません。</p>
-        </div>
-        <div th:if="${not attendances.isEmpty()}">
-            <table>
-                <thead>
-                <tr>
-                    <th>日付</th>
-                    <th>出勤</th>
-                    <th>退勤</th>
-                    <th>メモ</th>
-                    <th>労働時間</th>
-                    <th>編集</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:block th:each="attendance : ${attendances}">
-                    <tr>
-                        <td th:text="${attendance.attendance}"></td>
-                        <td th:text="${attendance.leave}"></td>
-                        <td th:text="${attendance.comment}"></td>
-                        <td th:text="${attendance.state}"></td>
-                    </tr>
-                </th:block>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="button-rightTop">
-        <form th:action="@{/logout}">
-            <button type="submit">ログアウト</button>
-        </form>
-        <form th:action="@{/management}" th:method="get">
-            <button type="submit">ユーザー管理</button>
-        </form>
-        <form th:action="@{/signup}">
-            <button type="submit">ユーザー登録画面</button>
-        </form>
-        <form th:action="@{/signup}">
-            <button type="submit">勤怠登録画面</button>
-        </form>
-    </div>
+<header>
+    <h1>勤怠管理</h1>
+    <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
+</header>
+
+<div class="button-rightTop">
+    <form th:action="@{/logout}">
+        <button type="submit">ログアウト</button>
+    </form>
+
+    <form th:action="@{/system}" th:method="get" th:object="${user}">
+        <!--              th:if="${session.user.branchId == 1 and session.user.departmentId == 1}">-->
+        <button type="submit">ユーザー管理</button>
+    </form>
+
+    <form th:action="@{/attendance}">
+        <button type="submit">勤怠登録</button>
+    </form>
+
 </div>
+
+
+<section>
+    <h3 th:text="${yer} + '年 ' + ${month} + '月'"></h3>
+    <button onclick="onClickMonth(-1)">前月</button>
+    <button onclick="onClickMonth(1)">次月</button>
+</section>
+
+<table >
+    <thead>
+    <tr>
+        <th>日付</th>
+        <th>出社</th>
+        <th>退社</th>
+        <th>メモ</th>
+        <th>労働時間</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${attendances}">
+        <td th:text="${row.id}"></td>
+        <td th:text="${row.attendance}"></td>
+        <td th:text="${row.leave}"></td>
+        <td th:text="${row.comment}"></td>
+        <td th:text="${row.stateId}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<button onclick="setSubmit()">送信</button>
+
+
 </body>
 </html>

@@ -17,6 +17,10 @@ public class UserForm {
     public interface SignUpGroup {}
     public interface LoginGroup {}
     public interface EditGroup{}
+
+    @Transient
+    private String error;
+
     private int id;
 
     @NotBlank(message = "アカウントを入力してください", groups = {LoginGroup.class, SignUpGroup.class, EditGroup.class})
@@ -48,5 +52,9 @@ public class UserForm {
 
 
     private Post post;
+
+    public enum isStopped {
+        有効, 停止中
+    }
 
 }

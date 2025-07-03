@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <title>ユーザー管理画面</title>
+</head>
+<body>
+<div class="header-contents">
+  <h1>-User Management-</h1>
+</div>
+<div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert" style="color:red;">
+  <strong th:text="${errorMessageForm}"></strong>
+</div>
+<div class="button-management">
+  <form th:action="@{/signup}">
+    <button type="submit" class="submit-btn2">ユーザー登録画面</button>
+  </form>
+  <form th:action="@{/home}">
+    <button type="submit" class="submit-btn2">戻る</button>
+  </form>
+</div>
+<!--  新規タスク -->
+<div th:each="user : ${users}" th:object="${users}" class="message-icon">
+  ID　　:　<span class="wrap-text" th:text="${user.id}"></span><br/>
+  アカウント名：　<span class="wrap-text" th:text="${user.account}"></span><br/>
+  氏名 ：　<span class="wrap-text" th:text="${user.name}"></span><br/>
+  役職　:　<span class="wrap-text" th:text="${user.post.postName}"></span><br/>
+
+  <form th:action="@{/updateStatus}" th:method="post" th:if="${session.loginUser.id != user.id}">
+    <input type="hidden" name="id" th:value="${user.id}" />
+    <select name="status">
+      <option th:each="status : ${statuses}"
+              th:value="${status.ordinal()}"
+              th:text="${status}"
+              th:selected="${status.ordinal() == user.isStopped}">
+      </option>
+    </select>
+    <button type="submit" onclick="return confirm('変更しますか？');">変更</button>
+  </form>
+  <form th:action="@{/userEdit/id={id}(id=${user.id})}" >
+    <input type="submit" value="編集"/>
+  </form>
+</div>
+</body>
+</html>

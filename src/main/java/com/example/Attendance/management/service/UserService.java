@@ -5,12 +5,14 @@ import com.example.Attendance.management.repository.PostRepository;
 import com.example.Attendance.management.repository.UserRepository;
 import com.example.Attendance.management.repository.entity.Post;
 import com.example.Attendance.management.repository.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -88,5 +90,49 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public List<UserForm>  findByAllUser(){
+        List<User> userList = userRepository.findAllByOrderByIdAsc();
+        List<UserForm> users = setUserForm(userList);
+        return users;
+
+    }
+
+    public List<UserForm> findUserById(int id){
+
+        List<User> results = userRepository.findByIdWithPost(id);
+        List<UserForm> users = setUserForm(results);
+        return users;
+    }
+
+
+    public List<UserForm> findByIdWithPost(int id){
+        List<User> userList = userRepository.findByIdWithPost(id);
+        List<UserForm> users = setUserForm(userList);
+        return users;
+    }
+
+    public UserForm findById(int id){
+
+        List<User> user = userRepository.findById(id);
+
+        //URLパラメーターから存在しないidで情報をDBから探しに行ったときにnullで返す
+        if(user == null){
+            return null;
+        }
+
+        List<UserForm> userForm = setUserForm(user);
+
+        return userForm.get(0);
+    }
+
+    @Transactional
+    public void updateStatus(Integer id, int status) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("指定されたidが見つかりません: ID=" + id));
+        user.setIsStopped(status);
+        user.setUpdatedDate(new Date());
+        userRepository.save(user);
     }
 }
