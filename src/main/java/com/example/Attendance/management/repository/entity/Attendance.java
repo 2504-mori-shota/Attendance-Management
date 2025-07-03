@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -26,10 +27,10 @@ public class Attendance {
     private  int userId;
 
     @Column
-    private LocalDate attendance;
+    private LocalDateTime attendance;
 
     @Column
-    private LocalDate leave;
+    private LocalDateTime leave;
 
     @Column
     private String comment;

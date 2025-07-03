@@ -1,4 +1,40 @@
 package com.example.Attendance.management.service;
 
+import com.example.Attendance.management.controller.form.AttendanceForm;
+import com.example.Attendance.management.repository.AttendanceRepository;
+import com.example.Attendance.management.repository.entity.Attendance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Service
 public class AttendanceService {
+    @Autowired
+    AttendanceRepository attendanceRepository;
+
+    public void saveAttendance(AttendanceForm reqAttendance) throws ParseException {
+        Attendance saveAttendance = setAttendanceEntity(reqAttendance);
+        attendanceRepository.save(saveAttendance);
+    }
+    private Attendance setAttendanceEntity(AttendanceForm reqAttendance) throws ParseException {
+        //今年の西暦を取得
+        LocalDate current_date = LocalDate.now();
+        int current_Year = current_date.getYear();
+
+        Attendance attendance = new Attendance();
+        attendance.setId(reqAttendance.getId());
+        attendance.setComment(reqAttendance.getComment());
+        attendance.setAttendance(LocalDateTime.parse(reqAttendance.getAttendance()));
+        attendance.setLeave(LocalDateTime.parse(reqAttendance.getLeave()));
+        attendance.setUserId(reqAttendance.getUserId());
+        attendance.setCreatedDate(reqAttendance.getCreatedDate());
+        attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
+        return attendance;
+    }
+
+
 }
