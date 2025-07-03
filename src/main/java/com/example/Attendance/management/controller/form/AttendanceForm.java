@@ -44,4 +44,7 @@ public class AttendanceForm {
 
     private Date updatedDate;
 
+    @NotBlank(message = "日付を入力してください")
+    private String date;
+
 }
