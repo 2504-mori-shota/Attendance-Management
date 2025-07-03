@@ -4,6 +4,7 @@ import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.repository.RequestRepository;
 import com.example.Attendance.management.repository.entity.Request;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RequestService {
+//    @Autowired
+//    RequestRepository requestRepository;
 
-    @Autowired
-    RequestRepository requestRepository;
-
-    public List<RequestForm> findRequest() {
-        List<Request> requests = requestRepository.findOderByCreatedDate();
-        List<RequestForm> result = setRequestForm(requests);
-        return result;
-    }
+//    public List<RequestForm> findRequest() {
+//        List<Request> requests = requestRepository.findOderByCreatedDate();
+//        List<RequestForm> result = setRequestForm(requests);
+//        return result;
+//    }
 
     private List<RequestForm> setRequestForm(List<Request> requests) {
         List<RequestForm> requestForms = new ArrayList<RequestForm>();
