@@ -17,6 +17,10 @@
     <div class="main-contents-attendance" th:object="${formModel}">
       <form th:method="post" th:action="@{/addAttendance}" th:object="${attendanceInfo}">
         <input type="submit" value="登録" class="message-button1" style="margin:0px; float:right;"/>
+        <label>日付選択
+          <input type="date" name="date" th:field="*{date}"/><br/>
+        </label>
+        <div th:if="${#fields.hasErrors('date')}" style="color:red;" th:errors="*{date}"></div>
         <label>出勤時間
           <input type="text" th:field="*{attendance}" placeholder="例)09:00"/><br/>
         </label>

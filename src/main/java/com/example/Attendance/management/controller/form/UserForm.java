@@ -53,4 +53,8 @@ public class UserForm {
 
     private Post post;
 
+    public enum isStopped {
+        有効, 停止中
+    }
+
 }

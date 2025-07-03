@@ -22,13 +22,10 @@ public class AttendanceService {
         attendanceRepository.save(saveAttendance);
     }
     private Attendance setAttendanceEntity(AttendanceForm reqAttendance) throws ParseException {
-        //今年の西暦を取得
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate current_date = LocalDate.now();
-        int current_Year = current_date.getYear();
 
-        String toDayA = current_date.format(dateTimeFormatter) + " " + reqAttendance.getAttendance();
-        String toDayL = current_date.format(dateTimeFormatter)  + " " + reqAttendance.getLeave();
+        //指定の日付勤怠情報を取得できる
+        String toDayA = reqAttendance.getDate() + " " + reqAttendance.getAttendance();
+        String toDayL = reqAttendance.getDate()  + " " + reqAttendance.getLeave();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dtA = LocalDateTime.parse(toDayA, formatter);

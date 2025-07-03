@@ -19,13 +19,13 @@
             <button type="submit">ログアウト</button>
         </form>
 
-        <form th:action="@{/management}" th:method="get" th:object="${user}">
+        <form th:action="@{/system}" th:method="get" th:object="${user}">
 <!--              th:if="${session.user.branchId == 1 and session.user.departmentId == 1}">-->
             <button type="submit">ユーザー管理</button>
         </form>
 
-        <form th:action="@{/signup}">
-            <button type="submit">ユーザー登録画面</button>
+        <form th:action="@{/attendance}">
+            <button type="submit">勤怠登録</button>
         </form>
 
     </div>
