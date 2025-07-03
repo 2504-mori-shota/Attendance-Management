@@ -34,8 +34,8 @@ public class SystemController {
         session = request.getSession();
         //　↓はログインユーザのセッションに入っている情報を取得
         UserForm userForm = (UserForm) session.getAttribute("loginUser");
-        List<User> users = userService.findByIdWithPost(userForm.getId());
-        User userInfo =  users.get(0);
+        List<UserForm> users = userService.findByIdWithPost(userForm.getId());
+        UserForm userInfo =  users.get(0);
         if (userInfo.getPostId() != 3) {
             //フラッシュメッセージをセット
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");

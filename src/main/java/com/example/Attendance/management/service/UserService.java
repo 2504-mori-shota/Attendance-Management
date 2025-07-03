@@ -107,8 +107,10 @@ public class UserService {
     }
 
 
-    public List<User> findByIdWithPost(int id){
-        return userRepository.findByIdWithPost(id);
+    public List<UserForm> findByIdWithPost(int id){
+        List<User> userList = userRepository.findByIdWithPost(id);
+        List<UserForm> users = setUserForm(userList);
+        return users;
     }
 
     public UserForm findById(int id){
