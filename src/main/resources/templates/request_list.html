@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    　
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>申請一覧</title>
+</head>
+<body>
+申請一覧
+<div th:each="request : ${requests}">
+    <div>
+        ID:<span th:text="${request.id}"/>
+    </div>
+    <div>
+        user:<span th:text="${request.userId}"/>
+    </div>
+    <div>
+        状態:<span th:text="${request.state}"/>
+    </div>
+    <div>
+        期間(開始)<span th:text="${request.startDate}"/>
+    </div>
+    <div>
+        期間(終了)<span th:text="${request.endDate}"/>
+    </div>
+</div>
+</body>
+</html>
