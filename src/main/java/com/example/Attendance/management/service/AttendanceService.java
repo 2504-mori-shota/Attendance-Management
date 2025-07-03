@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class AttendanceService {
@@ -42,6 +43,15 @@ public class AttendanceService {
         attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
         return attendance;
     }
+
+        // 月間勤怠情報を取得
+        public List<Attendance> getMonthlyAttendance(int userId, LocalDate month) {
+            LocalDateTime startOfMonth = month.withDayOfMonth(1).atStartOfDay();
+            LocalDateTime endOfMonth = month.withDayOfMonth(month.lengthOfMonth())
+                    .atTime(23, 59, 59);
+
+            return attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
+        }
 
 
 }
