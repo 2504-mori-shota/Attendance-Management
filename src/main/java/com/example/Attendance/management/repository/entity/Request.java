@@ -25,7 +25,7 @@ public class Request {
     private int userId;
 
     @Column
-    private String state;
+    private int state;
 
     @Column
     private Date startDate;
@@ -33,9 +33,9 @@ public class Request {
     @Column
     private Date endDate;
 
-    @Column(insertable = false, updatable = false)
+    @Column(insertable = false, updatable = false, name="created_date")
     private Date createdDate;
 
-    @Column(insertable = false)
+    @Column(insertable = false, name="updated_date")
     private Date updatedDate;
 }

@@ -12,19 +12,22 @@
         <span th:text="${errorMessage}" style="color:red"></span>
     </div>
 </th:block>
+</div>
 <div class="login-icon">
     <!--  ログイン情報をコントローラーに渡す-->
-    <form th:method="post" th:action="@{/login}">
+    <form th:method="post" th:action="@{/login}" th:object="${userForm}">
         <div class="form-area">
             <label>アカウント</label>
             <!--      入力されたアカウント名をコントローラーに渡す-->
-            <input type="text" th:name="account" th:value="${account}" placeholder="アカウント名を入力">
+            <input type="text" name="account" th:field="*{account}" placeholder="アカウント名を入力">
+            <div th:if="${#fields.hasErrors('account')}" style="color:red;" th:errors="*{account}"></div>
         </div>
 
         <div class="form-area">
             <label>パスワード</label>
             <!--      入力されたパスワードをコントローラーに渡す-->
-            <input type="password" name="password" placeholder="パスワードを入力">
+            <input type="password" name="password" th:field="*{password}" placeholder="パスワードを入力">
+            <div th:if="${#fields.hasErrors('password')}" style="color:red;" th:errors="*{password}"></div>
         </div>
         <input type="submit" value="ログイン" class="btn"/>
     </form>
