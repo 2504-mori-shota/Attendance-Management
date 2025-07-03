@@ -35,11 +35,15 @@ public class Attendance {
     @Column
     private String comment;
 
-    @Column
-    private String state;
+    @Column(name="state")
+    private int stateId;
 
     @Column(insertable = false, updatable = false)
     private Date createdDate;
     @Column(insertable = false)
     private Date updatedDate;
+
+    public enum Status {
+        未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
+    }
 }

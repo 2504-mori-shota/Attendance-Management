@@ -78,7 +78,7 @@ public class AttendanceController {
             Model model
     ) throws ParseException {
         session = request.getSession();
-        UserForm user = (UserForm) session.getAttribute("user"); // セッションから再取得
+        UserForm user = (UserForm) session.getAttribute("loginUser"); // セッションから再取得
 
 
         attendanceForm.setUserId(user.getId());

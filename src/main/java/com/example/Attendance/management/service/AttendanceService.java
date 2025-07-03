@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class AttendanceService {
@@ -22,14 +23,23 @@ public class AttendanceService {
     }
     private Attendance setAttendanceEntity(AttendanceForm reqAttendance) throws ParseException {
         //今年の西暦を取得
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate current_date = LocalDate.now();
         int current_Year = current_date.getYear();
+
+        String toDayA = current_date.format(dateTimeFormatter) + " " + reqAttendance.getAttendance();
+        String toDayL = current_date.format(dateTimeFormatter)  + " " + reqAttendance.getLeave();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dtA = LocalDateTime.parse(toDayA, formatter);
+        LocalDateTime dtL = LocalDateTime.parse(toDayL, formatter);
 
         Attendance attendance = new Attendance();
         attendance.setId(reqAttendance.getId());
         attendance.setComment(reqAttendance.getComment());
-        attendance.setAttendance(LocalDateTime.parse(reqAttendance.getAttendance()));
-        attendance.setLeave(LocalDateTime.parse(reqAttendance.getLeave()));
+        attendance.setAttendance(dtA);
+        attendance.setLeave(dtL);
+        attendance.setStateId(0);
         attendance.setUserId(reqAttendance.getUserId());
         attendance.setCreatedDate(reqAttendance.getCreatedDate());
         attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
