@@ -28,7 +28,13 @@ public class RequestService {
 
             requestForm.setId(request.getId());
             requestForm.setUserId(requestForm.getUserId());
-            requestForm.setState(requestForm.getState());
+            if (request.getState()==0){
+                requestForm.setState("申請中");
+            } else if (request.getState()==1){
+                requestForm.setState("差戻済み");
+            } else if (request.getState()==2){
+                requestForm.setState("承認済み");
+            }
             requestForm.setStartDate(request.getStartDate());
             requestForm.setEndDate(request.getEndDate());
             requestForm.setCreatedDate(request.getCreatedDate());

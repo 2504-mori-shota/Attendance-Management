@@ -25,7 +25,7 @@ public class Request {
     private int userId;
 
     @Column
-    private String state;
+    private int state;
 
     @Column
     private Date startDate;
