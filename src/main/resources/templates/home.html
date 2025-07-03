@@ -44,11 +44,14 @@
     </thead>
     <tbody>
     <tr th:each="row : ${attendances}" th:if="${row != null}">
-        <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'yyyy-MM-dd') : '-'}"></td>
+        <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'M/dd') : '-'}"></td>
         <td th:text="${row.attendance != null ? #temporals.format(row.attendance, 'HH:mm') : '-'}"></td>
         <td th:text="${row.leave != null       ? #temporals.format(row.leave, 'HH:mm')      : '-'}"></td>
         <td th:text="${row.comment}"></td>
-        <td th:text="${row.stateId}"></td>
+<!--        ${T(java.time.Duration).between(row.attendance, row.leave).minusHours(1).toHoursPart()}-->
+        <td th:text="|${#numbers.formatInteger(T(java.time.Duration).between(row.attendance, row.leave).minusHours(1).toHoursPart(),2)} :
+        ${#numbers.formatInteger(T(java.time.Duration).between(row.attendance, row.leave).minusHours(1).toMinutesPart(),2)}|"></td>
+
     </tr>
     </tbody>
 </table>
