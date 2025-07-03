@@ -44,4 +44,6 @@ public class AttendanceForm {
 
     private Date updatedDate;
 
+    private String date;
+
 }
