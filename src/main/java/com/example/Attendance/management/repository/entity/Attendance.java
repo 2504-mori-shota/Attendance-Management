@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -26,19 +27,23 @@ public class Attendance {
     private  int userId;
 
     @Column
-    private LocalDate attendance;
+    private LocalDateTime attendance;
 
     @Column
-    private LocalDate leave;
+    private LocalDateTime leave;
 
     @Column
     private String comment;
 
-    @Column
-    private String state;
+    @Column(name="state")
+    private int stateId;
 
     @Column(insertable = false, updatable = false)
     private Date createdDate;
     @Column(insertable = false)
     private Date updatedDate;
+
+    public enum Status {
+        未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
+    }
 }

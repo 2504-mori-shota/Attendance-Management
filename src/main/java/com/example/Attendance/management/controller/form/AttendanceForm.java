@@ -37,7 +37,7 @@ public class AttendanceForm {
     private String comment;
 
 
-    private String state;
+    private int state;
 
 
     private Date createdDate;
