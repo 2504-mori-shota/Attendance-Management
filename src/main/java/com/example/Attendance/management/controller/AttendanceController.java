@@ -54,21 +54,6 @@ public class AttendanceController {
 
     }
 
-//    // コントローラー内に選択肢を返すメソッド プルダウンで使用
-//    private Map<Integer, String> getRequestOptions() {
-//        List<Request> requests = attendanceService.findAllRequest();
-//        Map<Integer, String> options = new LinkedHashMap<>();
-//
-//        for(int i = 0; i < requests.size(); i++ ){
-//            Request request = requests.get(i);
-//
-//            String name = request.getState();
-//            options.put(i+1, name);
-//        }
-//
-//        return options;
-//    }
-
 
     @PostMapping("/addAttendance")
     public ModelAndView addContent(
@@ -78,10 +63,17 @@ public class AttendanceController {
             BindingResult result,
             Model model
     ) throws ParseException {
+
         session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser"); // セッションから再取得
 
-
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("attendance");
+            mav.addObject("attendanceInfo", attendanceForm);
+            mav.addObject("formModel", user);
+            // errorsはバインディング済みなので自動的にビューへ渡る
+            return mav;
+        }
         attendanceForm.setUserId(user.getId());
         // 投稿をテーブルに格納
         attendanceService.saveAttendance(attendanceForm);
