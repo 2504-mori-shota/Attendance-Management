@@ -48,6 +48,8 @@ public class HomeController {
             List<Attendance> attendance = attendanceService.getMonthlyAttendance(user.getId(),LocalDate.now());
             model.addAttribute("attendances", attendanceService.getMonthlyAttendance(user.getId(), LocalDate.now()));
         }
+
+
         return "home";
     }
 
