@@ -1,11 +1,15 @@
 package com.example.Attendance.management.service;
 
+import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
+import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.RequestRepository;
+import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.repository.entity.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +17,21 @@ import java.util.List;
 public class RequestService {
     @Autowired
     RequestRepository requestRepository;
+    @Autowired
+    AttendanceRepository attendanceRepository;
 
+    //全権取得
     public List<RequestForm> findRequest() {
         List<Request> requests = new ArrayList<Request>();
         requests = requestRepository.findAllByOrderByCreatedDate();
         List<RequestForm> result = setRequestForm(requests);
+        return result;
+    }
+
+    //
+    public List<RequestForm> findRequestById(int id){
+        List<Request> request = requestRepository.findById(id);
+        List<RequestForm> result = setRequestForm(request);
         return result;
     }
 
@@ -43,5 +57,13 @@ public class RequestService {
             requestForms.add(requestForm);
         }
         return requestForms;
+    }
+
+    ///AttendanceService
+    public List<AttendanceForm> findAttendanceByRequest(RequestForm requestForm){
+        List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(
+                requestForm.getUserId(),() requestForm.getStartDate(),requestForm.getEndDate());
+        List<RequestForm> result = setRequestForm(request);
+        return result;
     }
 }
