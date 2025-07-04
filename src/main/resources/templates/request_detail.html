@@ -40,7 +40,6 @@
   </tr>
   </tbody>
 </table>
-<span th:text="${requestId}"></span>
 <form th:method="post" th:action="@{/request/update}">
     <input type="hidden" name="requestId" th:value="${requestId}"/>
     <button type="submit">承認</button>
