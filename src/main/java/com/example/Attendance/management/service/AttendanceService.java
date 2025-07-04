@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,13 +48,50 @@ public class AttendanceService {
     }
 
         // 月間勤怠情報を取得
-        public List<Attendance> getMonthlyAttendance(int userId, LocalDate month) {
+        public List<AttendanceForm> getMonthlyAttendance(int userId, LocalDate month) {
             LocalDateTime startOfMonth = month.withDayOfMonth(1).atStartOfDay();
             LocalDateTime endOfMonth = month.withDayOfMonth(month.lengthOfMonth())
                     .atTime(23, 59, 59);
-
-            return attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
+            List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
+            List<AttendanceForm> attendanceForms = setAttendanceForm(attendances);
+            return attendanceForms;
         }
+
+    private List<AttendanceForm> setAttendanceForm(List<Attendance> results) {
+        List<AttendanceForm> attendances = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+
+        for (int i = 0; i < results.size(); i++) {
+
+            AttendanceForm attendance = new AttendanceForm();
+            Attendance result = results.get(i);
+            //出勤時間と退勤時間をLocalDateTime型 → String型に型変換
+            String attendanceString = result.getAttendance().format(formatter);
+            String leaveString = result.getLeave().format(formatter);
+            //出勤時間を計算
+            //between(出勤, 退勤)→正しく出る
+            //between(退勤, 出勤）→計算がマイナスになる
+            Duration diff = Duration.between(result.getAttendance(), result.getLeave());
+            long hours = diff.toHours();
+            long minutes = diff.toMinutes() % 60;
+            //LocalTimeに型変換
+            LocalTime restTime = LocalTime.of((int)hours, (int)minutes);
+
+            attendance.setId(result.getId());
+            attendance.setUserId(result.getUserId());
+            attendance.setComment(result.getComment());
+            attendance.setAttendance(attendanceString);
+            attendance.setLeave(leaveString);
+            attendance.setRestTime(restTime);
+            attendance.setStateId(result.getStateId());
+            attendance.setCreatedDate(result.getCreatedDate());
+            attendance.setUpdatedDate(result.getUpdatedDate());
+            attendances.add(attendance);
+        }
+        return attendances;
+    }
+
 
 
 }
