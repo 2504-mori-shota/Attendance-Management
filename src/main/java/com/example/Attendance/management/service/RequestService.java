@@ -1,13 +1,19 @@
 package com.example.Attendance.management.service;
 
+import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.RequestRepository;
+import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.repository.entity.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,6 +73,23 @@ public class RequestService {
         request.setUpdatedDate(requestForm.getUpdatedDate());
 
         return request;
+    }
+
+    public void saveRequest(AttendanceForm start, AttendanceForm end) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String startDate = start.getAttendance();
+        String endDate = end.getAttendance();
+
+        Date STR = formatter.parse(startDate);
+        Date END = formatter.parse(endDate);
+
+        RequestForm requestForm = new RequestForm();
+        requestForm.setUserId(start.getUserId());
+        requestForm.setState(1);
+        requestForm.setStartDate(STR);
+        requestForm.setEndDate(END);
+        Request request = setRequest(requestForm);
+        requestRepository.save(request);
     }
 
 }
