@@ -80,14 +80,14 @@ public class RequestService {
         String strStartDate = start.getAttendance();
         String strEndDate = end.getAttendance();
 
-        Date STR = formatter.parse(strStartDate);
-        Date END = formatter.parse(strEndDate);
+        Date startDate = formatter.parse(strStartDate);
+        Date endDate = formatter.parse(strEndDate);
 
         RequestForm requestForm = new RequestForm();
         requestForm.setUserId(start.getUserId());
         requestForm.setState(1);
-        requestForm.setStartDate(STR);
-        requestForm.setEndDate(END);
+        requestForm.setStartDate(startDate);
+        requestForm.setEndDate(endDate);
         Request request = setRequest(requestForm);
         requestRepository.save(request);
     }
