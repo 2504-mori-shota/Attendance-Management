@@ -38,9 +38,9 @@ public class Attendance {
     @Column(name="state")
     private int stateId;
 
-    @Column(insertable = false, updatable = false)
-    private Date createdDate;
     @Column(insertable = false)
+    private Date createdDate;
+    @Column(insertable = false, updatable = false)
     private Date updatedDate;
 
     public enum Status {

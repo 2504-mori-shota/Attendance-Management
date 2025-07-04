@@ -35,7 +35,6 @@
         <input type="text" class="comment" th:field="*{comment}" ></textarea><br/>
         <div th:if="${#fields.hasErrors('comment')}" style="color:red;" th:errors="*{comment}"></div>
 
-        <!--<input type="hidden" th:value="">-->
       </form>
       <form th:action="@{/home}">
         <input type="submit" value="戻る" class="message-button2"/>

@@ -135,4 +135,14 @@ public class UserService {
         user.setUpdatedDate(new Date());
         userRepository.save(user);
     }
+
+    public UserForm findByAccount(String account){
+
+        List<User> results = userRepository.findByAccount(account);
+        List<UserForm> users = setUserForm(results);
+        if(users.isEmpty()){
+            return null;
+        }
+        return users.get(0);
+    }
 }

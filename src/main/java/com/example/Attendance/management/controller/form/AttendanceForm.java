@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -24,20 +25,20 @@ public class AttendanceForm {
 
     @NotBlank(message = "出勤時間を入力してください")
     @Pattern(regexp = "^[^　]*$", message = "出勤時間を入力してください")
-    @Pattern(regexp = "^([01]\\d|1[0-3]):[0-5]\\d$", message = "半角英数字で入力してください")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角英数字で入力してください")
     //@Size(max = 5, message = "アカウントは6文字以上20文字以内で入力してください")
     private String attendance;
 
     @NotBlank(message = "出勤時間を入力してください")
     @Pattern(regexp = "^[^　]*$", message = "出勤時間を入力してください")
-    @Pattern(regexp = "^([01]\\d|1[0-3]):[0-5]\\d$", message = "半角英数字で入力してください")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角英数字で入力してください")
     private String leave;
 
 
     private String comment;
 
 
-    private int state;
+    private int stateId;
 
 
     private Date createdDate;
@@ -46,5 +47,7 @@ public class AttendanceForm {
 
     @NotBlank(message = "日付を指定してください")
     private String date;
+
+    private LocalTime restTime;
 
 }
