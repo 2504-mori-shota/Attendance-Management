@@ -2,7 +2,11 @@ package com.example.Attendance.management.controller;
 
 
 import com.example.Attendance.management.controller.form.AttendanceForm;
+
+import com.example.Attendance.management.controller.form.AttendanceListForm;
+
 import com.example.Attendance.management.controller.form.RequestForm;
+
 import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.service.AttendanceService;
@@ -10,17 +14,17 @@ import com.example.Attendance.management.service.RequestService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import java.text.ParseException;
 import java.time.Duration;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -47,6 +51,7 @@ public class HomeController {
 
         session = request.getSession();
 
+
         //バリエーションチャック
         UserForm user = (UserForm) request.getSession().getAttribute("loginUser");
         if (user == null) {
@@ -67,19 +72,24 @@ public class HomeController {
         if (month > 12) {
             year++;
             month = 1;
-        }
 
+        }
 
         //指定した月のデータを表示
         LocalDate target = LocalDate.of(year, month, 1);
         List<AttendanceForm> attendanceForms = attendanceService.getMonthlyAttendance(user.getId(), target);
         int totalDays = target.lengthOfMonth();
-
         //serviceで計算した労働時間合計を受け取る
         Duration totalWorkingTime = attendanceService.calculateTotalWorkingTime(attendanceForms);
         // 時間と分に変換
         long hours = totalWorkingTime.toHours();
         long minutes = totalWorkingTime.toMinutes() % 60;
+
+        List<AttendanceForm> attendance = attendanceService.getMonthlyAttendance(user.getId(),LocalDate.now());
+        AttendanceListForm attendanceListForm = new AttendanceListForm();
+        attendanceListForm.setAttendances(attendance);
+        model.addAttribute("attendances", attendanceService.getMonthlyAttendance(user.getId(), LocalDate.now()));
+        model.addAttribute("attendanceList", attendanceListForm);
 
         // modelにオブジェクト格納してreturnで返す
         model.addAttribute("year", year);
@@ -92,15 +102,29 @@ public class HomeController {
         return"home";
 }
 
+        @PostMapping("/application")
+        public ModelAndView application (
+                HttpServletRequest request,
+                @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,
+                Model model) throws ParseException {
+            session = request.getSession();
+            UserForm user = (UserForm) session.getAttribute("loginUser");
 
-@RequestMapping("/logout")
-public String logout(HttpServletRequest request) {
-    HttpSession session = request.getSession(false); // セッションを取得
-    if (session != null) {
-        session.invalidate();//セッション破棄
+            List<AttendanceForm> list = attendanceForms.getAttendances();
+
+            attendanceService.saveAttendanceState(list);
+
+            return new ModelAndView("redirect:/home");
+        }
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // セッションを取得
+        if (session != null) {
+            session.invalidate();//セッション破棄
+        }
+        return "redirect:/";
     }
-    return "redirect:/";
-}
 
 }
 

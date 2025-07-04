@@ -11,6 +11,7 @@
             <h1>勤怠管理</h1>
             <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
         </div>
+    </header>
 
     <div class="button-rightTop">
         <form th:action="@{/logout}">
@@ -68,8 +69,19 @@
     </tbody>
 </table>
 
-<button onclick="setSubmit()">送信</button>
+        <form th:action="@{/application}" th:method="post" th:object="${attendanceList}">
+            <div th:each="item, stat : *{attendances}">
+                <input type="hidden" th:field="*{attendances[__${stat.index}__].id}">
+                <input type="hidden" th:field="*{attendances[__${stat.index}__].userId}">
+                <input type="hidden" th:field="*{attendances[__${stat.index}__].attendance}">
+                <input type="hidden" th:field="*{attendances[__${stat.index}__].leave}">
+                <input type="hidden" th:field="*{attendances[__${stat.index}__].comment}">
+                <input type="hidden" th:field="*{attendances[__${stat.index}__].createdDate}">
+            </div>
+            <input type="submit" value="申請" class="message-button2" onclick="setSubmit()"/>
+            <!---->
+        </form>
 
 
-</body>
+    </body>
 </html>
