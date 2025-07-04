@@ -15,10 +15,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 public class AttendanceEditController {
@@ -29,8 +32,8 @@ public class AttendanceEditController {
 
     @PostMapping("/attendanceedit")
     public ModelAndView newAttend(
-            @ModelAttribute("formModel") Attendance attendanceForm,
-             HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("id") String strId,
+             HttpServletRequest request,
              RedirectAttributes redirectAttributes) {
         session = request.getSession();
         // セッションからユーザーオブジェクトを取得
@@ -39,12 +42,14 @@ public class AttendanceEditController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "ログインしてください");
             return new ModelAndView("redirect:/");
         }
+
+        AttendanceForm attendanceForm = attendanceService.findById(Integer.parseInt(strId));
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
         // 画面遷移先を指定
         mav.setViewName("/attendanceedit");
         mav.addObject("formModel", user);
-        // 準備した空のFormを保管
+        // Formに元の情報を保管
         mav.addObject("attendanceInfo", attendanceForm);
         // mav.addObject("errorMessageForm", errorMessages);
         return mav;
@@ -52,11 +57,13 @@ public class AttendanceEditController {
     }
 
     @PostMapping("/updateAttendance")
-    public ModelAndView addContent(
-            HttpServletRequest request, HttpServletResponse response,
+    public ModelAndView updateContent(
+            HttpServletRequest request,
             @Valid
             @ModelAttribute("attendanceInfo") AttendanceForm attendanceForm,
             BindingResult result,
+            @RequestParam(name = "id", required = false) String strId,
+            @RequestParam(name = "created_date", required = false) String createdDate,
             Model model
     ) throws ParseException {
 
@@ -64,13 +71,17 @@ public class AttendanceEditController {
         UserForm user = (UserForm) session.getAttribute("loginUser"); // セッションから再取得
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView("attendance");
+            ModelAndView mav = new ModelAndView("attendanceedit");
             mav.addObject("attendanceInfo", attendanceForm);
             mav.addObject("formModel", user);
             // errorsはバインディング済みなので自動的にビューへ渡る
             return mav;
         }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date date = format.parse(createdDate);
         attendanceForm.setUserId(user.getId());
+        attendanceForm.setId(Integer.parseInt(strId));
+        attendanceForm.setCreatedDate(date);
         // 投稿をテーブルに格納
         attendanceService.saveAttendance(attendanceForm);
         // rootへリダイレクト

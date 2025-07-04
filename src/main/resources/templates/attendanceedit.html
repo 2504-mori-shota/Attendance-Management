@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <link th:href="@{/css/style.css}" rel="stylesheet">
-  <title>勤怠登録</title>
+  <title>勤怠編集</title>
 </head>
 <body>
 <div class="header-contents">
-  <h2>-Attendance registration-</h2>
+  <h2>-Attendance Edit-</h2>
 </div><br/>
 
 <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
@@ -18,7 +18,7 @@
   <form th:method="post" th:action="@{/updateAttendance}" th:object="${attendanceInfo}">
     <input type="submit" value="登録" class="message-button1" style="margin:0px; float:right;"/>
     <label>日付選択
-      <input type="date" name="date" th:field="*{date}"/><br/>
+      <input type="date" name="date" th:field="*{date}" readonly/><br/>
     </label>
     <div th:if="${#fields.hasErrors('date')}" style="color:red;" th:errors="*{date}"></div>
     <label>出勤時間
@@ -35,6 +35,8 @@
     <input type="text" class="comment" th:field="*{comment}" ></textarea><br/>
     <div th:if="${#fields.hasErrors('comment')}" style="color:red;" th:errors="*{comment}"></div>
 
+    <input type="hidden" name="id" th:value="${attendanceInfo.id}">
+    <input type="hidden" name="created_date" th:value="${attendanceInfo.createdDate}">
   </form>
   <form th:action="@{/home}">
     <input type="submit" value="戻る" class="message-button2"/>
