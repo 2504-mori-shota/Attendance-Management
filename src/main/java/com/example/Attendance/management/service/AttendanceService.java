@@ -4,6 +4,7 @@ import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.entity.Attendance;
+import com.example.Attendance.management.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,20 +28,33 @@ public class AttendanceService {
         attendanceRepository.save(saveAttendance);
     }
     private Attendance setAttendanceEntity(AttendanceForm reqAttendance) throws ParseException {
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Attendance attendance = new Attendance();
+        //申請用のsetEntity
+        if(reqAttendance.getDate() == null){
+            LocalDateTime dtA = LocalDateTime.parse(reqAttendance.getAttendance(), formatter);
+            LocalDateTime dtL = LocalDateTime.parse(reqAttendance.getLeave(), formatter);
+            attendance.setAttendance(dtA);
+            attendance.setLeave(dtL);
+            attendance.setId(reqAttendance.getId());
+            attendance.setComment(reqAttendance.getComment());
+            attendance.setUserId(reqAttendance.getUserId());
+            attendance.setCreatedDate(reqAttendance.getCreatedDate());
+            return attendance;
+        }
         //指定の日付勤怠情報を取得できる
         String toDayA = reqAttendance.getDate() + " " + reqAttendance.getAttendance();
         String toDayL = reqAttendance.getDate()  + " " + reqAttendance.getLeave();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         LocalDateTime dtA = LocalDateTime.parse(toDayA, formatter);
         LocalDateTime dtL = LocalDateTime.parse(toDayL, formatter);
-
-        Attendance attendance = new Attendance();
-        attendance.setId(reqAttendance.getId());
-        attendance.setComment(reqAttendance.getComment());
         attendance.setAttendance(dtA);
         attendance.setLeave(dtL);
+
+        attendance.setId(reqAttendance.getId());
+        attendance.setComment(reqAttendance.getComment());
+
         attendance.setState(0);
         attendance.setUserId(reqAttendance.getUserId());
         attendance.setCreatedDate(reqAttendance.getCreatedDate());
@@ -140,5 +154,17 @@ public class AttendanceService {
         return attendances;
     }
 
+    public void saveAttendanceState(List<AttendanceForm> attendanceForms) throws ParseException {
+        for (int i = 0; i < attendanceForms.size(); i++) {
 
+            AttendanceForm attendanceForm = attendanceForms.get(i);
+
+            Attendance attendance = setAttendanceEntity(attendanceForm);
+            attendance.setState(1);
+            attendanceRepository.save(attendance);
+        }
+
+
+
+    }
 }

@@ -9,9 +9,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,7 +42,7 @@ public class AttendanceForm {
 
     private int state;
 
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdDate;
 
     private Date updatedDate;
@@ -53,5 +55,7 @@ public class AttendanceForm {
     public enum Status {
         未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
     }
+
+
 
 }
