@@ -19,6 +19,7 @@ public class RequestListController {
     public String view (Model model){
         List<RequestForm> requestForms = requestService.findRequest();
         model.addAttribute("requests",requestForms);
+        model.addAttribute("statuses",RequestForm.Status.values());
         return "request_list";
     }
 }

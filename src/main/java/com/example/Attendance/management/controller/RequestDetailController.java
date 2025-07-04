@@ -7,15 +7,19 @@ import com.example.Attendance.management.service.AttendanceService;
 import com.example.Attendance.management.service.RequestService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Controller
 public class RequestDetailController {
 
     @Autowired
@@ -25,7 +29,7 @@ public class RequestDetailController {
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/request/detail/{id}")
+    @GetMapping("/request/detail")
     public String view (@RequestParam("id") String id, Model model){
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
@@ -44,19 +48,24 @@ public class RequestDetailController {
         if (requestListData == null) {
             errorMessages.add("不正なパラメータが入力されました");
             session.setAttribute("errorMessages", errorMessages);
-            return "redirect:/manager/form";
+            return "redirect:/request/list";
         }
 
-        List<AttendanceForm> attendanceForms = attendanceService.
+        //requestをもとに勤怠情報を取得
+        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestListData.get(0));
 
-        // mavにオブジェクト格納してreturnで返す
-        model.addAttribute("users", userData);
-        mav.addObject("branchChoices", branchChoices);
-        mav.addObject("departmentChoices", departmentChoices);
-        mav.setViewName("/setting");
+        //月の日数を取得
+        String attendanceDate = attendanceForms.get(0).getAttendance();
+        LocalDate attendanceLocalDate = LocalDate.parse(attendanceDate, DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+        int totalDays = attendanceLocalDate.lengthOfMonth();
+        int month = attendanceLocalDate.getMonthValue();
 
-        return mav;
+        // modelにオブジェクト格納してreturnで返す
+        model.addAttribute("month", month);
+        model.addAttribute("totalDays", totalDays);
+        model.addAttribute("attendances", attendanceForms);
+        model.addAttribute("statuses",AttendanceForm.Status.values());
 
-        return "request_list";
+        return "request_detail";
     }
 }

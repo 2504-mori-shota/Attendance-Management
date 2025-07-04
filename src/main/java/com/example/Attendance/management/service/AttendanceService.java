@@ -1,6 +1,7 @@
 package com.example.Attendance.management.service;
 
 import com.example.Attendance.management.controller.form.AttendanceForm;
+import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.entity.Attendance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,22 +38,32 @@ public class AttendanceService {
         attendance.setComment(reqAttendance.getComment());
         attendance.setAttendance(dtA);
         attendance.setLeave(dtL);
-        attendance.setStateId(0);
+        attendance.setState(0);
         attendance.setUserId(reqAttendance.getUserId());
         attendance.setCreatedDate(reqAttendance.getCreatedDate());
         attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
         return attendance;
     }
 
-        // 月間勤怠情報を取得
-        public List<AttendanceForm> getMonthlyAttendance(int userId, LocalDate month) {
-            LocalDateTime startOfMonth = month.withDayOfMonth(1).atStartOfDay();
-            LocalDateTime endOfMonth = month.withDayOfMonth(month.lengthOfMonth())
-                    .atTime(23, 59, 59);
-            List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
-            List<AttendanceForm> attendanceForms = setAttendanceForm(attendances);
-            return attendanceForms;
-        }
+    // 月間勤怠情報を取得
+    public List<AttendanceForm> getMonthlyAttendance(int userId, LocalDate month) {
+        LocalDateTime startOfMonth = month.withDayOfMonth(1).atStartOfDay();
+        LocalDateTime endOfMonth = month.withDayOfMonth(month.lengthOfMonth())
+                .atTime(23, 59, 59);
+        List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
+        List<AttendanceForm> attendanceForms = setAttendanceForm(attendances);
+        return attendanceForms;
+    }
+
+    public List<AttendanceForm> findAttendanceByRequest(RequestForm requestForm){
+        // Date → Localdatetime の変換
+        LocalDateTime start = LocalDateTime.ofInstant(requestForm.getStartDate().toInstant(), ZoneId.systemDefault());
+        LocalDateTime end = LocalDateTime.ofInstant(requestForm.getEndDate().toInstant(), ZoneId.systemDefault());
+
+        List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(requestForm.getUserId(),start,end);
+        List<AttendanceForm> result = setAttendanceForm(attendances);
+        return result;
+    }
 
     private List<AttendanceForm> setAttendanceForm(List<Attendance> results) {
         List<AttendanceForm> attendances = new ArrayList<>();
@@ -84,7 +92,7 @@ public class AttendanceService {
             attendance.setAttendance(attendanceString);
             attendance.setLeave(leaveString);
             attendance.setRestTime(restTime);
-            attendance.setStateId(result.getStateId());
+            attendance.setState(result.getState());
             attendance.setCreatedDate(result.getCreatedDate());
             attendance.setUpdatedDate(result.getUpdatedDate());
             attendances.add(attendance);

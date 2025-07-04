@@ -1,15 +1,12 @@
 package com.example.Attendance.management.service;
 
-import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.RequestRepository;
-import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.repository.entity.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,14 +38,8 @@ public class RequestService {
             RequestForm requestForm = new RequestForm();
 
             requestForm.setId(request.getId());
-            requestForm.setUserId(requestForm.getUserId());
-            if (request.getState()==0){
-                requestForm.setState("申請中");
-            } else if (request.getState()==1){
-                requestForm.setState("差戻済み");
-            } else if (request.getState()==2){
-                requestForm.setState("承認済み");
-            }
+            requestForm.setUserId(request.getUserId());
+            requestForm.setState(request.getState());
             requestForm.setStartDate(request.getStartDate());
             requestForm.setEndDate(request.getEndDate());
             requestForm.setCreatedDate(request.getCreatedDate());
@@ -59,11 +50,4 @@ public class RequestService {
         return requestForms;
     }
 
-    ///AttendanceService
-    public List<AttendanceForm> findAttendanceByRequest(RequestForm requestForm){
-        List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(
-                requestForm.getUserId(),() requestForm.getStartDate(),requestForm.getEndDate());
-        List<RequestForm> result = setRequestForm(request);
-        return result;
-    }
 }
