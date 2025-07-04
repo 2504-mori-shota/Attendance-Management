@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -37,7 +38,7 @@ public class AttendanceForm {
     private String comment;
 
 
-    private int state;
+    private int stateId;
 
 
     private Date createdDate;
@@ -46,5 +47,7 @@ public class AttendanceForm {
 
     @NotBlank(message = "日付を指定してください")
     private String date;
+
+    private LocalTime restTime;
 
 }

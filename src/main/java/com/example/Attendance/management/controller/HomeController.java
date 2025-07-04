@@ -45,7 +45,7 @@ public class HomeController {
             model.addAttribute("attendances", List.of(new Attendance()));
         } else {
             // userId が指定されている場合、勤怠情報を取得
-            List<Attendance> attendance = attendanceService.getMonthlyAttendance(user.getId(),LocalDate.now());
+            List<AttendanceForm> attendance = attendanceService.getMonthlyAttendance(user.getId(),LocalDate.now());
             model.addAttribute("attendances", attendanceService.getMonthlyAttendance(user.getId(), LocalDate.now()));
         }
 
