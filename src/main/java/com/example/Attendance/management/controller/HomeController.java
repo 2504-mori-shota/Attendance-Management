@@ -114,6 +114,8 @@ public class HomeController {
 
             attendanceService.saveAttendanceState(list);
 
+            requestService.saveRequest(list.get(0), list.get(list.size() - 1));
+
             return new ModelAndView("redirect:/home");
         }
 
