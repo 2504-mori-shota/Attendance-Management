@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findAllByOrderByCreatedDate();
+    List<Request> findById(int id);
 }

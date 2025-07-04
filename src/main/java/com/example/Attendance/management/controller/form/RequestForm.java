@@ -12,7 +12,7 @@ public class RequestForm {
 
     private int userId;
 
-    private String state;
+    private int state;
 
     private Date startDate;
 
@@ -21,5 +21,9 @@ public class RequestForm {
     private Date createdDate;
 
     private Date updatedDate;
+
+    public enum Status {
+        申請中, 差戻済み, 承認済み
+    }
 
 }
