@@ -17,7 +17,7 @@ public class RequestService {
     @Autowired
     AttendanceRepository attendanceRepository;
 
-    //全権取得
+    //全件取得
     public List<RequestForm> findRequest() {
         List<Request> requests = new ArrayList<Request>();
         requests = requestRepository.findAllByOrderByCreatedDate();
@@ -30,6 +30,11 @@ public class RequestService {
         List<Request> request = requestRepository.findById(id);
         List<RequestForm> result = setRequestForm(request);
         return result;
+    }
+
+    public void updateRequest(RequestForm requestForm){
+        Request request = setRequest(requestForm);
+        requestRepository.save(request);
     }
 
     private List<RequestForm> setRequestForm(List<Request> requests) {
@@ -48,6 +53,20 @@ public class RequestService {
             requestForms.add(requestForm);
         }
         return requestForms;
+    }
+
+    private Request setRequest(RequestForm requestForm) {
+        Request request = new Request();
+
+        request.setId(requestForm.getId());
+        request.setUserId(requestForm.getUserId());
+        request.setState(requestForm.getState());
+        request.setStartDate(requestForm.getStartDate());
+        request.setEndDate(requestForm.getEndDate());
+        request.setCreatedDate(requestForm.getCreatedDate());
+        request.setUpdatedDate(requestForm.getUpdatedDate());
+
+        return request;
     }
 
 }

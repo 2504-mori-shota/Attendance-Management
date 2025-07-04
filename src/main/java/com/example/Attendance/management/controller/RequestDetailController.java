@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,7 +42,7 @@ public class RequestDetailController {
             model.addAttribute("errorMessages", errorMessages);
             return "redirect:/request/list";
         }
-        // ユーザ情報取得
+        // 申請情報取得
         int requestId = Integer.parseInt(id);
         List<RequestForm> requestListData = requestService.findRequestById(requestId);
 
@@ -63,9 +65,22 @@ public class RequestDetailController {
         // modelにオブジェクト格納してreturnで返す
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
+        model.addAttribute("requestId", requestId);
         model.addAttribute("attendances", attendanceForms);
         model.addAttribute("statuses",AttendanceForm.Status.values());
 
         return "request_detail";
     }
+
+    // 申請情報更新
+    @PostMapping("/request/update")
+    public String approval (@ModelAttribute("requestId") String id, Model model) {
+        int requestId = Integer.parseInt(id);
+        List<RequestForm> requests = requestService.findRequestById(requestId);
+        RequestForm request = requests.get(0);
+        request.setState(2);
+        requestService.updateRequest(request);
+        return "redirect:/request/list";
+    }
+
 }

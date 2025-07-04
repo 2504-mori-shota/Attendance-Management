@@ -52,6 +52,8 @@ public class AttendanceForm {
 
     private LocalTime restTime;
 
+    private Boolean checkbox;
+
     public enum Status {
         未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
     }
