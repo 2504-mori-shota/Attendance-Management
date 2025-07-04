@@ -28,9 +28,12 @@ public class LoginController {
     public String view(Model model){
         // form用の空のentityを準備
         UserForm userForm = new UserForm();
+        // ログインフィルターで書いたエラー文をここで受け取る。
+        String errorMessage = (String) session.getAttribute("errorMessageForm");
         session.removeAttribute("errorMessages");
         // 準備した空のFormを保管
         model.addAttribute("userForm", userForm);
+        model.addAttribute("errorMessageForm", errorMessage);
         return "login";
     }
 
