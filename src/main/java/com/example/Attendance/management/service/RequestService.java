@@ -77,11 +77,11 @@ public class RequestService {
 
     public void saveRequest(AttendanceForm start, AttendanceForm end) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String startDate = start.getAttendance();
-        String endDate = end.getAttendance();
+        String strStartDate = start.getAttendance();
+        String strEndDate = end.getAttendance();
 
-        Date STR = formatter.parse(startDate);
-        Date END = formatter.parse(endDate);
+        Date STR = formatter.parse(strStartDate);
+        Date END = formatter.parse(strEndDate);
 
         RequestForm requestForm = new RequestForm();
         requestForm.setUserId(start.getUserId());
