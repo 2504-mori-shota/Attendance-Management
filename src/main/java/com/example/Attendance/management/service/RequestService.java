@@ -1,6 +1,7 @@
 package com.example.Attendance.management.service;
 
 import com.example.Attendance.management.controller.form.RequestForm;
+import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.RequestRepository;
 import com.example.Attendance.management.repository.entity.Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,21 @@ import java.util.List;
 public class RequestService {
     @Autowired
     RequestRepository requestRepository;
+    @Autowired
+    AttendanceRepository attendanceRepository;
 
+    //全権取得
     public List<RequestForm> findRequest() {
         List<Request> requests = new ArrayList<Request>();
         requests = requestRepository.findAllByOrderByCreatedDate();
         List<RequestForm> result = setRequestForm(requests);
+        return result;
+    }
+
+    //
+    public List<RequestForm> findRequestById(int id){
+        List<Request> request = requestRepository.findById(id);
+        List<RequestForm> result = setRequestForm(request);
         return result;
     }
 
@@ -27,14 +38,8 @@ public class RequestService {
             RequestForm requestForm = new RequestForm();
 
             requestForm.setId(request.getId());
-            requestForm.setUserId(requestForm.getUserId());
-            if (request.getState()==0){
-                requestForm.setState("申請中");
-            } else if (request.getState()==1){
-                requestForm.setState("差戻済み");
-            } else if (request.getState()==2){
-                requestForm.setState("承認済み");
-            }
+            requestForm.setUserId(request.getUserId());
+            requestForm.setState(request.getState());
             requestForm.setStartDate(request.getStartDate());
             requestForm.setEndDate(request.getEndDate());
             requestForm.setCreatedDate(request.getCreatedDate());
@@ -44,4 +49,5 @@ public class RequestService {
         }
         return requestForms;
     }
+
 }

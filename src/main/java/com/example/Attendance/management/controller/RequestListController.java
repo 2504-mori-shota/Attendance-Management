@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Controller
-public class RequestController {
+public class RequestListController {
 
     @Autowired
     RequestService requestService;
@@ -19,6 +19,7 @@ public class RequestController {
     public String view (Model model){
         List<RequestForm> requestForms = requestService.findRequest();
         model.addAttribute("requests",requestForms);
+        model.addAttribute("statuses",RequestForm.Status.values());
         return "request_list";
     }
 }

@@ -38,7 +38,7 @@ public class AttendanceForm {
     private String comment;
 
 
-    private int stateId;
+    private int state;
 
 
     private Date createdDate;
@@ -49,5 +49,9 @@ public class AttendanceForm {
     private String date;
 
     private LocalTime restTime;
+
+    public enum Status {
+        未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
+    }
 
 }
