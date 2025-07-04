@@ -57,7 +57,7 @@ public class AttendanceController {
 
     @PostMapping("/addAttendance")
     public ModelAndView addContent(
-            HttpServletRequest request, HttpServletResponse response,
+            HttpServletRequest request,
             @Valid
             @ModelAttribute("attendanceInfo") AttendanceForm attendanceForm,
             BindingResult result,

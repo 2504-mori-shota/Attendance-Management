@@ -52,8 +52,8 @@
         <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
 
         <td class="button-signup">
-            <form th:action="@{/attendanceedit}" th:object="${formModel}" th:method="post">
-                <input type="hidden" name="formModel" th:value="${row}">
+            <form th:action="@{/attendanceedit}" th:method="post">
+                <input type="hidden" th:name="id" th:value="${row.id}">
                 <input type="submit" class="submit-btn2" value="編集"/>
             </form>
         </td>
