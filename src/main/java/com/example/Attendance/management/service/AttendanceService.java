@@ -4,6 +4,7 @@ import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.entity.Attendance;
+import com.example.Attendance.management.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +28,51 @@ public class AttendanceService {
         attendanceRepository.save(saveAttendance);
     }
     private Attendance setAttendanceEntity(AttendanceForm reqAttendance) throws ParseException {
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Attendance attendance = new Attendance();
+        //申請用のsetEntity
+        if(reqAttendance.getDate() == null){
+            LocalDateTime dtA = LocalDateTime.parse(reqAttendance.getAttendance(), formatter);
+            LocalDateTime dtL = LocalDateTime.parse(reqAttendance.getLeave(), formatter);
+            attendance.setAttendance(dtA);
+            attendance.setLeave(dtL);
+            attendance.setId(reqAttendance.getId());
+            attendance.setComment(reqAttendance.getComment());
+            attendance.setUserId(reqAttendance.getUserId());
+            attendance.setCreatedDate(reqAttendance.getCreatedDate());
+            return attendance;
+        }
         //指定の日付勤怠情報を取得できる
         String toDayA = reqAttendance.getDate() + " " + reqAttendance.getAttendance();
         String toDayL = reqAttendance.getDate()  + " " + reqAttendance.getLeave();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         LocalDateTime dtA = LocalDateTime.parse(toDayA, formatter);
         LocalDateTime dtL = LocalDateTime.parse(toDayL, formatter);
-
-        Attendance attendance = new Attendance();
-        attendance.setId(reqAttendance.getId());
-        attendance.setComment(reqAttendance.getComment());
         attendance.setAttendance(dtA);
         attendance.setLeave(dtL);
+
+        attendance.setId(reqAttendance.getId());
+        attendance.setComment(reqAttendance.getComment());
+
         attendance.setState(0);
         attendance.setUserId(reqAttendance.getUserId());
         attendance.setCreatedDate(reqAttendance.getCreatedDate());
         attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
         return attendance;
+    }
+
+    //月間の労働時間を合計するメソッド
+    //Durationクラスは、時間の長さを表現するためのクラス。
+    //LocalTimeを→Durationに。　LocalTimeは時間を加算できない。Durationにすることで複数の時間を合計することが可能に。
+    public Duration calculateTotalWorkingTime(List<AttendanceForm> attendances) {
+        //ストリームを使うことで、リストの各要素に対して順番に処理を行うことができる
+        return attendances.stream()
+                .map(AttendanceForm::getRestTime)
+                //LocalTime 型の restTime を Duration 型に変換
+                .map(time -> Duration.ofHours(time.getHour()).plusMinutes(time.getMinute()))
+                //reduce はストリームの各要素を順番に処理し、最終的な結果を得るためのやつ
+                .reduce(Duration.ZERO, Duration::plus);
     }
 
     // 月間勤怠情報を取得
@@ -140,5 +167,17 @@ public class AttendanceService {
         return attendances;
     }
 
+    public void saveAttendanceState(List<AttendanceForm> attendanceForms) throws ParseException {
+        for (int i = 0; i < attendanceForms.size(); i++) {
 
+            AttendanceForm attendanceForm = attendanceForms.get(i);
+
+            Attendance attendance = setAttendanceEntity(attendanceForm);
+            attendance.setState(1);
+            attendanceRepository.save(attendance);
+        }
+
+
+
+    }
 }

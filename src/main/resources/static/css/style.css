@@ -1,8 +1,46 @@
 
 body {
-  background-color:  #4C9A2A;  /* 明るい緑 */
-   color: #1a381b;  /* 濃い緑っぽい文字色 */
-   font-family: 'Chalkboard SE', cursive, sans-serif;
+  background-color: #E9F6EC;  /* RecoRu風の薄め緑背景 */
+  color: #333333;             /* 読みやすい濃い文字色 */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+ /* 共通リセット */
+ table {
+   width: 100%;
+   border-collapse: collapse;
+   table-layout: fixed;
+   font-family: Arial, sans-serif;
+ }
+.header {
+  top: 0;
+  width: 100%;
+  padding: 9px 15px;
+  background-color: #B2DFDB; /* RecoRu風の爽やかグリーン */
+  color: #333333;
+  font-size: 1.0rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+
+ /* 各行の区切り */
+ tbody tr {
+   border-bottom: 1px solid #e0e0e0;
+ }
+
+ /* 行ホバー時の強調 */
+ tbody tr:hover {
+   background-color: #eef6ff;
+ }
+
+ /* セル内余白とテキストの折り返し制御 */
+ tbody td {
+   padding: 6px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
  }
 
  .kotei {

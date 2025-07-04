@@ -2,15 +2,12 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  　
-  <link th:href="@{/css/style.css}" rel="styleSheet">
   <title>申請詳細</title>
 </head>
 <body>
 <h1>申請詳細</h1>
 
-<table >
+<table>
   <thead>
   <tr>
     <th>日付</th>
@@ -45,8 +42,6 @@
     <button type="submit">承認</button>
 </form>
 <form th:action="@{/request/list}" th:method="get">
-  <div>
-    <button type="submit" class="submit-btn2">戻る</button>
   </div>
 </form>
 </body>
