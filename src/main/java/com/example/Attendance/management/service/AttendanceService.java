@@ -62,6 +62,19 @@ public class AttendanceService {
         return attendance;
     }
 
+    //月間の労働時間を合計するメソッド
+    //Durationクラスは、時間の長さを表現するためのクラス。
+    //LocalTimeを→Durationに。　LocalTimeは時間を加算できない。Durationにすることで複数の時間を合計することが可能に。
+    public Duration calculateTotalWorkingTime(List<AttendanceForm> attendances) {
+        //ストリームを使うことで、リストの各要素に対して順番に処理を行うことができる
+        return attendances.stream()
+                .map(AttendanceForm::getRestTime)
+                //LocalTime 型の restTime を Duration 型に変換
+                .map(time -> Duration.ofHours(time.getHour()).plusMinutes(time.getMinute()))
+                //reduce はストリームの各要素を順番に処理し、最終的な結果を得るためのやつ
+                .reduce(Duration.ZERO, Duration::plus);
+    }
+
     // 月間勤怠情報を取得
     public List<AttendanceForm> getMonthlyAttendance(int userId, LocalDate month) {
         LocalDateTime startOfMonth = month.withDayOfMonth(1).atStartOfDay();

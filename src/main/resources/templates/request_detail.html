@@ -2,59 +2,58 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  　
-  <link th:href="@{/css/style.css}" rel="styleSheet">
-  <title>申請詳細</title>
+    <meta charset="UTF-8">
+    　
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>申請詳細</title>
 </head>
 <body>
 <h1>申請詳細</h1>
 
-<table >
-  <thead>
-  <tr>
-    <th>日付</th>
-    <th>出社</th>
-    <th>退社</th>
-    <th>メモ</th>
-    <th>労働時間</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
-    <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}"></td>
-    <div th:each="row : ${attendances}" th:if="${row != null}">
-      <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}">
-<!--      <td th:text="${#strings.replace(#strings.substring(row.attendance, 5, 10), '-', '/')}"></td>-->
-      <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
-      <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
-      <td th:text="${row.comment}"></td>
-      <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
+<table>
+    <thead>
+    <tr>
+        <th>日付</th>
+        <th>出社</th>
+        <th>退社</th>
+        <th>メモ</th>
+        <th>労働時間</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
+        <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}"></td>
+        <div th:each="row : ${attendances}" th:if="${row != null}">
+            <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}">
+                <!--      <td th:text="${#strings.replace(#strings.substring(row.attendance, 5, 10), '-', '/')}"></td>-->
+                <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
+                <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
+                <td th:text="${row.comment}"></td>
+                <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
 
-      <td class="button-signup">
-        <!--      <form th:action="@{/attendanceedit}" th:object="${formModel}" th:method="post">-->
-        <!--        <input type="hidden" name="formModel" th:value="${row}">-->
-        <!--        <input type="submit" class="submit-btn2" value="編集"/>-->
-        <!--      </form>-->
-        <select name="status">
-          <option th:each="status : ${statuses}"
-                  th:value="${status.ordinal()}"
-                  th:text="${status}"
-                  th:selected="${status.ordinal() == 0}">
-          </option>
-        </select>
-      </td>
-    </div>
+                <td class="button-signup">
+                    <!--      <form th:action="@{/attendanceedit}" th:object="${formModel}" th:method="post">-->
+                    <!--        <input type="hidden" name="formModel" th:value="${row}">-->
+                    <!--        <input type="submit" class="submit-btn2" value="編集"/>-->
+                    <!--      </form>-->
+                    <select name="status">
+                        <option th:each="status : ${statuses}"
+                                th:value="${status.ordinal()}"
+                                th:text="${status}"
+                                th:selected="${status.ordinal() == 0}">
+                        </option>
+                    </select>
+                </td>
+            </div>
 
 
-
-  </tr>
-  </tbody>
+    </tr>
+    </tbody>
 </table>
 <form th:action="@{/request/list}" th:method="get">
-  <div>
-    <button type="submit" class="submit-btn2">戻る</button>
-  </div>
+    <div>
+        <button type="submit" class="submit-btn2">戻る</button>
+    </div>
 </form>
 </body>
 </html>

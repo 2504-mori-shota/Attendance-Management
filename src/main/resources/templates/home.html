@@ -1,51 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <link th:href="@{/css/style.css}" rel="stylesheet">
-        <title>勤怠管理</title>
-    </head>
-    <body>
-
-        <header>
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <title>勤怠管理</title>
+</head>
+<body>
+    <header>
+        <div class="header">
             <h1>勤怠管理</h1>
             <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
-        </header>
-
-        <div class="button-rightTop">
-            <form th:action="@{/logout}">
-                <button type="submit">ログアウト</button>
-            </form>
-
-            <form th:action="@{/system}" th:method="get" th:object="${user}">
-                <!--              th:if="${session.user.branchId == 1 and session.user.departmentId == 1}">-->
-                <button type="submit">ユーザー管理</button>
-            </form>
-
-            <form th:action="@{/attendance}">
-                <button type="submit">勤怠登録</button>
-            </form>
-
         </div>
+    </header>
 
-        <p>2025年7月</p>
-            <button onclick="onClickMonth(-1)">前月</button>
-            <button onclick="onClickMonth(1)">次月</button>
+    <div class="button-rightTop">
+        <form th:action="@{/logout}">
+            <button type="submit">ログアウト</button>
+        </form>
 
-        <table >
-            <thead>
-            <tr>
-                <th>日付</th>
-                <th>出社</th>
-                <th>退社</th>
-                <th>メモ</th>
-                <th>労働時間</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="row : ${attendances}" th:if="${row != null}">
+        <form th:action="@{/system}" th:method="get" th:object="${user}">
+            <!--              th:if="${session.user.branchId == 1 and session.user.departmentId == 1}">-->
+            <button type="submit">ユーザー管理</button>
+        </form>
 
-                <td th:text="${#strings.replace(#strings.substring(row.attendance, 5, 10), '-', '/')}"></td>
+        <form th:action="@{/attendance}">
+            <button type="submit">勤怠登録</button>
+        </form>
+    </div>
+
+<span th:text="${year} + '年' + ${month} + '月'"></span>
+<a th:href="@{/home(year=${year},month=${month - 1})}"> ＜前月＞</a>
+<a th:href="@{/home(year=${year},month=${month + 1})}">＜次月＞ </a>
+<p>合計労働時間: <span th:text="${totalWorkingTime}">00:00</span></p>
+
+<table>
+    <thead>
+    <tr>
+        <th>日付</th>
+        <th>出社</th>
+        <th>退社</th>
+        <th>メモ</th>
+        <th>労働時間</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${attendances}" th:if="${row != null}">
+
+    <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
+        <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}"></td>
+        <div th:each="row : ${attendances}" th:if="${row != null}">
+            <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}">
+
                 <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
                 <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
                 <td th:text="${row.comment}"></td>
@@ -57,10 +62,12 @@
                         <input type="submit" class="submit-btn2" value="編集"/>
                     </form>
                 </td>
+            </div>
+        </div>
+    </tr>
 
-            </tr>
-            </tbody>
-        </table>
+    </tbody>
+</table>
 
         <form th:action="@{/application}" th:method="post" th:object="${attendanceList}">
             <div th:each="item, stat : *{attendances}">
