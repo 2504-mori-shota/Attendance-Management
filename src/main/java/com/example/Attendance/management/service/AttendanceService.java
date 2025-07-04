@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,7 +51,7 @@ public class AttendanceService {
             LocalDateTime startOfMonth = month.withDayOfMonth(1).atStartOfDay();
             LocalDateTime endOfMonth = month.withDayOfMonth(month.lengthOfMonth())
                     .atTime(23, 59, 59);
-            List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(userId, startOfMonth, endOfMonth);
+            List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetweenOrderByAttendanceAsc(userId, startOfMonth, endOfMonth);
             List<AttendanceForm> attendanceForms = setAttendanceForm(attendances);
             return attendanceForms;
         }
@@ -92,6 +91,42 @@ public class AttendanceService {
         return attendances;
     }
 
+    public AttendanceForm findById (int id) {
+        List<Attendance> attendances = attendanceRepository.findById(id);
+        List<AttendanceForm> attendanceForms = setAttendanceEditForm(attendances);
+        return attendanceForms.get(0);
+    }
+
+    private List<AttendanceForm> setAttendanceEditForm(List<Attendance> results) {
+        List<AttendanceForm> attendances = new ArrayList<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+
+        for (int i = 0; i < results.size(); i++) {
+
+            AttendanceForm attendance = new AttendanceForm();
+            Attendance result = results.get(i);
+            //出勤時間と退勤時間をLocalDateTime型 → String型に型変換
+            String attendanceString = result.getAttendance().format(timeFormatter);
+            String leaveString = result.getLeave().format(timeFormatter);
+            //日付を取得
+            String date = result.getAttendance().format(dateFormatter);
+
+
+            attendance.setId(result.getId());
+            attendance.setUserId(result.getUserId());
+            attendance.setComment(result.getComment());
+            attendance.setAttendance(attendanceString);
+            attendance.setLeave(leaveString);
+            attendance.setDate(date);
+            attendance.setStateId(result.getStateId());
+            attendance.setCreatedDate(result.getCreatedDate());
+            attendance.setUpdatedDate(result.getUpdatedDate());
+            attendances.add(attendance);
+        }
+        return attendances;
+    }
 
 
 }

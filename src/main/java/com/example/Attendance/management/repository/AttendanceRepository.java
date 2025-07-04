@@ -12,6 +12,8 @@ import java.util.List;
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     // 指定したユーザーの月間勤怠情報を取得
-    List<Attendance> findByUserIdAndAttendanceBetween(int userId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<Attendance> findByUserIdAndAttendanceBetweenOrderByAttendanceAsc(int userId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    List<Attendance> findById(int id);
 
 }
