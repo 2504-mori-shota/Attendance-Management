@@ -127,6 +127,11 @@ public class HomeController {
         }
         return "redirect:/";
     }
+    @DeleteMapping("/Attendance/delete/{id}")
+    public String deleteAttendance(@PathVariable int id){
+        attendanceService.deleteAttendance(id);
+        return "redirect:/home";
+    }
 
 }
 
