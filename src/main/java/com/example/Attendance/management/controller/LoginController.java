@@ -30,7 +30,7 @@ public class LoginController {
         UserForm userForm = new UserForm();
         // ログインフィルターで書いたエラー文をここで受け取る。
         String errorMessage = (String) session.getAttribute("errorMessageForm");
-        session.removeAttribute("errorMessages");
+        session.removeAttribute("errorMessageForm");
         // 準備した空のFormを保管
         model.addAttribute("userForm", userForm);
         model.addAttribute("errorMessageForm", errorMessage);
@@ -55,7 +55,7 @@ public class LoginController {
         if (user == null || user.getIsStopped() == 1) {
             errorMessages.add("ログインに失敗しました");
             model.addAttribute("errorMessages",errorMessages);
-            return "/login";
+            return "redirect:/";
         }
         // セッションにログインユーザー情報を格納
         session.setAttribute("loginUser", user); //ここからやる
