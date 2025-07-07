@@ -23,12 +23,12 @@
         </form>
 
 
-        <form th:action="@{/useredit/id={id}(id=${session.loginUser.id})}" >
+        <form th:action="@{/useredit/id={id}(id=${session.loginUser.id})}">
             <input type="submit" value="編集"/>
         </form>
-        
 
-        <form th:action="@{/request/list}" th:method="get">
+
+        <form th:action="@{/request/list}" th:method="get" th:if="${session.loginUser.id == 2}">
             <button type="submit">申請一覧</button>
         </form>
 
@@ -96,7 +96,7 @@
                 <input type="hidden" th:field="*{attendances[__${stat.index}__].comment}">
                 <input type="hidden" th:field="*{attendances[__${stat.index}__].createdDate}">
             </div>
-            <input type="submit" value="申請" class="message-button2" onclick="setSubmit()"/>
+            <input type="submit" value="申請" class="message-button2" onclick="return confirm('申請してもよろしいでしょうか？')"/>
             <!---->
         </form>
 
