@@ -19,13 +19,14 @@
         </form>
 
         <form th:action="@{/system}" th:method="get" th:object="${user}">
-            <!--              th:if="${session.user.branchId == 1 and session.user.departmentId == 1}">-->
             <button type="submit">ユーザー管理</button>
         </form>
 
-        <form th:action="@{/attendance}">
+      <!--  <form th:action="@{/attendance}">
+            <input type="hidden" name="Year" th:value="${year}">
+            <input type="hidden" name="Month" th:value="${month}">
             <button type="submit">勤怠登録</button>
-        </form>
+        </form> -->
     </div>
 
 <span th:text="${year} + '年' + ${month} + '月'"></span>
@@ -47,7 +48,11 @@
     <tr th:each="row : ${attendances}" th:if="${row != null}">
 
     <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
-        <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}"></td>
+        <td>
+            <a th:href="${'/attendance?date=' + year + '-' + #numbers.formatInteger(month,2) + '-' + #numbers.formatInteger(i,2)}"
+                    th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}">
+            </a>
+        </td>
         <div th:each="row : ${attendances}" th:if="${row != null}">
             <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}">
 
