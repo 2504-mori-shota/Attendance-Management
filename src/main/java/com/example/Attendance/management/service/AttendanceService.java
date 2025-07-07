@@ -4,7 +4,10 @@ import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.entity.Attendance;
+
 import com.example.Attendance.management.repository.entity.User;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -180,7 +183,57 @@ public class AttendanceService {
             attendanceRepository.save(attendance);
         }
 
-
-
     }
+    @Transactional
+    public void deleteAttendance(Integer id){
+        attendanceRepository.deleteById(id.longValue());
+        }
+
+
+    //同日の情報取得用
+    public List<AttendanceForm> findAllByUserId (int id, String date) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate monthDay = LocalDate.parse(date, dateFormatter);
+        LocalDateTime start = monthDay.atStartOfDay();
+        LocalDateTime end = monthDay.plusDays(1).atStartOfDay();
+        List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetween(id, start, end);
+        List<AttendanceForm> attendanceForms = setAttendanceEditForm(attendances);
+        return attendanceForms;
+    }
+
+    //前・登録済み情報　後・登録前情報
+    public boolean findByTime(AttendanceForm attendanceList, AttendanceForm attendanceForm){
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        //登録済み(already)の時間をLocalDateTime型に変換
+        String aStartTime = attendanceList.getDate() + " " + attendanceList.getAttendance();
+        String aEndTime = attendanceList.getDate() + " " + attendanceList.getLeave();
+        LocalDateTime aStart = LocalDateTime.parse(aStartTime, dateFormatter);
+        LocalDateTime aEnd = LocalDateTime.parse(aEndTime, dateFormatter);
+
+        //登録前(still)の勤怠時間をLocalDateTime型に変換
+        String sStartTime = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
+        String sEndTime = attendanceForm.getDate() + " " + attendanceForm.getLeave();
+        LocalDateTime sStart = LocalDateTime.parse(sStartTime, dateFormatter);
+        LocalDateTime sEnd = LocalDateTime.parse(sEndTime, dateFormatter);
+
+        if (attendanceList.getId() != attendanceForm.getId()) {
+            //isAfter = ～以降　　isBefore　= ～以前
+            //sStart.isAfter(aStart)　は　登録前が登録済みよりも後の時間かどうか
+            if (sStart.isAfter(aStart) && sStart.isBefore(aEnd)) {
+                return true;
+            }
+            if (sEnd.isAfter(aStart) && sEnd.isBefore(aEnd)) {
+                return true;
+            }
+            if (aStart.isAfter(sStart) && aStart.isBefore(sEnd)) {
+                return true;
+            }
+            if (aEnd.isAfter(sStart) && aEnd.isBefore(sEnd)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
