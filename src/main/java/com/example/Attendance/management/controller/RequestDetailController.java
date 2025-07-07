@@ -1,8 +1,8 @@
 package com.example.Attendance.management.controller;
 
 import com.example.Attendance.management.controller.form.AttendanceForm;
+import com.example.Attendance.management.controller.form.AttendanceListForm;
 import com.example.Attendance.management.controller.form.RequestForm;
-import com.example.Attendance.management.repository.entity.Request;
 import com.example.Attendance.management.service.AttendanceService;
 import com.example.Attendance.management.service.RequestService;
 import jakarta.servlet.http.HttpSession;
@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -55,6 +54,8 @@ public class RequestDetailController {
 
         //requestをもとに勤怠情報を取得
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestListData.get(0));
+        AttendanceListForm attendanceListForm = new AttendanceListForm();
+        attendanceListForm.setAttendances(attendanceForms);
 
         //月の日数を取得
         String attendanceDate = attendanceForms.get(0).getAttendance();
@@ -66,7 +67,8 @@ public class RequestDetailController {
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
         model.addAttribute("requestId", requestId);
-        model.addAttribute("attendances", attendanceForms);
+//        model.addAttribute("attendances", attendanceForms);
+        model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
 
         return "request_detail";
@@ -75,10 +77,41 @@ public class RequestDetailController {
     // 申請情報更新
     @PostMapping("/request/update")
     public String approval (@ModelAttribute("requestId") String id, Model model) {
+        //requestの更新処理↓↓
         int requestId = Integer.parseInt(id);
         List<RequestForm> requests = requestService.findRequestById(requestId);
         RequestForm request = requests.get(0);
         request.setState(2);
+        //requestの更新処理
+        requestService.updateRequest(request);
+        return "redirect:/request/list";
+    }
+
+    // 申請差戻機能
+    @PostMapping("/request/return")
+    public String returnRequest (@ModelAttribute("attendanceList") AttendanceListForm attendanceListForm,
+                                 @ModelAttribute("requestId") String strRequestId,
+                                 Model model) throws ParseException {
+        //attendanceの更新処理↓↓
+        List<AttendanceForm> attendanceForms = attendanceListForm.getAttendances();
+        for (AttendanceForm attendanceForm : attendanceForms){
+            int attendanceId = attendanceForm.getId();
+            AttendanceForm dbAttendanceForm = attendanceService.findById(attendanceId);
+            if (attendanceForm.getCheckbox()){
+                dbAttendanceForm.setState(3);
+            } else {
+                dbAttendanceForm.setState(2);
+            }
+            attendanceService.saveAttendance(dbAttendanceForm);
+        }
+
+        //requestの更新処理↓↓
+        int requestId = Integer.parseInt(strRequestId);
+        List<RequestForm> requests = requestService.findRequestById(requestId);
+        RequestForm request = requests.get(0);
+        //statusを差戻済み(1)に更新
+        request.setState(1);
+        //requestの更新処理
         requestService.updateRequest(request);
         return "redirect:/request/list";
     }

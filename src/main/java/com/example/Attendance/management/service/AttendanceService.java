@@ -4,6 +4,10 @@ import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.entity.Attendance;
+
+import com.example.Attendance.management.repository.entity.User;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +57,11 @@ public class AttendanceService {
 
         attendance.setId(reqAttendance.getId());
         attendance.setComment(reqAttendance.getComment());
-
-        attendance.setState(0);
+        if (reqAttendance.getState() == null){
+            attendance.setState(0);
+        } else {
+            attendance.setState(reqAttendance.getState());
+        }
         attendance.setUserId(reqAttendance.getUserId());
         attendance.setCreatedDate(reqAttendance.getCreatedDate());
         attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
@@ -176,7 +183,10 @@ public class AttendanceService {
             attendanceRepository.save(attendance);
         }
 
-
+    }
+    @Transactional
+    public void deleteAttendance(Integer id){
+        attendanceRepository.deleteById(id.longValue());
         }
 
 

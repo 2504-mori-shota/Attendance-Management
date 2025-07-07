@@ -41,7 +41,7 @@ public class AttendanceForm {
     private String comment;
 
 
-    private int state;
+    private Integer state;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdDate;
