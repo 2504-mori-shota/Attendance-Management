@@ -54,8 +54,11 @@ public class AttendanceService {
 
         attendance.setId(reqAttendance.getId());
         attendance.setComment(reqAttendance.getComment());
-
-        attendance.setState(0);
+        if (reqAttendance.getState() == null){
+            attendance.setState(0);
+        } else {
+            attendance.setState(reqAttendance.getState());
+        }
         attendance.setUserId(reqAttendance.getUserId());
         attendance.setCreatedDate(reqAttendance.getCreatedDate());
         attendance.setUpdatedDate(reqAttendance.getUpdatedDate());
