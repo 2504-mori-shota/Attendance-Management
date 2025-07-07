@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class AttendanceEditController {
@@ -69,6 +70,17 @@ public class AttendanceEditController {
 
         session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser"); // セッションから再取得
+
+        List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
+
+
+        for (int i = 0; i < attendanceFormList.size(); i++) {
+            AttendanceForm attendance = attendanceFormList.get(i);
+            //trueでifに入る
+            if (attendanceService.findByTime(attendance, attendanceForm)){
+                result.rejectValue("attendance", "duplicate", "勤務時間が重複しています");
+            }
+        }
 
         if (result.hasErrors()) {
             ModelAndView mav = new ModelAndView("attendanceedit");
