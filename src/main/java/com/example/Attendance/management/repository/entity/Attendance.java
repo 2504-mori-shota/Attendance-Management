@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,4 +43,5 @@ public class Attendance {
     private Date createdDate;
     @Column(insertable = false, updatable = false)
     private Date updatedDate;
+
 }

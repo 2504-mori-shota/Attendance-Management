@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.util.List;
 
 
 @Controller
@@ -32,7 +33,11 @@ public class AttendanceController {
 
     @GetMapping("/attendance")
     public ModelAndView newAttend
-            (HttpServletRequest request, HttpServletResponse response,
+            (HttpServletRequest request,
+//             @RequestParam(name = "Year", required = false)String year,
+//             @RequestParam(name = "Month", required = false)String month,
+             @RequestParam("date")String date,
+             Model model,
              RedirectAttributes redirectAttributes) {
         session = request.getSession();
         // セッションからユーザーオブジェクトを取得
@@ -44,11 +49,15 @@ public class AttendanceController {
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
         AttendanceForm attendanceForm = new AttendanceForm();
+        attendanceForm.setDate(date);
         // 画面遷移先を指定
         mav.setViewName("/attendance");
         mav.addObject("formModel", user);
         // 準備した空のFormを保管
         mav.addObject("attendanceInfo", attendanceForm);
+//        model.addAttribute("date", date);
+//        model.addAttribute("Year", year);
+//        model.addAttribute("Month", month);
         // mav.addObject("errorMessageForm", errorMessages);
         return mav;
 
@@ -67,6 +76,18 @@ public class AttendanceController {
         session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser"); // セッションから再取得
 
+        //日付重複チェック
+        List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
+
+
+        for (int i = 0; i < attendanceFormList.size(); i++) {
+            AttendanceForm attendance = attendanceFormList.get(i);
+            //trueでifに入る
+            if (attendanceService.findByTime(attendance, attendanceForm)){
+                result.rejectValue("attendance", "duplicate", "勤務時間が重複しています");
+            }
+        }
+
         if (result.hasErrors()) {
             ModelAndView mav = new ModelAndView("attendance");
             mav.addObject("attendanceInfo", attendanceForm);
@@ -75,6 +96,7 @@ public class AttendanceController {
             return mav;
         }
         attendanceForm.setUserId(user.getId());
+
         // 投稿をテーブルに格納
         attendanceService.saveAttendance(attendanceForm);
         // rootへリダイレクト

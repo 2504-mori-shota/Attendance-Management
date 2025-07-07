@@ -16,9 +16,12 @@
 
     <div class="main-contents-attendance" th:object="${formModel}">
       <form th:method="post" th:action="@{/addAttendance}" th:object="${attendanceInfo}">
-        <input type="submit" value="登録" class="message-button1" style="margin:0px; float:right;"/>
-        <label>日付選択
+
+        <!--<label>日付選択
           <input type="date" name="date" th:field="*{date}"/><br/>
+        </label>-->
+        <label>日付
+          <input type="date" name="date" th:field="*{date}" readonly/><br/>
         </label>
         <div th:if="${#fields.hasErrors('date')}" style="color:red;" th:errors="*{date}"></div>
         <label>出勤時間
@@ -34,6 +37,9 @@
         <label>メモ</label><br/>
         <input type="text" class="comment" th:field="*{comment}" ></textarea><br/>
         <div th:if="${#fields.hasErrors('comment')}" style="color:red;" th:errors="*{comment}"></div>
+        <input type="hidden" name="Year" th:value="${Year}"/>
+        <input type="hidden" name="Month" th:value="${Month}"/>
+        <input type="submit" value="登録" class="message-button1"/>
 
       </form>
       <form th:action="@{/home}">

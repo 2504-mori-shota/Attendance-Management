@@ -55,7 +55,7 @@ public class HomeController {
         //バリエーションチャック
         UserForm user = (UserForm) request.getSession().getAttribute("loginUser");
         if (user == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
 
         LocalDate now = LocalDate.now();
