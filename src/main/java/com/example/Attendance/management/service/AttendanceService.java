@@ -5,6 +5,7 @@ import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.repository.AttendanceRepository;
 import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.repository.entity.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -178,6 +179,9 @@ public class AttendanceService {
         }
 
 
-
+    }
+    @Transactional
+    public void deleteAttendance(Integer id){
+        attendanceRepository.deleteById(id.longValue());
     }
 }

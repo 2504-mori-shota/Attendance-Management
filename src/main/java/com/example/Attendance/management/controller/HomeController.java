@@ -55,7 +55,7 @@ public class HomeController {
         //バリエーションチャック
         UserForm user = (UserForm) request.getSession().getAttribute("loginUser");
         if (user == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
 
         LocalDate now = LocalDate.now();
@@ -124,6 +124,11 @@ public class HomeController {
             session.invalidate();//セッション破棄
         }
         return "redirect:/";
+    }
+    @DeleteMapping("/Attendance/delete/{id}")
+    public String deleteAttendance(@PathVariable int id){
+        attendanceService.deleteAttendance(id);
+        return "redirect:/home";
     }
 
 }
