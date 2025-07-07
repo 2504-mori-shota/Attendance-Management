@@ -22,6 +22,10 @@
             <button type="submit">ユーザー管理</button>
         </form>
 
+        <form th:action="@{/request/list}" th:method="get">
+            <button type="submit">申請一覧</button>
+        </form>
+
     </div>
 
 <span th:text="${year} + '年' + ${month} + '月'"></span>
