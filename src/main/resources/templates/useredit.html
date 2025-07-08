@@ -19,7 +19,9 @@
       <form th:action="@{/update}" th:object="${formModel}" th:method="post">
         <!--  ユーザー登録 -->
         <label>アカウント<br/>
-          <input type="text" th:field="*{account}" class="form-control"></label><br/>
+          <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="form-control">
+          <input th:unless="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="form-control" readonly>
+        </label><br/>
         <div th:if="${#fields.hasErrors('account')}" style="color:red;" th:errors="*{account}"></div>
 
         <label>パスワード<br/>
@@ -31,19 +33,21 @@
         <div th:if="${#fields.hasErrors('passwordConfirm')}" style="color:red;" th:errors="*{passwordConfirm}"></div>
 
         <label>氏名<br/>
-          <input type="text" th:field="*{name}" class="form-control"></label><br/>
+          <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{name}" class="form-control">
+          <input th:unless="${session.loginUser.postId == 3}" type="text" th:field="*{name}" class="form-control" readonly>
+        </label><br/>
         <div th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}"></div>
 
-        <div th:if="${formModel.id != session.loginUser.id}">
           <label>役職<br/>
-            <select th:field="*{postId}" class="form-control">
+            <select th:if="${session.loginUser.postId == 3 && (formModel.id != session.loginUser.id)}" th:field="*{postId}" class="form-control">
               <option value="" disabled selected>選択してください</option>
               <option th:each="entry : ${postOptions}"
                       th:value="${entry.key}"
                       th:text="${entry.value}"></option>
             </select>
+            <input th:unless="${session.loginUser.postId == 3 && (formModel.id != session.loginUser.id)}" type="text" th:value="${postName}" class="form-control" readonly>
+            <input type="hidden" th:field="*{postId}"/>
           </label><br/>
-        </div>
 
           <input th:type="hidden" name="id" th:value="${formModel.id}">
           <button type="submit" class="submit-btn2">変更</button>

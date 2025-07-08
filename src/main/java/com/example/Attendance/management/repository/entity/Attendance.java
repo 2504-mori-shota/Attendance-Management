@@ -39,9 +39,9 @@ public class Attendance {
     @Column
     private int state;
 
-    @Column(insertable = false)
-    private Date createdDate;
     @Column(insertable = false, updatable = false)
+    private Date createdDate;
+    @Column(insertable = false)
     private Date updatedDate;
 
 }

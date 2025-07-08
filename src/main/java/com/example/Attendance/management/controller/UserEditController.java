@@ -38,7 +38,8 @@ public class UserEditController {
     public ModelAndView newContent(
             @PathVariable("id") String strId,
             HttpServletRequest request,
-            RedirectAttributes redirectAttributes) throws IOException {
+            RedirectAttributes redirectAttributes,
+            Model model) throws IOException {
         ModelAndView mav = new ModelAndView();
 
         //URLパターンチェック
@@ -67,14 +68,15 @@ public class UserEditController {
         List<UserForm> users = userService.findByIdWithPost(sessionUser.getId());
         UserForm userInfoForm = users.get(0);
 
-        if (userInfoForm.getPostId() != 3) {
-            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
-            return new ModelAndView("redirect:/system");
-        }
+//        if (userInfoForm.getPostId() != 3) {
+//            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+//            return new ModelAndView("redirect:/system");
+//        }
         // 画面遷移先を指定
         mav.setViewName("/useredit");
         // 準備した空のFormを保管
         mav.addObject("postOptions", getPostOptions());
+        model.addAttribute("postName", userInfoForm.getPost().getPostName());
         // mav.addObject("errorMessageForm", errorMessages);
         return mav;
     }
@@ -100,7 +102,10 @@ public class UserEditController {
             @Validated(UserForm.EditGroup.class)
             @Valid @ModelAttribute("formModel") UserForm userForm,
             BindingResult result,
+            HttpServletRequest request,
             Model model) {
+        session = request.getSession();
+        UserForm sessionUser = (UserForm) session.getAttribute("loginUser");
         // パスワード確認チェック
         if (!result.hasFieldErrors("passwordConfirm") &&
                 !userForm.getPassword().equals(userForm.getPasswordConfirm())) {
@@ -111,13 +116,6 @@ public class UserEditController {
         if ((userPass != null) && (userPass.getId() != userForm.getId())) {
             result.rejectValue("account", "duplicate", "アカウントが重複しています");
         }
-
-
-        if (userForm.getPassword().matches("^[a-zA-Z]+$") && (userForm.getPassword().length() >= 6 && userForm.getPassword().length() <= 20)) {
-            userService.saveUser(userForm);
-            return "redirect:/management";
-        }
-
 
         if (!userForm.getPassword().isBlank() && !userForm.getPassword().matches("^[a-zA-Z]+$")) {
             result.rejectValue("password", "duplicate", "パスワードは半角かつ6文字以上20文字以内で入力してください");
@@ -132,9 +130,11 @@ public class UserEditController {
             return "useredit"; // フォワードで遷移
         }
 
-        userForm.setPassword(userPass.getPassword());
-
         userService.saveUser(userForm);
+
+        if (sessionUser.getPostId() != 3){
+            return "redirect:/home";
+        }
         return "redirect:/system";
     }
 }

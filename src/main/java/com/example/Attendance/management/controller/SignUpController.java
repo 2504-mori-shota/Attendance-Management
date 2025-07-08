@@ -105,6 +105,6 @@ public class SignUpController {
         // 投稿をテーブルに格納
         userService.saveUser(userForm);
         // rootへリダイレクト
-        return "redirect:/management";
+        return "redirect:/system";
     }
 }
