@@ -32,25 +32,6 @@
                 <button type="submit">申請一覧</button>
             </form>
 
-            <div class="button-rightTop">
-                <form th:action="@{/logout}">
-                    <button type="submit">ログアウト</button>
-                </form>
-
-                <form th:action="@{/system}" th:method="get" th:object="${user}" th:if="${session.loginUser.id == 3}">
-                    <button type="submit">ユーザー管理</button>
-                </form>
-
-
-                <form th:action="@{/useredit/id={id}(id=${session.loginUser.id})}">
-                    <input type="submit" value="編集"/>
-                </form>
-
-
-                <form th:action="@{/request/list}" th:method="get" th:if="${session.loginUser.id == 2}">
-                    <button type="submit">申請一覧</button>
-                </form>
-
             </div>
         </div>
 

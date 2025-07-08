@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +33,7 @@ public class AttendanceService {
     }
     private Attendance setAttendanceEntity(AttendanceForm reqAttendance) throws ParseException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Date date = new Date();
         Attendance attendance = new Attendance();
         //申請用のsetEntity
         if(reqAttendance.getDate() == null){
@@ -42,7 +44,7 @@ public class AttendanceService {
             attendance.setId(reqAttendance.getId());
             attendance.setComment(reqAttendance.getComment());
             attendance.setUserId(reqAttendance.getUserId());
-            attendance.setCreatedDate(reqAttendance.getCreatedDate());
+            attendance.setUpdatedDate(date);
             return attendance;
         }
         //指定の日付勤怠情報を取得できる

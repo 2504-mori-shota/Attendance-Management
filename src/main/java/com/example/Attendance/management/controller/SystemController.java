@@ -36,7 +36,7 @@ public class SystemController {
         UserForm userForm = (UserForm) session.getAttribute("loginUser");
         List<UserForm> users = userService.findByIdWithPost(userForm.getId());
         UserForm userInfo =  users.get(0);
-        if (userInfo.getPostId() != 3) {
+        if (userInfo.getPostId() != 3 && userInfo.getPost().getId() != 3) {
             //フラッシュメッセージをセット
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return new ModelAndView("redirect:/home");

@@ -65,15 +65,28 @@ public class UserService {
     }
 
     private User setUserEntity(UserForm reqUser) {
-        String encodedPassword = passwordEncoder.encode(reqUser.getPassword());
+
+        Date date = new Date();
 
         User report = new User();
         report.setId(reqUser.getId());
         report.setAccount(reqUser.getAccount());
-        report.setPassword(encodedPassword);
+
+        if (!reqUser.getPassword().isBlank()) {
+            String encodedPassword = passwordEncoder.encode(reqUser.getPassword());
+            report.setPassword(encodedPassword);
+            //元のハッシュ化されたパスワードを取得
+        } else {
+            List<User> user = userRepository.findById(reqUser.getId());
+            User user1 = user.get(0);
+            String password = user1.getPassword();
+            report.setPassword(password);
+        }
+
         report.setName(reqUser.getName());
         report.setPostId(reqUser.getPostId());
         report.setIsStopped(reqUser.getIsStopped());
+        report.setUpdatedDate(date);
         return report;
     }
 

@@ -117,13 +117,6 @@ public class UserEditController {
             result.rejectValue("account", "duplicate", "アカウントが重複しています");
         }
 
-
-        if (userForm.getPassword().matches("^[a-zA-Z]+$") && (userForm.getPassword().length() >= 6 && userForm.getPassword().length() <= 20)) {
-            userService.saveUser(userForm);
-            return "redirect:/home";
-        }
-
-
         if (!userForm.getPassword().isBlank() && !userForm.getPassword().matches("^[a-zA-Z]+$")) {
             result.rejectValue("password", "duplicate", "パスワードは半角かつ6文字以上20文字以内で入力してください");
         }
@@ -137,9 +130,8 @@ public class UserEditController {
             return "useredit"; // フォワードで遷移
         }
 
-        userForm.setPassword(userPass.getPassword());
-
         userService.saveUser(userForm);
+
         if (sessionUser.getPostId() != 3){
             return "redirect:/home";
         }
