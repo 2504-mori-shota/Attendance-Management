@@ -14,6 +14,9 @@
 </th:block>
 </div>
 <div class="login-icon">
+    <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
+        <strong th:text="${errorMessageForm}" style="color: red;"></strong>
+    </div>
     <!--  ログイン情報をコントローラーに渡す-->
     <form th:method="post" th:action="@{/login}" th:object="${userForm}">
         <div class="form-area">

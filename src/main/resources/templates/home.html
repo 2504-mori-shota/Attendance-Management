@@ -6,40 +6,40 @@
     <title>勤怠管理</title>
 </head>
 <body>
-    <header>
-        <div class="header">
-            <h1>勤怠管理</h1>
-            <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
-        </div>
-    </header>
-
-    <div class="button-rightTop">
-        <form th:action="@{/logout}">
-            <button type="submit">ログアウト</button>
-        </form>
-
-        <form th:action="@{/system}" th:method="get" th:object="${user}" th:if="${session.loginUser.id == 3}">
-            <button type="submit">ユーザー管理</button>
-        </form>
-
-
-        <form th:action="@{/useredit/id={id}(id=${session.loginUser.id})}">
-            <input type="submit" value="編集"/>
-        </form>
-
-
-        <form th:action="@{/request/list}" th:method="get" th:if="${session.loginUser.id == 2}">
-            <button type="submit">申請一覧</button>
-        </form>
-
+<header>
+    <div class="header">
+        <h1>勤怠管理</h1>
+        <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
     </div>
+</header>
+
+<div class="button-rightTop">
+    <form th:action="@{/logout}">
+        <button type="submit">ログアウト</button>
+    </form>
+
+    <form th:action="@{/system}" th:method="get" th:object="${user}" th:if="${session.loginUser.id == 3}">
+        <button type="submit">ユーザー管理</button>
+    </form>
+
+
+    <form th:action="@{/useredit/id={id}(id=${session.loginUser.id})}">
+        <input type="submit" value="編集"/>
+    </form>
+
+
+    <form th:action="@{/request/list}" th:method="get" th:if="${session.loginUser.id == 2}">
+        <button type="submit">申請一覧</button>
+    </form>
+
+</div>
 
 <span th:text="${year} + '年' + ${month} + '月'"></span>
 <a th:href="@{/home(year=${year},month=${month - 1})}"> ＜前月＞</a>
 <a th:href="@{/home(year=${year},month=${month + 1})}">＜次月＞ </a>
 <p>合計労働時間: <span th:text="${totalWorkingTime}">00:00</span></p>
 
-<table>
+<table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
     <thead>
     <tr>
         <th>日付</th>
@@ -47,6 +47,10 @@
         <th>退社</th>
         <th>メモ</th>
         <th>労働時間</th>
+        <th>勤怠編集</th>
+        <th>勤怠消去</th>
+        <th>ステータス</th>
+
     </tr>
     </thead>
     <tbody>
@@ -55,7 +59,7 @@
     <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
         <td>
             <a th:href="${'/attendance?date=' + year + '-' + #numbers.formatInteger(month,2) + '-' + #numbers.formatInteger(i,2)}"
-                    th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}">
+               th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}">
             </a>
         </td>
         <div th:each="row : ${attendances}" th:if="${row != null}">
@@ -73,7 +77,7 @@
                     </form>
                 </td>
                 <td class="buttons">
-                    <form th:action="@{/Attendance/delete/{id}(id=${row.id})}"  th:method="post">
+                    <form th:action="@{/Attendance/delete/{id}(id=${row.id})}" th:method="post">
                         <input type="hidden" name="_method" value="delete"/>
                         <button type="submit" onclick="return confirm('消去しますか？');">消去</button>
                     </form>
@@ -87,19 +91,20 @@
     </tbody>
 </table>
 
-        <form th:action="@{/application}" th:method="post" th:object="${attendanceList}">
-            <div th:each="item, stat : *{attendances}">
-                <input type="hidden" th:field="*{attendances[__${stat.index}__].id}">
-                <input type="hidden" th:field="*{attendances[__${stat.index}__].userId}">
-                <input type="hidden" th:field="*{attendances[__${stat.index}__].attendance}">
-                <input type="hidden" th:field="*{attendances[__${stat.index}__].leave}">
-                <input type="hidden" th:field="*{attendances[__${stat.index}__].comment}">
-                <input type="hidden" th:field="*{attendances[__${stat.index}__].createdDate}">
-            </div>
-            <input type="submit" value="申請" class="message-button2" onclick="return confirm('申請してもよろしいでしょうか？')"/>
-            <!---->
-        </form>
+<form th:action="@{/application}" th:method="post" th:object="${attendanceList}">
+    <div th:each="item, stat : *{attendances}">
+        <input type="hidden" th:field="*{attendances[__${stat.index}__].id}">
+        <input type="hidden" th:field="*{attendances[__${stat.index}__].userId}">
+        <input type="hidden" th:field="*{attendances[__${stat.index}__].attendance}">
+        <input type="hidden" th:field="*{attendances[__${stat.index}__].leave}">
+        <input type="hidden" th:field="*{attendances[__${stat.index}__].comment}">
+        <input type="hidden" th:field="*{attendances[__${stat.index}__].createdDate}">
+    </div>
+    <input type="submit" value="申請" class="message-button2"
+           onclick="return confirm('申請してもよろしいでしょうか？')"/>
+    <!---->
+</form>
 
 
-    </body>
+</body>
 </html>
