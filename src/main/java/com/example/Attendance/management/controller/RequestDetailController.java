@@ -53,7 +53,9 @@ public class RequestDetailController {
         }
 
         //requestをもとに勤怠情報を取得
-        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestListData.get(0));
+        RequestForm requestForm = requestListData.get(0);
+        int requestUserId = requestForm.getUserId();
+        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForm);
         AttendanceListForm attendanceListForm = new AttendanceListForm();
         attendanceListForm.setAttendances(attendanceForms);
 
@@ -67,6 +69,7 @@ public class RequestDetailController {
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
         model.addAttribute("requestId", requestId);
+        model.addAttribute("requestUserId", requestUserId);
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
 
@@ -119,4 +122,17 @@ public class RequestDetailController {
         return "redirect:/request/list";
     }
 
+    @PostMapping("/myrequest/delete")
+    public String myRequestDelete (@ModelAttribute("requestId") String strRequestId, Model model) throws ParseException {
+        //requestIdのint化
+        int requestId = Integer.parseInt(strRequestId);
+        //ステータス変更のためにattendanceを取得
+        List<RequestForm> requestForms = requestService.findRequestById(requestId);
+        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForms.get(0));
+        //ステータスを未申請(0)に変更
+        attendanceService.saveAttendanceState(attendanceForms,0);
+        //requestの削除
+        requestService.deleteRequest(requestId);
+        return "redirect:/request/list";
+    }
 }

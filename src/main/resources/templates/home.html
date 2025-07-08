@@ -30,6 +30,9 @@
                 <input type="submit" value="編集"/>
             </form>
 
+            <form th:action="@{/myrequest/{id}(id=${session.loginUser.id})}">
+                <input type="submit" value="申請状況"/>
+            </form>
 
             <form th:action="@{/request/list}" th:method="get" th:if="${session.loginUser.postId == 2}">
                 <button type="submit">申請一覧</button>
