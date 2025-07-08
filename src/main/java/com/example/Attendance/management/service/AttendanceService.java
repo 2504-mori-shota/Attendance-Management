@@ -173,13 +173,13 @@ public class AttendanceService {
         return attendances;
     }
 
-    public void saveAttendanceState(List<AttendanceForm> attendanceForms) throws ParseException {
+    public void saveAttendanceState(List<AttendanceForm> attendanceForms,int state) throws ParseException {
         for (int i = 0; i < attendanceForms.size(); i++) {
 
             AttendanceForm attendanceForm = attendanceForms.get(i);
 
             Attendance attendance = setAttendanceEntity(attendanceForm);
-            attendance.setState(1);
+            attendance.setState(state);
             attendanceRepository.save(attendance);
         }
 

@@ -112,7 +112,7 @@ public class HomeController {
 
             List<AttendanceForm> list = attendanceForms.getAttendances();
 
-            attendanceService.saveAttendanceState(list);
+            attendanceService.saveAttendanceState(list,1);
 
             requestService.saveRequest(list.get(0), list.get(list.size() - 1));
 
