@@ -67,7 +67,6 @@ public class RequestDetailController {
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
         model.addAttribute("requestId", requestId);
-//        model.addAttribute("attendances", attendanceForms);
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
 
@@ -76,7 +75,7 @@ public class RequestDetailController {
 
     // 申請情報更新
     @PostMapping("/request/update")
-    public String approval (@ModelAttribute("requestId") String id, Model model) {
+    public String approval (@ModelAttribute("requestId") String id, Model model) throws ParseException {
         //requestの更新処理↓↓
         int requestId = Integer.parseInt(id);
         List<RequestForm> requests = requestService.findRequestById(requestId);
@@ -84,6 +83,10 @@ public class RequestDetailController {
         request.setState(2);
         //requestの更新処理
         requestService.updateRequest(request);
+
+        //attenddanceの更新処理↓↓
+        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(request);
+        attendanceService.saveAttendanceState(attendanceForms,4);
         return "redirect:/request/list";
     }
 

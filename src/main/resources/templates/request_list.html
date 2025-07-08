@@ -23,6 +23,7 @@
     </thead>
     <tbody>
     <div th:each="request : ${requests}">
+        <div th:if="${request.state == 0}">
         <tr>
             <td><span th:text="${request.id}"/>
             <td><span th:text="${request.userId}"/>
@@ -36,6 +37,7 @@
                 </form>
             </td>
         </tr>
+        </div>
     </div>
     </tbody>
 </table>
