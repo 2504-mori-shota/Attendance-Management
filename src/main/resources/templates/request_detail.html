@@ -17,6 +17,7 @@
     <th>退社</th>
     <th>メモ</th>
     <th>労働時間</th>
+      <th>ステータス</th>
   </tr>
   </thead>
   <tbody>
@@ -41,11 +42,11 @@
   </tbody>
 </table>
     <input type="hidden" name="requestId" th:value="${requestId}"/>
-    <button type="submit" th:if="${session.loginUser.postId == 2}">差戻</button>
+    <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')" th:if="${session.loginUser.postId == 2}">差戻</button>
 </form>
 <form th:method="post" th:action="@{/request/update}">
     <input type="hidden" name="requestId" th:value="${requestId}"/>
-    <button type="submit" th:if="${session.loginUser.postId == 2}">承認</button>
+    <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')" th:if="${session.loginUser.postId == 2}">承認</button>
 </form>
 <form th:action="@{/myrequest/delete}" th:method="post">
     <input type="hidden" name="requestId" th:value="${requestId}"/>
