@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class LoginController {
         if (user == null || user.getIsStopped() == 1) {
             errorMessages.add("ログインに失敗しました");
             model.addAttribute("errorMessages",errorMessages);
-            return "redirect:/";
+            return "/login";
         }
         // セッションにログインユーザー情報を格納
         session.setAttribute("loginUser", user); //ここからやる

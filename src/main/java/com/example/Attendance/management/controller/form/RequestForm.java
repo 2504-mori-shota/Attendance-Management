@@ -1,5 +1,6 @@
 package com.example.Attendance.management.controller.form;
 
+import com.example.Attendance.management.repository.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,5 +26,7 @@ public class RequestForm {
     public enum Status {
         申請中, 差戻済み, 承認済み
     }
+
+    private User user;
 
 }

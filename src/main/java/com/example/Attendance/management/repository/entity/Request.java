@@ -38,4 +38,8 @@ public class Request {
 
     @Column(insertable = false, name="updated_date")
     private Date updatedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    private User user;
 }
