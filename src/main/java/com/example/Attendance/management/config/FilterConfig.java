@@ -12,20 +12,13 @@ public class FilterConfig {
 
         bean.setFilter(new LoginFilter());
         //ログイン情報が必要なURL
+        bean.addUrlPatterns("/attendance/*");
         bean.addUrlPatterns("/home/*");
-        bean.addUrlPatterns("/management");
-        bean.addUrlPatterns("/singUp");
-        bean.addUrlPatterns("/message");
-        bean.addUrlPatterns("/userEdit/*");
-        bean.addUrlPatterns("/inset");
-        bean.addUrlPatterns("/update");
-        bean.addUrlPatterns("/management");
-        bean.addUrlPatterns("/aoi");
-        bean.addUrlPatterns("/mori");
-        bean.addUrlPatterns("/addMessage");
-        bean.addUrlPatterns("/addComment");
-        bean.addUrlPatterns("/read" );
-        bean.addUrlPatterns("/signup" );
+        bean.addUrlPatterns("/request/*");
+        bean.addUrlPatterns("/myrequest/*");
+        bean.addUrlPatterns("/signup/*");
+        bean.addUrlPatterns("/system/*");
+        bean.addUrlPatterns("/useredit/*");
 
         bean.setOrder(1);
         return bean;
