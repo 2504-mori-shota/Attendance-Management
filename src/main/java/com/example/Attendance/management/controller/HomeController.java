@@ -114,21 +114,9 @@ public class HomeController {
 
             }
 
-
             attendanceService.saveAttendanceState(list,1);
 
             requestService.saveRequest(list.get(0), list.get(list.size() - 1));
-
-//            List<RequestForm> requestForms = requestService.findByUserIdAndStartDate(user.getId(), list.get(0), list.get(list.size() - 1));
-//
-//            if (requestForms == null) {
-//
-//            } else {
-//                //同じ月の中で最後に登録された申請Idを取得
-//                requestService.saveRequest(requestForms.get(requestForms.size() - 1).getId());
-//            }
-
-
 
             return new ModelAndView("redirect:/home");
         }
