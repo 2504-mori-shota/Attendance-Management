@@ -17,7 +17,7 @@
             <th>退社</th>
             <th>メモ</th>
             <th>労働時間</th>
-              <th>ステータス</th>
+              <th th:if="${session.loginUser.postId == 2}">ステータス</th>
           </tr>
           </thead>
           <tbody>
@@ -30,11 +30,9 @@
                   <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
                   <td th:text="${row.comment}"></td>
                   <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
-                  <td class="checkbox">
-        <!--              <form th:action="">-->
+                  <td class="checkbox" th:if="${session.loginUser.postId == 2}">
                       <input type="hidden" th:field="*{attendances[__${stat.index}__].id}"/>
                       <input type="checkbox" th:field="*{attendances[__${stat.index}__].checkbox}"/>
-        <!--              </form>-->
                   </td>
                 </div>
             </div>
