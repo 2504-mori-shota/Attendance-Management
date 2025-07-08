@@ -55,6 +55,7 @@ public class RequestService {
             requestForm.setEndDate(request.getEndDate());
             requestForm.setCreatedDate(request.getCreatedDate());
             requestForm.setUpdatedDate(request.getUpdatedDate());
+            requestForm.setUser(request.getUser());
 
             requestForms.add(requestForm);
         }
