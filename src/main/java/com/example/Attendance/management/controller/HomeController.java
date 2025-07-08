@@ -95,8 +95,7 @@ public class HomeController {
         @PostMapping("/application")
         public ModelAndView application (
                 HttpServletRequest request,
-                @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,
-                RedirectAttributes redirectAttributes,
+                @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,RedirectAttributes redirectAttributes,
                 Model model) throws ParseException {
             session = request.getSession();
             UserForm user = (UserForm) session.getAttribute("loginUser");
@@ -107,9 +106,29 @@ public class HomeController {
             }
             List<AttendanceForm> list = attendanceForms.getAttendances();
 
+            for (AttendanceForm attendanceForm : list) {
+                if (attendanceForm.getState() == 1 || attendanceForm.getState() == 4) {
+                    redirectAttributes.addFlashAttribute("errorMessageForm", "既に申請済みです");
+                    return new ModelAndView("redirect:/home");
+                }
+
+            }
+
+
             attendanceService.saveAttendanceState(list,1);
 
             requestService.saveRequest(list.get(0), list.get(list.size() - 1));
+
+//            List<RequestForm> requestForms = requestService.findByUserIdAndStartDate(user.getId(), list.get(0), list.get(list.size() - 1));
+//
+//            if (requestForms == null) {
+//
+//            } else {
+//                //同じ月の中で最後に登録された申請Idを取得
+//                requestService.saveRequest(requestForms.get(requestForms.size() - 1).getId());
+//            }
+
+
 
             return new ModelAndView("redirect:/home");
         }
