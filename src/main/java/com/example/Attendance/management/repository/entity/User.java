@@ -22,7 +22,7 @@ public class User {
     @Column(name = "account")
     private String account;
 
-    @Column(name = "password", updatable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "name")
@@ -36,13 +36,8 @@ public class User {
 
     @Column(name = "created_date", insertable = false, updatable = false)
     private Date createdDate;
-    @Column(name="updated_date",insertable = false, updatable = false)
+    @Column(name="updated_date",insertable = false)
     private Date updatedDate;
-
-    public enum isStopped {
-        有効, 停止中
-    }
-
 
     @ManyToOne
     @JoinColumn(name = "post_id", insertable = false, updatable = false)
