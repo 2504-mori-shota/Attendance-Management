@@ -33,8 +33,7 @@ public class AttendanceForm {
 
     @NotBlank(message = "出勤時間を入力してください")
     @Pattern(regexp = "^[^　]*$", message = "出勤時間を入力してください")
-    @Pattern(regexp = "^([01]\\d|2[0-4]):[0-5]\\d$", message = "半角英数字で入力してください")
-    @Pattern(regexp = "^([01]\\d|24):00\\d$", message = "半角英数字で入力してください")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角英数字で入力してください")
     private String leave;
 
 
