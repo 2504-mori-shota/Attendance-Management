@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>申請詳細</h1>
-<form th:action="@{/request/return}" th:object="${attendanceList}" th:method="post">
+<form th:action="@{/request/return}" th:object="${attendanceList}">
 <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
   <thead>
   <tr>
@@ -42,15 +42,25 @@
   </tbody>
 </table>
     <input type="hidden" name="requestId" th:value="${requestId}"/>
-    <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')">差戻</button>
+    <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')" th:if="${session.loginUser.postId == 2}">差戻</button>
 </form>
 <form th:method="post" th:action="@{/request/update}">
     <input type="hidden" name="requestId" th:value="${requestId}"/>
-    <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')">承認</button>
+    <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')" th:if="${session.loginUser.postId == 2}">承認</button>
+</form>
+<form th:action="@{/myrequest/delete}" th:method="post">
+    <input type="hidden" name="requestId" th:value="${requestId}"/>
+    <button type="submit" th:if="${session.loginUser.id == requestUserId}">取消</button>
 </form>
 <form th:action="@{/request/list}" th:method="get">
     <div>
-        <button type="submit" class="submit-btn2">戻る</button>
+        <button type="submit" class="submit-btn2" th:if="${session.loginUser.postId == 2}">戻る</button>
+    </div>
+</form>
+<form th:action="@{/myrequest/{id}(id=${session.loginUser.id})}" th:method="get">
+    <div>
+        <button type="submit" class="submit-btn2"
+                th:if="${session.loginUser.id == requestUserId && session.loginUser.postId != 2}">戻る</button>
     </div>
 </form>
 </body>
