@@ -2,33 +2,23 @@ package com.example.Attendance.management.controller;
 
 
 import com.example.Attendance.management.controller.form.AttendanceForm;
-
 import com.example.Attendance.management.controller.form.AttendanceListForm;
-
-import com.example.Attendance.management.controller.form.RequestForm;
-
 import com.example.Attendance.management.controller.form.UserForm;
-import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.service.AttendanceService;
 import com.example.Attendance.management.service.RequestService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.text.ParseException;
 import java.time.Duration;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class HomeController {
@@ -106,10 +96,15 @@ public class HomeController {
         public ModelAndView application (
                 HttpServletRequest request,
                 @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,
+                RedirectAttributes redirectAttributes,
                 Model model) throws ParseException {
             session = request.getSession();
             UserForm user = (UserForm) session.getAttribute("loginUser");
 
+            if (attendanceForms.getAttendances() == null){
+                redirectAttributes.addFlashAttribute("errorMessageForm", "今月の勤怠情報がありません");
+                return new ModelAndView("redirect:/home");
+            }
             List<AttendanceForm> list = attendanceForms.getAttendances();
 
             attendanceService.saveAttendanceState(list,1);
