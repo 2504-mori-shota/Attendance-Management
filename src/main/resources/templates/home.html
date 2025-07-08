@@ -10,6 +10,9 @@
             <div class="header">
                 <h1>勤怠管理</h1>
                 <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
+                <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
+                    <strong th:text="${errorMessageForm}"></strong>
+                </div>
             </div>
         </header>
 
@@ -64,25 +67,27 @@
                     </a>
                 </td>
                 <div th:each="row : ${attendances}" th:if="${row != null}">
-                    <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}">
+                    <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}" >
+                            <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
+                            <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
+                            <td th:text="${row.comment}"></td>
+                            <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
 
-                        <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
-                        <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
-                        <td th:text="${row.comment}"></td>
-                        <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
-
-                        <td class="buttons">
-                            <form th:action="@{/attendanceedit}" th:method="post">
-                                <input type="hidden" th:name="id" th:value="${row.id}">
-                                <input type="submit" class="submit-btn2" value="編集"/>
-                            </form>
-                        </td>
-                        <td class="buttons">
-                            <form th:action="@{/Attendance/delete/{id}(id=${row.id})}" th:method="post">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" onclick="return confirm('消去しますか？');">消去</button>
-                            </form>
-                        </td>
+                            <td class="buttons">
+                                <form th:action="@{/attendanceedit}" th:method="post">
+                                    <input type="hidden" th:name="id" th:value="${row.id}">
+                                    <input type="submit" class="submit-btn2" value="編集"/>
+                                </form>
+                            </td>
+                            <td class="buttons">
+                                <form th:action="@{/Attendance/delete/{id}(id=${row.id})}" th:method="post">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" onclick="return confirm('消去しますか？');">消去</button>
+                                </form>
+                            </td>
+                            <td>
+                                <span th:text="${statuses[row.state]}" />
+                            </td>
                     </div>
                 </div>
             </tr>
