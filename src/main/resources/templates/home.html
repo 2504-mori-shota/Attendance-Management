@@ -61,7 +61,6 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="row : ${attendances}" th:if="${row != null}">
 
             <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
                 <td>
@@ -69,7 +68,7 @@
                        th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}">
                     </a>
                 </td>
-                <div th:each="row : ${attendances}" th:if="${row != null}">
+                <div th:each="row : ${attendances}">
                     <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}" >
                             <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
                             <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
