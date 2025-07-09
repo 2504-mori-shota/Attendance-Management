@@ -52,6 +52,9 @@ public class RequestService {
     }
 
     private List<RequestForm> setRequestForm(List<Request> requests) {
+        if(requests == null){
+            return null;
+        }
         List<RequestForm> requestForms = new ArrayList<RequestForm>();
         for (Request request : requests){
             RequestForm requestForm = new RequestForm();
