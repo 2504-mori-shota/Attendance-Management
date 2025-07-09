@@ -48,7 +48,7 @@
         </form>
         <form th:action="@{/myrequest/delete}" th:method="post">
             <input type="hidden" name="requestId" th:value="${requestId}"/>
-            <button type="submit" th:if="${session.loginUser.id == requestUserId}">取消</button>
+            <button type="submit" th:if="${session.loginUser.id == requestUserId}" onclick="return confirm('取消しますか？');">取消</button>
         </form>
         <form th:action="@{/request/list}" th:method="get">
             <div>
