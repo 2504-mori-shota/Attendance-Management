@@ -39,14 +39,7 @@ public class HomeController {
             @RequestParam(value = "month", required = false) Integer month,
             Model model, HttpServletRequest request) {
 
-        session = request.getSession();
-
-
-        //バリエーションチャック
         UserForm user = (UserForm) request.getSession().getAttribute("loginUser");
-        if (user == null) {
-            return "redirect:/";
-        }
 
         LocalDate now = LocalDate.now();
         if (year == null || month == null) {
@@ -75,10 +68,8 @@ public class HomeController {
         long hours = totalWorkingTime.toHours();
         long minutes = totalWorkingTime.toMinutes() % 60;
 
-        List<AttendanceForm> attendance = attendanceService.getMonthlyAttendance(user.getId(),LocalDate.now());
         AttendanceListForm attendanceListForm = new AttendanceListForm();
-        attendanceListForm.setAttendances(attendance);
-        model.addAttribute("attendances", attendanceService.getMonthlyAttendance(user.getId(), LocalDate.now()));
+        attendanceListForm.setAttendances(attendanceForms);
         model.addAttribute("attendanceList", attendanceListForm);
 
         // modelにオブジェクト格納してreturnで返す
