@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -32,7 +33,8 @@ public class RequestDetailController {
     private HttpSession session;
 
     @GetMapping("/request/detail")
-    public String view (@RequestParam("id") String id, Model model){
+    public String view (@RequestParam(value = "id", required = false) String id,
+                        RedirectAttributes redirectAttributes,Model model){
 
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
@@ -40,16 +42,14 @@ public class RequestDetailController {
         //権限チェック
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         if (loginUser.getPostId() != 2){
-            errorMessages.add("無効なアクセスです");
-            model.addAttribute("errorMessages", errorMessages);
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return "redirect:/home";
         }
 
-        // バリデーションチェック (URLチェック)　null/半角数字以外/存在しないID
-        if (id.isBlank() || (!id.matches("^[0-9]+$"))) {
-            errorMessages.add("不正なパラメータが入力されました");
-            model.addAttribute("errorMessages", errorMessages);
-            return "redirect:/request/list";
+        //引数チェック
+        if (id.isBlank() || !id.matches("^[0-9]+$")){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return "redirect:/home";
         }
         // 申請情報取得
         int requestId = Integer.parseInt(id);
@@ -57,9 +57,8 @@ public class RequestDetailController {
 
         // 存在しないidをURLで直打ちされた場合
         if (requestListData == null) {
-            errorMessages.add("不正なパラメータが入力されました");
-            session.setAttribute("errorMessages", errorMessages);
-            return "redirect:/request/list";
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return "redirect:/home";
         }
 
         //requestをもとに勤怠情報を取得
