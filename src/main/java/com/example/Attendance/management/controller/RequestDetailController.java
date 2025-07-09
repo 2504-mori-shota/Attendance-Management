@@ -39,13 +39,6 @@ public class RequestDetailController {
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
 
-        //権限チェック
-        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        if (loginUser.getPostId() != 2){
-            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
-            return "redirect:/home";
-        }
-
         //引数チェック
         if (id.isBlank() || !id.matches("^[0-9]+$")){
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
@@ -58,6 +51,13 @@ public class RequestDetailController {
         // 存在しないidをURLで直打ちされた場合
         if (requestListData == null) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return "redirect:/home";
+        }
+
+        //権限チェック
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        if (loginUser.getPostId() != 2 && loginUser.getId() != requestListData.get(0).getUserId()){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return "redirect:/home";
         }
 
