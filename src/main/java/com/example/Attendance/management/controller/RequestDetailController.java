@@ -133,6 +133,6 @@ public class RequestDetailController {
         attendanceService.saveAttendanceState(attendanceForms,0);
         //requestの削除
         requestService.deleteRequest(requestId);
-        return "redirect:/request/list";
+        return "redirect:/home";
     }
 }
