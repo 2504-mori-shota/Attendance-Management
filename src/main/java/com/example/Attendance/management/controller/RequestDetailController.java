@@ -3,6 +3,7 @@ package com.example.Attendance.management.controller;
 import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.AttendanceListForm;
 import com.example.Attendance.management.controller.form.RequestForm;
+import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.service.AttendanceService;
 import com.example.Attendance.management.service.RequestService;
 import jakarta.servlet.http.HttpSession;
@@ -32,8 +33,17 @@ public class RequestDetailController {
 
     @GetMapping("/request/detail")
     public String view (@RequestParam("id") String id, Model model){
+
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
+
+        //権限チェック
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        if (loginUser.getPostId() != 2){
+            errorMessages.add("無効なアクセスです");
+            model.addAttribute("errorMessages", errorMessages);
+            return "redirect:/home";
+        }
 
         // バリデーションチェック (URLチェック)　null/半角数字以外/存在しないID
         if (id.isBlank() || (!id.matches("^[0-9]+$"))) {
