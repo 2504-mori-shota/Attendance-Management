@@ -62,7 +62,7 @@ public class UserEditController {
         if (sessionUser == null) {
             session.setAttribute("errorMessageForm", "ログインしてください");
             return new ModelAndView("redirect:/");
-        } else if (sessionUser.getId() != Integer.parseInt(strId)) {
+        } else if (sessionUser.getId() != Integer.parseInt(strId) && sessionUser.getPostId() != 3) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return new ModelAndView("redirect:/home");
         }
