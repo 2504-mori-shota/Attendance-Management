@@ -52,10 +52,12 @@
           <input th:type="hidden" name="id" th:value="${formModel.id}">
           <button type="submit" class="submit-btn2">変更</button>
       </form>
-      <form th:action="@{/system}">
+      <form th:action="@{/system}" th:if="${session.loginUser.postId == 3}">
         <button type="submit" class="submit-btn2">戻る</button>
       </form>
-
+      <form th:action="@{/home}" th:if="${session.loginUser.postId != 3}">
+        <button type="submit" class="submit-btn2">戻る</button>
+      </form>
 
     </div>
   </body>
