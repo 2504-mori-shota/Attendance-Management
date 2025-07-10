@@ -49,7 +49,8 @@
             <input type="hidden" th:field="*{postId}"/>
           </label><br/>
 
-          <input th:type="hidden" name="id" th:value="${formModel.id}">
+          <input th:type="hidden" name="id" th:value="${formModel.id}"/>
+          <input th:type="hidden" name="isStopped" th:value="${formModel.isStopped}"/>
           <button type="submit" class="submit-btn2">変更</button>
       </form>
       <form th:action="@{/system}" th:if="${session.loginUser.postId == 3}">

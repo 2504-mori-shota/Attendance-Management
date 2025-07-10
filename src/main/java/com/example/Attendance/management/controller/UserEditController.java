@@ -70,10 +70,6 @@ public class UserEditController {
         List<UserForm> users = userService.findByIdWithPost(sessionUser.getId());
         UserForm userInfoForm = users.get(0);
 
-//        if (userInfoForm.getPostId() != 3) {
-//            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
-//            return new ModelAndView("redirect:/system");
-//        }
         // 画面遷移先を指定
         mav.setViewName("/useredit");
         // 準備した空のFormを保管
