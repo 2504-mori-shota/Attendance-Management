@@ -41,7 +41,7 @@ public class AttendanceController {
              Model model,
              RedirectAttributes redirectAttributes) {
         //引数チェック
-        if (date.isBlank()){
+        if (date.isBlank()) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
@@ -51,10 +51,13 @@ public class AttendanceController {
         // form用の空のentityを準備
         AttendanceForm attendanceForm = new AttendanceForm();
         // URLにdateを直打ちした際のバリデーション
+        int year;
+        int month;
+        int day;
         try {
-            int year = Integer.parseInt(date.substring(0,4));
-            int month = Integer.parseInt(date.substring(5,7));
-            int day = Integer.parseInt(date.substring(8,10));
+            year = Integer.parseInt(date.substring(0, 4));
+            month = Integer.parseInt(date.substring(5, 7));
+            day = Integer.parseInt(date.substring(8, 10));
 
             //取得処理
             Calendar calendar = Calendar.getInstance();
@@ -62,13 +65,14 @@ public class AttendanceController {
             calendar.set(Calendar.MONTH, month - 1);
             int result = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-            if (!(date.length() != 10 || date.charAt(4) == '-' || date.charAt(7) == '-' || day < result)){
+            if (date.length() != 10 || date.charAt(4) != '-' || date.charAt(7) != '-' || month > 12 || day > result) {
                 throw new Exception();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
+        date = String.format("%04d",year) + "-" + String.format("%02d",month) + "-" + String.format("%02d",day);
         attendanceForm.setDate(date);
         // 画面遷移先を指定
         mav.setViewName("/attendance");
@@ -95,6 +99,13 @@ public class AttendanceController {
         //日付重複チェック
         List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
 
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("attendance");
+            mav.addObject("attendanceInfo", attendanceForm);
+            mav.addObject("formModel", user);
+            // errorsはバインディング済みなので自動的にビューへ渡る
+            return mav;
+        }
 
         for (int i = 0; i < attendanceFormList.size(); i++) {
             AttendanceForm attendance = attendanceFormList.get(i);

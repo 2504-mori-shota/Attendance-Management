@@ -2,17 +2,14 @@ package com.example.Attendance.management.controller;
 
 import com.example.Attendance.management.controller.form.AttendanceForm;
 import com.example.Attendance.management.controller.form.UserForm;
-import com.example.Attendance.management.repository.entity.Attendance;
 import com.example.Attendance.management.service.AttendanceService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +70,13 @@ public class AttendanceEditController {
 
         List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
 
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("attendanceedit");
+            mav.addObject("attendanceInfo", attendanceForm);
+            mav.addObject("formModel", user);
+            // errorsはバインディング済みなので自動的にビューへ渡る
+            return mav;
+        }
 
         for (int i = 0; i < attendanceFormList.size(); i++) {
             AttendanceForm attendance = attendanceFormList.get(i);
