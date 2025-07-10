@@ -41,7 +41,7 @@ public class AttendanceController {
              Model model,
              RedirectAttributes redirectAttributes) {
         //引数チェック
-        if (date.isBlank()) {
+        if (date == null || date.isBlank()) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
