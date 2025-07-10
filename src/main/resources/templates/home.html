@@ -68,6 +68,7 @@
                        th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}">
                     </a>
                 </td>
+                <!--ここまでが正常-->
                 <div th:each="row : ${attendances}">
                     <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}" >
                             <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
