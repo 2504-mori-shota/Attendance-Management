@@ -118,15 +118,16 @@ public class UserEditController {
         }
 
         if (!userForm.getPassword().isBlank() && !userForm.getPassword().matches("^[a-zA-Z]+$")) {
-            result.rejectValue("password", "duplicate", "パスワードは半角かつ6文字以上20文字以内で入力してください");
+            result.rejectValue("password", "duplicate", "半角かつ6文字以上20文字以内で入力してください");
         }
 
         if ((!userForm.getPassword().isBlank() && userForm.getPassword().length() < 6) || userForm.getPassword().length() > 20) {
-            result.rejectValue("password", "duplicate", "パスワードは6文字以上20文字以内で入力してください");
+            result.rejectValue("password", "duplicate", "6文字以上20文字以内で入力してください");
         }
 
         if (result.hasErrors()) {
             model.addAttribute("postOptions", getPostOptions());
+            model.addAttribute("postName", sessionUser.getPost().getPostName());
             return "useredit"; // フォワードで遷移
         }
 
