@@ -39,7 +39,7 @@ public class UserForm {
     private String passwordConfirm;
 
     @NotBlank(message = "氏名を入力してください", groups = {SignUpGroup.class, EditGroup.class})
-    @Size(max = 10, message = "氏名は10文字以内で入力してください", groups = {SignUpGroup.class, EditGroup.class})
+    @Size(max = 10, message = "氏名は10文字以下で入力してください", groups = {SignUpGroup.class, EditGroup.class})
     @Pattern(regexp = "^[^　]*$", message = "氏名を入力してください", groups = {SignUpGroup.class, EditGroup.class})
     private String name;
 

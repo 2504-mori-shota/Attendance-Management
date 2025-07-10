@@ -89,7 +89,7 @@ public class SignUpController {
         // パスワード確認チェック
         if (!result.hasFieldErrors("passwordConfirm") &&
                 !userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            result.rejectValue("passwordConfirm", null, "パスワードとパスワード確認が一致しません");
+            result.rejectValue("passwordConfirm", null, "パスワードと確認用パスワードが一致しません");
         }
         // アカウント重複チェック
         if (userService.AccountDuB(userForm.getAccount())) {
