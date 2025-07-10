@@ -16,7 +16,7 @@ body {
   top: 0;
   width: 100%;
   padding: 9px 15px;
-  background-color: #B2DFDB; /* RecoRu風の爽やかグリーン */
+  background-color: #B2DFDB; /* RecoRu風 */
   color: #333333;
   font-size: 1.0rem;
   font-weight: bold;
@@ -124,6 +124,7 @@ body {
     font-size: 20px;
     text-align: center;
     line-height: 50px;
+     opacity: 0.8; /* 0（完全透明） 1（完全不透明） */
         color: #DCEAD7;  /* 明るめの文字色 */
         box-shadow: 0 0 8px rgba(0,0,0,0.2);
         font-size: 1rem;
@@ -131,6 +132,11 @@ body {
           border: 3px solid #2a3d2a;
           border-radius: 6px;
           color: #DCEAD7;  /* 明るめの文字色 */
+}
+
+.round-button:hover {
+  opacity: 1;
+      background-color: #4CAF50;
 }
 
 

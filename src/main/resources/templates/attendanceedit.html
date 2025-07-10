@@ -16,7 +16,6 @@
 
 <div class="main-contents-attendance" th:object="${formModel}">
   <form th:method="post" th:action="@{/updateAttendance}" th:object="${attendanceInfo}">
-    <input type="submit" value="登録" class="message-button1" style="margin:0px; float:right;"/>
     <label>日付
       <input type="date" name="date" th:field="*{date}" readonly/><br/>
     </label>
@@ -37,7 +36,10 @@
 
     <input type="hidden" name="id" th:value="${attendanceInfo.id}">
     <input type="hidden" name="created_date" th:value="${attendanceInfo.createdDate}">
+
+    <input type="submit" value="登録" class="message-button1" />
   </form>
+
   <form th:action="@{/home}">
     <input type="submit" value="戻る" class="message-button2"/>
     <!---->
