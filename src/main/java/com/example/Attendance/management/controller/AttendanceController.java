@@ -34,8 +34,6 @@ public class AttendanceController {
     @GetMapping("/attendance")
     public ModelAndView newAttend
             (HttpServletRequest request,
-//             @RequestParam(name = "Year", required = false)String year,
-//             @RequestParam(name = "Month", required = false)String month,
              @RequestParam("date")String date,
              Model model,
              RedirectAttributes redirectAttributes) {
@@ -79,6 +77,13 @@ public class AttendanceController {
         //日付重複チェック
         List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
 
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("attendance");
+            mav.addObject("attendanceInfo", attendanceForm);
+            mav.addObject("formModel", user);
+            // errorsはバインディング済みなので自動的にビューへ渡る
+            return mav;
+        }
 
         for (int i = 0; i < attendanceFormList.size(); i++) {
             AttendanceForm attendance = attendanceFormList.get(i);

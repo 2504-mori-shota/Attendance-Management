@@ -25,22 +25,22 @@ public class UserForm {
 
     @NotBlank(message = "アカウントを入力してください", groups = {LoginGroup.class, SignUpGroup.class, EditGroup.class})
     @Pattern(regexp = "^[^　]*$", message = "アカウントを入力してください", groups = {LoginGroup.class, SignUpGroup.class, EditGroup.class})
-    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "アカウントは半角英数字かつ6文字以上20文字以内で入力してください", groups = {SignUpGroup.class, EditGroup.class})
-    @Size(min = 6, max = 20, message = "アカウントは半角英数字かつ6文字以上20文字以内で入力してください", groups = {SignUpGroup.class, EditGroup.class})
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "半角英数字で入力してください", groups = {SignUpGroup.class, EditGroup.class})
+    @Size(min = 6, max = 20, message = "6文字以上20文字以下で入力してください", groups = {SignUpGroup.class, EditGroup.class})
     private String account;
 
     @NotBlank(message = "パスワードを入力してください", groups = {LoginGroup.class, SignUpGroup.class})
     @Pattern(regexp = "^[^　]*$", message = "パスワードを入力してください",groups = {LoginGroup.class, SignUpGroup.class})
-    @Size(min = 6, max = 20, message = "パスワードは半角英数字かつ6文字以上20文字以内で入力してください", groups = SignUpGroup.class)
-    @Pattern(regexp = "^[a-zA-Z]+$", message = "パスワードは半角かつ6文字以上20文字以内で入力してください", groups = SignUpGroup.class )
+    @Size(min = 6, max = 20, message = "6文字以上20文字以内で入力してください", groups = SignUpGroup.class)
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "半角英字で入力してください", groups = SignUpGroup.class )
     private String password;
 
     @Transient // DBにマッピングしない
-    @NotBlank(message = "パスワードと確認用パスワードが一致しません", groups = SignUpGroup.class)
     private String passwordConfirm;
 
     @NotBlank(message = "氏名を入力してください", groups = {SignUpGroup.class, EditGroup.class})
     @Size(max = 10, message = "氏名は10文字以内で入力してください", groups = {SignUpGroup.class, EditGroup.class})
+    @Pattern(regexp = "^[^　]*$", message = "氏名を入力してください", groups = {SignUpGroup.class, EditGroup.class})
     private String name;
 
     private Integer postId;
