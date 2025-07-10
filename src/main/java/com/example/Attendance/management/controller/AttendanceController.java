@@ -20,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -34,31 +37,44 @@ public class AttendanceController {
     @GetMapping("/attendance")
     public ModelAndView newAttend
             (HttpServletRequest request,
-//             @RequestParam(name = "Year", required = false)String year,
-//             @RequestParam(name = "Month", required = false)String month,
-             @RequestParam("date")String date,
+             @RequestParam(value = "date", required = false)String date,
              Model model,
              RedirectAttributes redirectAttributes) {
-        session = request.getSession();
-        // セッションからユーザーオブジェクトを取得
-        UserForm user = (UserForm) session.getAttribute("loginUser");
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("errorMessageForm", "ログインしてください");
-            return new ModelAndView("redirect:/");
+        //引数チェック
+        if (date.isBlank()){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/home");
         }
+
+        UserForm user = (UserForm) session.getAttribute("loginUser");
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
         AttendanceForm attendanceForm = new AttendanceForm();
+        // URLにdateを直打ちした際のバリデーション
+        try {
+            int year = Integer.parseInt(date.substring(0,4));
+            int month = Integer.parseInt(date.substring(5,7));
+            int day = Integer.parseInt(date.substring(8,10));
+
+            //取得処理
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month - 1);
+            int result = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+            if (!(date.length() != 10 || date.charAt(4) == '-' || date.charAt(7) == '-' || day < result)){
+                throw new Exception();
+            }
+        } catch (Exception e){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/home");
+        }
         attendanceForm.setDate(date);
         // 画面遷移先を指定
         mav.setViewName("/attendance");
         mav.addObject("formModel", user);
         // 準備した空のFormを保管
         mav.addObject("attendanceInfo", attendanceForm);
-//        model.addAttribute("date", date);
-//        model.addAttribute("Year", year);
-//        model.addAttribute("Month", month);
-        // mav.addObject("errorMessageForm", errorMessages);
         return mav;
 
     }
