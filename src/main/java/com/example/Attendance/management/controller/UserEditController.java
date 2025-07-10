@@ -118,8 +118,8 @@ public class UserEditController {
         if ((userPass != null) && (userPass.getId() != userForm.getId())) {
             result.rejectValue("account", "duplicate", "アカウントが重複しています");
         }
-        //パスワードスペースチェック（前：全角チェック　後：半角チェック）
-        if (userForm.getPassword().matches("^[^　]*$") || userForm.getPassword().matches("^[^ ]*$")) {
+        //パスワードスペースチェック（[\\s]半角の空白文字チェック）
+        if (userForm.getPassword().matches("^[\\s　]+$")) {
             result.rejectValue("password", "duplicate", "パスワードを入力してください");
         }
         if (!userForm.getPassword().isBlank() && !userForm.getPassword().matches("^[a-zA-Z]+$")) {
