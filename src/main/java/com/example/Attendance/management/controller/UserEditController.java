@@ -55,7 +55,6 @@ public class UserEditController {
         }
 
         //ログインユーザ情報チェック
-        session = request.getSession();
         UserForm sessionUser = (UserForm) session.getAttribute("loginUser");
 
         //FilterConfig及びLoginFilterの機能の代替
@@ -63,6 +62,9 @@ public class UserEditController {
         if (sessionUser == null) {
             session.setAttribute("errorMessageForm", "ログインしてください");
             return new ModelAndView("redirect:/");
+        } else if (sessionUser.getId() != Integer.parseInt(strId)) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            return new ModelAndView("redirect:/home");
         }
 
         List<UserForm> users = userService.findByIdWithPost(sessionUser.getId());
@@ -116,7 +118,10 @@ public class UserEditController {
         if ((userPass != null) && (userPass.getId() != userForm.getId())) {
             result.rejectValue("account", "duplicate", "アカウントが重複しています");
         }
-
+        //パスワードスペースチェック（前：全角チェック　後：半角チェック）
+        if (userForm.getPassword().matches("^[^　]*$") || userForm.getPassword().matches("^[^ ]*$")) {
+            result.rejectValue("password", "duplicate", "パスワードを入力してください");
+        }
         if (!userForm.getPassword().isBlank() && !userForm.getPassword().matches("^[a-zA-Z]+$")) {
             result.rejectValue("password", "duplicate", "半角かつ6文字以上20文字以内で入力してください");
         }

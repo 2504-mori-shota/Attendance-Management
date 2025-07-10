@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,20 +29,33 @@ public class AttendanceEditController {
     @Autowired
     AttendanceService attendanceService;
 
-    @PostMapping("/attendanceedit")
+    @GetMapping("/attendanceedit")
     public ModelAndView newAttend(
-            @RequestParam("id") String strId,
+            @RequestParam(name="id", required = false) String strId,
              HttpServletRequest request,
              RedirectAttributes redirectAttributes) {
-        session = request.getSession();
         // セッションからユーザーオブジェクトを取得
         UserForm user = (UserForm) session.getAttribute("loginUser");
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("errorMessageForm", "ログインしてください");
-            return new ModelAndView("redirect:/");
+
+        //なぜかisBlankだけだとnullをひっかけてくれない
+        if (strId == null || strId.isBlank()) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/home");
         }
 
         AttendanceForm attendanceForm = attendanceService.findById(Integer.parseInt(strId));
+
+        //idが存在しない場合のバリデーション
+        if (attendanceForm == null){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/home");
+        }
+        //自分が登録している勤怠idを入力したときのバリデーション
+        if (user.getId() != attendanceForm.getUserId()) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            return new ModelAndView("redirect:/home");
+        }
+
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
         // 画面遷移先を指定
