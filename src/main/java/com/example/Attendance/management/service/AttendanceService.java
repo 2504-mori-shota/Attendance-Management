@@ -140,6 +140,9 @@ public class AttendanceService {
     public AttendanceForm findById (int id) {
         List<Attendance> attendances = attendanceRepository.findById(id);
         List<AttendanceForm> attendanceForms = setAttendanceEditForm(attendances);
+        if (attendanceForms.isEmpty()) {
+            return null;
+        }
         return attendanceForms.get(0);
     }
 

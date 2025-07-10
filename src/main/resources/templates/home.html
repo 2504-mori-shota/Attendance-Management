@@ -77,7 +77,7 @@
 
                             <td class="buttons">
                                 <div th:if="${!(row.state == 1 || row.state == 4)}">
-                                    <form th:action="@{/attendanceedit}" th:method="post">
+                                    <form th:action="@{/attendanceedit}" th:method="get">
                                         <input type="hidden" th:name="id" th:value="${row.id}">
                                         <input type="submit" class="submit-btn2" value="編集"/>
                                     </form>
