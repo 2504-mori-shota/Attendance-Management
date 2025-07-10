@@ -233,6 +233,10 @@ public class AttendanceService {
             if (aEnd.isAfter(sStart) && aEnd.isBefore(sEnd)) {
                 return true;
             }
+            //出勤時間と退勤時間が両方とも被っていた時用の処理
+            if (sStart.isEqual(aStart)) {
+                return true;
+            }
         }
         return false;
     }

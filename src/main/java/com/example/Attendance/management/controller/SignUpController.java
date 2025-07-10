@@ -45,7 +45,7 @@ public class SignUpController {
 
         if (userInfoForm.getPostId() != 3) {
             //フラッシュメッセージをセット
-            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なアクセスです");
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return new ModelAndView("redirect:/home");
         }
 
