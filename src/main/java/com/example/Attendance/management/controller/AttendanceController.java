@@ -46,6 +46,7 @@ public class AttendanceController {
             return new ModelAndView("redirect:/home");
         }
 
+        session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser");
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
