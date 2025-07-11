@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <title>勤怠登録</title>
+  </head>
+  <body>
+    <div class="header">
+      <h2>-Attendance registration-</h2>
+    </div><br/>
+
+    <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
+      <strong th:text="${errorMessageForm}"></strong>
+    </div>
+
+    <div class="main-contents-attendance" th:object="${formModel}">
+      <form th:method="post" th:action="@{/addAttendance}" th:object="${attendanceInfo}">
+
+        <!--<label>日付選択
+          <input type="date" name="date" th:field="*{date}"/><br/>
+        </label>-->
+        <label>日付
+          <input type="date" name="date" th:field="*{date}" readonly/><br/>
+        </label>
+        <div th:if="${#fields.hasErrors('date')}" style="color:red;" th:errors="*{date}"></div>
+        <label>出勤時間
+          <input type="text" th:field="*{attendance}" placeholder="例)09:00"/><br/>
+        </label>
+        <div th:if="${#fields.hasErrors('attendance')}" style="color:red;" th:errors="*{attendance}"></div>
+
+        <label>退勤時間
+          <input type="text" th:field="*{leave}" placeholder="例)18:00"/><br/>
+        </label>
+        <div th:if="${#fields.hasErrors('leave')}" style="color:red;" th:errors="*{leave}"></div>
+
+        <label>メモ</label><br/>
+        <input type="text" class="comment" th:field="*{comment}" ></textarea><br/>
+        <div th:if="${#fields.hasErrors('comment')}" style="color:red;" th:errors="*{comment}"></div>
+        <input type="hidden" name="Year" th:value="${Year}"/>
+        <input type="hidden" name="Month" th:value="${Month}"/>
+        <input type="submit" value="登録" class="message-button1"/>
+
+      </form>
+      <form th:action="@{/home}">
+        <input type="submit" value="戻る" class="message-button2"/>
+        <!---->
+      </form>
+    </div>
+  </body>
+</html>

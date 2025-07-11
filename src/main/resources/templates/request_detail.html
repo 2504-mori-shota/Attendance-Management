@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>申請詳細</title>
+</head>
+<body>
+<div class="header">
+    <h1>申請詳細</h1>
+</div>
+    <form th:action="@{/request/return}" th:object="${attendanceList}" th:method="post">
+        <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
+            <thead>
+            <tr>
+                <th>日付</th>
+                <th>出社</th>
+                <th>退社</th>
+                <th>メモ</th>
+                <th>労働時間</th>
+                <th th:if="${session.loginUser.postId == 2}">ステータス</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="i : ${#numbers.sequence(1,totalDays)}">
+                <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(i,2)}"></td>
+                <div th:each="row, stat : *{attendances}">
+                    <div th:if="${#numbers.formatInteger(i,2) == #strings.substring(row.attendance, 8, 10)}">
+                        <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
+                        <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
+                        <td th:text="${row.comment}"></td>
+                        <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
+                        <td class="checkbox" th:if="${session.loginUser.postId == 2}">
+                            <input type="hidden" th:field="*{attendances[__${stat.index}__].id}"/>
+                            <input type="checkbox" th:field="*{attendances[__${stat.index}__].checkbox}"/>
+                        </td>
+                    </div>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="requestId" th:value="${requestId}"/>
+        <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')"
+                th:if="${session.loginUser.postId == 2}">差戻
+        </button>
+    </form>
+    <form th:method="post" th:action="@{/request/update}">
+        <input type="hidden" name="requestId" th:value="${requestId}"/>
+        <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')"
+                th:if="${session.loginUser.postId == 2}">承認
+        </button>
+    </form>
+    <form th:action="@{/myrequest/delete}" th:method="post">
+        <input type="hidden" name="requestId" th:value="${requestId}"/>
+        <button type="submit" th:if="${session.loginUser.id == requestUserId}"
+                onclick="return confirm('取消しますか？');">取消
+        </button>
+    </form>
+    <form th:action="@{/request/list}" th:method="get">
+        <div>
+            <button type="submit" class="submit-btn2" th:if="${session.loginUser.postId == 2}">戻る</button>
+        </div>
+    </form>
+    <form th:action="@{/myrequest/{id}(id=${session.loginUser.id})}" th:method="get">
+        <div>
+            <button type="submit" class="submit-btn2"
+                    th:if="${session.loginUser.id == requestUserId && session.loginUser.postId != 2}">戻る
+            </button>
+        </div>
+    </form>
+</body>
+</html>
