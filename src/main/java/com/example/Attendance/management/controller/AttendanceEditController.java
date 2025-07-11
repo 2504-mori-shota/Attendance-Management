@@ -35,6 +35,7 @@ public class AttendanceEditController {
              HttpServletRequest request,
              RedirectAttributes redirectAttributes) {
         // セッションからユーザーオブジェクトを取得
+        session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser");
 
         //なぜかisBlankだけだとnullをひっかけてくれない
@@ -107,11 +108,9 @@ public class AttendanceEditController {
             // errorsはバインディング済みなので自動的にビューへ渡る
             return mav;
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date date = format.parse(createdDate);
+
         attendanceForm.setUserId(user.getId());
         attendanceForm.setId(Integer.parseInt(strId));
-        attendanceForm.setCreatedDate(date);
         // 投稿をテーブルに格納
         attendanceService.saveAttendance(attendanceForm);
         // rootへリダイレクト
