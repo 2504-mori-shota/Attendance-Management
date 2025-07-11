@@ -6,6 +6,7 @@ import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.service.AttendanceService;
 import com.example.Attendance.management.service.RequestService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,10 @@ public class RequestDetailController {
     private HttpSession session;
 
     @GetMapping("/request/detail")
-    public String view (@RequestParam(value = "id", required = false) String id,
-                        RedirectAttributes redirectAttributes,Model model){
+    public String view (
+            HttpServletRequest request,
+            @RequestParam(value = "id", required = false) String id,
+            RedirectAttributes redirectAttributes, Model model){
 
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
@@ -55,6 +58,7 @@ public class RequestDetailController {
         }
 
         //権限チェック
+        session = request.getSession();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         if (loginUser.getPostId() != 2 && loginUser.getId() != requestListData.get(0).getUserId()){
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");

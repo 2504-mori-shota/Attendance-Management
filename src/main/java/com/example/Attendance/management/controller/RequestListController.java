@@ -3,6 +3,7 @@ package com.example.Attendance.management.controller;
 import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.service.RequestService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,9 @@ public class RequestListController {
 
     //承認者権限を持つ人の画面
     @GetMapping("/request/list")
-    public String view (Model model, RedirectAttributes redirectAttributes){
+    public String view (HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
         //　↓はログインユーザのセッションに入っている情報を取得
+        session = request.getSession();
         UserForm userForm = (UserForm) session.getAttribute("loginUser");
 
         if (userForm.getPostId() != 2) {
