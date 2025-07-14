@@ -41,7 +41,7 @@ public class UserEditController {
             RedirectAttributes redirectAttributes,
             Model model) throws IOException {
         ModelAndView mav = new ModelAndView();
-
+        session = request.getSession();
         //URLパターンチェック
         UserForm user = null;
         if (!StringUtils.isBlank(strId) && strId.matches("^[0-9]*$")) {
