@@ -92,6 +92,16 @@ public class AttendanceService {
         return attendanceForms;
     }
 
+    // 日付から勤怠情報取得
+    public List<AttendanceForm> getDailyAttendance(int userId, LocalDate day) {
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = day.atTime(23, 59, 59);
+        List<Attendance> attendances = attendanceRepository.findByUserIdAndAttendanceBetweenOrderByAttendanceAsc(userId, startOfDay, endOfDay);
+        List<AttendanceForm> attendanceForms = setAttendanceForm(attendances);
+        return attendanceForms;
+    }
+
+
     public List<AttendanceForm> findAttendanceByRequest(RequestForm requestForm){
         // Date → Localdatetime の変換
         LocalDateTime start = LocalDateTime.ofInstant(requestForm.getStartDate().toInstant(), ZoneId.systemDefault());
