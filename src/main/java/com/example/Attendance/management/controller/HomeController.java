@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -62,6 +63,15 @@ public class HomeController {
         LocalDate target = LocalDate.of(year, month, 1);
         List<AttendanceForm> attendanceForms = attendanceService.getMonthlyAttendance(user.getId(), target);
         int totalDays = target.lengthOfMonth();
+
+        //改行、空欄縦線のためにリストを作成
+        List<Integer> dataNumList = new ArrayList<Integer>();
+        for (int i = 0; i < totalDays; i++){
+            LocalDate day = LocalDate.of(year, month, i+1);
+            List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(user.getId(), day);
+            dataNumList.add(dayAttendanceForms.size());
+        }
+
         //serviceで計算した労働時間合計を受け取る
         Duration totalWorkingTime = attendanceService.calculateTotalWorkingTime(attendanceForms);
         // 時間と分に変換
@@ -76,6 +86,7 @@ public class HomeController {
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
+        model.addAttribute("dataNumList", dataNumList);
         model.addAttribute("attendances", attendanceForms);
         model.addAttribute("statuses", AttendanceForm.Status.values());
         model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
