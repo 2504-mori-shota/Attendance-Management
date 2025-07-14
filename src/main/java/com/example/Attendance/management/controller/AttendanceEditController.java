@@ -35,6 +35,7 @@ public class AttendanceEditController {
              HttpServletRequest request,
              RedirectAttributes redirectAttributes) {
         // セッションからユーザーオブジェクトを取得
+        session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser");
 
         //なぜかisBlankだけだとnullをひっかけてくれない
