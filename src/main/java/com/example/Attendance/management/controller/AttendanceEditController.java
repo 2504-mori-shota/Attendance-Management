@@ -19,6 +19,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -101,6 +104,18 @@ public class AttendanceEditController {
             }
         }
 
+
+        //勤怠の入力値チェック
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String todayAttendance = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
+        String todayLeave = attendanceForm.getDate()  + " " + attendanceForm.getLeave();
+        LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
+        LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
+        Duration diff = Duration.between(dtAttendance, dtLeave);
+
+        if (diff.isNegative()) {
+            result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
+        }
         if (result.hasErrors()) {
             ModelAndView mav = new ModelAndView("attendanceedit");
             mav.addObject("attendanceInfo", attendanceForm);
@@ -108,11 +123,9 @@ public class AttendanceEditController {
             // errorsはバインディング済みなので自動的にビューへ渡る
             return mav;
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date date = format.parse(createdDate);
+
         attendanceForm.setUserId(user.getId());
         attendanceForm.setId(Integer.parseInt(strId));
-        attendanceForm.setCreatedDate(date);
         // 投稿をテーブルに格納
         attendanceService.saveAttendance(attendanceForm);
         // rootへリダイレクト
