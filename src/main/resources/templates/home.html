@@ -27,7 +27,7 @@
 
 
             <form th:action="@{/useredit/id={id}(id=${session.loginUser.id})}">
-                <input type="submit" value="編集"/>
+                <input type="submit" value="アカウント編集"/>
             </form>
 
             <form th:action="@{/myrequest/{id}(id=${session.loginUser.id})}">

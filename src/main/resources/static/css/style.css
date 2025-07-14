@@ -16,13 +16,26 @@ body {
   top: 0;
   width: 100%;
   padding: 9px 15px;
-  background-color: #B2DFDB; /* RecoRu風 */
-  color: #333333;
+  background-color: #29b39a; /* RecoRu風 */
+  color: #ffffff;
   font-size: 1.0rem;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   z-index: 10;
 }
+.header-login {
+  top: 0;
+  width: 100%;
+  padding: 9px 15px;
+  background-color: #29b39a; /* RecoRu風 */
+  color: #ffffff;
+  font-size: 1.0rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+
 
 
  /* 各行の区切り */
@@ -79,13 +92,15 @@ body {
 
 /* 黒板外枠 */
 .blackboard {
+  background-color: #29b39a; /* RecoRu風 */
+  color: #1f3a2d;             /* テキスト色は安定感あるダークグリーン */
   margin: 20px auto;
   padding: 20px;
   max-width: 800px;
-  background-color: #1a381b;
-  border: 8px solid #5a6b5a;
   border-radius: 8px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.5);
+  box-shadow:
+    inset 0 0 10px rgba(31,58,45,0.2),
+    0 2px 6px rgba(31,58,45,0.2);
 }
 
 .chalk-title {
@@ -116,8 +131,8 @@ body {
     right: 25px;
     width: 70px;
     height: 70px;
-    background-color: #4CAF50;
-    color: block;
+    background-color: #29b39a;
+    color: #ffffff;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -129,14 +144,14 @@ body {
         box-shadow: 0 0 8px rgba(0,0,0,0.2);
         font-size: 1rem;
         line-height: 1.5;
-          border: 3px solid #2a3d2a;
+          border: 3px solid #e3f4e8;
           border-radius: 6px;
-          color: #DCEAD7;  /* 明るめの文字色 */
+          color: #e3f4e8
 }
 
 .round-button:hover {
   opacity: 1;
-      background-color: #4CAF50;
+      background-color: #29b39a;
 }
 
 
@@ -160,17 +175,18 @@ body {
 	width: 80%;
 }
 .main-contents1 {
-  background-color: #3f5c3f;  /* 濃い緑 */
+  background-color: #e3f4e8;
+  color: #2f4f3f;
+  border: 3px solid #a1c4ae;
   padding: 15px;
   margin-bottom: 16px;
-  border: 3px solid #2a3d2a;
   border-radius: 6px;
-  color: #DCEAD7;  /* 明るめの文字色 */
-  text-align: left;
-  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  text-align: center;
+  box-shadow: 0 0 8px rgba(47,79,63,0.2);
   font-size: 1rem;
   line-height: 1.5;
 }
+
 .logAut {
 display: block;
 	margin-left: auto;
@@ -178,17 +194,17 @@ display: block;
 
 /* マネジメント画面 */
 .main-management {
-  margin: 20px;
+  margin: 18px;
   padding: 10px 10px 5px 10px;
   float:left;
-  background-color: #3f5c3f; /* 投稿内容と同じ濃い緑 */
-  border: 3px solid #2a3d2a;
+  background-color: #29b39a;
   border-radius: 6px;
   box-shadow: 0 0 8px rgba(0,0,0,0.2);
-  color: #DCEAD7; /* 明るい文字色 */
+  color: #ffffff;
   font-size: 1rem;
   line-height: 1.5;
-  width: 25%;
+  width: auto;
+
 }
 
 .back {

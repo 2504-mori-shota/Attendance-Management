@@ -13,7 +13,8 @@
     </div>
 </th:block>
 </div>
-<div class="login-icon">
+<div class="blackboard">
+    <div class="main-contents1">
     <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
         <strong th:text="${errorMessageForm}" style="color: red;"></strong>
     </div>
@@ -34,6 +35,7 @@
         </div>
         <input type="submit" value="ログイン" class="btn"/>
     </form>
+</div>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
   <title>ユーザー管理画面</title>
 </head>
 <body>
-<div class="header-contents">
+<div class="header">
   <h1>-User Management-</h1>
 </div>
 <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert" style="color:red;">
@@ -21,7 +21,7 @@
   </form>
 </div>
 <!--  新規タスク -->
-<div th:each="user : ${users}" th:object="${users}" class="message-icon">
+<div th:each="user : ${users}" th:object="${users}" class="main-management">
   ID　　:　<span class="wrap-text" th:text="${user.id}"></span><br/>
   アカウント名：　<span class="wrap-text" th:text="${user.account}"></span><br/>
   氏名 ：　<span class="wrap-text" th:text="${user.name}"></span><br/>
