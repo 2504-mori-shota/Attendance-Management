@@ -32,7 +32,7 @@
               </div>
 
               <div th:if="${i ge 1}">
-                    <div th:each="row, stat : *{attendances}">
+                    <div th:each="row, stat : ${attendanceList.attendances}">
                       <div th:if="${#numbers.formatInteger(st.count,2) == #strings.substring(row.attendance, 8, 10)}">
                           <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
                           <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>

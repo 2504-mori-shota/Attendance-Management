@@ -68,6 +68,7 @@ public class RequestDetailController {
         //requestをもとに勤怠情報を取得
         RequestForm requestForm = requestListData.get(0);
         int requestUserId = requestForm.getUserId();
+        //申請されている勤怠情報取得
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForm);
         AttendanceListForm attendanceListForm = new AttendanceListForm();
         attendanceListForm.setAttendances(attendanceForms);
@@ -84,7 +85,7 @@ public class RequestDetailController {
         List<Integer> dataNumList = new ArrayList<Integer>();
         for (int i = 0; i < totalDays; i++){
             LocalDate day = LocalDate.of(year, month, i+1);
-            List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(loginUser.getId(), day);
+            List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(requestUserId, day);
             dataNumList.add(dayAttendanceForms.size());
         }
 
