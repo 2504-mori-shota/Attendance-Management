@@ -21,6 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -114,6 +117,18 @@ public class AttendanceController {
             if (attendanceService.findByTime(attendance, attendanceForm)){
                 result.rejectValue("attendance", "duplicate", "勤務時間が重複しています");
             }
+        }
+
+        //勤怠の入力値チェック
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String todayAttendance = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
+        String todayLeave = attendanceForm.getDate()  + " " + attendanceForm.getLeave();
+        LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
+        LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
+        Duration diff = Duration.between(dtAttendance, dtLeave);
+
+        if (diff.isNegative()) {
+            result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
         }
 
         if (result.hasErrors()) {
