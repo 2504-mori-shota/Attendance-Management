@@ -16,8 +16,11 @@
                     <th>日付</th>
                     <th>出社</th>
                     <th>退社</th>
-                    <th>メモ</th>
+                    <th>休憩開始</th>
+                    <th>休憩終了</th>
+                    <th>休憩時間</th>
                     <th>労働時間</th>
+                    <th>メモ</th>
                     <th th:if="${session.loginUser.postId == 2}">ステータス</th>
                 </tr>
                 </thead>
@@ -26,7 +29,7 @@
               <tr th:each="i, st: ${dataNumList}">
                 <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(st.count,2)}"></td>
                   <div th:if="${i == 0}">
-                      <td/><td/><td/><td/>
+                      <td/><td/><td/><td/><td/><td/>
                       <td th:if="${session.loginUser.postId == 2}"/>
                   </div>
 
@@ -35,8 +38,11 @@
                           <div th:if="${#numbers.formatInteger(st.count,2) == #strings.substring(row.attendance, 8, 10)}">
                               <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
                               <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
-                              <td th:text="${row.comment}"></td>
+                              <td></td><!--休憩開始-->
+                              <td></td><!--休憩終了-->
+                              <td></td><!--休憩時間-->
                               <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
+                              <td th:text="${row.comment}"></td>
                               <td class="checkbox" th:if="${session.loginUser.postId == 2}">
                                   <input type="hidden" th:field="*{attendances[__${stat.index}__].id}"/>
                                   <input type="checkbox" th:field="*{attendances[__${stat.index}__].checkbox}"/>
