@@ -97,7 +97,7 @@ public class RequestService {
 
         RequestForm requestForm = new RequestForm();
         requestForm.setUserId(start.getUserId());
-        requestForm.setState(0);
+        requestForm.setState(1);
         requestForm.setStartDate(startDate);
         requestForm.setEndDate(endDate);
         Request request = setRequest(requestForm);

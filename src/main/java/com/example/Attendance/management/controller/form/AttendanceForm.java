@@ -62,7 +62,7 @@ public class AttendanceForm {
     private Boolean checkbox;
 
     public enum Status {
-        未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
+        未申請, 申請中, 承認済み, 承認取消済,  差戻済み〇, 差戻済みX,
     }
 
 
