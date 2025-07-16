@@ -109,7 +109,7 @@ public class HomeController {
             List<AttendanceForm> list = attendanceForms.getAttendances();
 
             for (AttendanceForm attendanceForm : list) {
-                if (attendanceForm.getState() == 1 || attendanceForm.getState() == 4) {
+                if (attendanceForm.getState() == 1 || attendanceForm.getState() == 2 || attendanceForm.getState() == 3) {
                     redirectAttributes.addFlashAttribute("errorMessageForm", "既に申請済みです");
                     return new ModelAndView("redirect:/home");
                 }

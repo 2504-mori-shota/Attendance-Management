@@ -24,7 +24,7 @@ public class RequestForm {
     private Date updatedDate;
 
     public enum Status {
-        申請中, 差戻済み, 承認済み
+        未申請, 申請中, 承認済み, 承認取消済,  差戻済み,
     }
 
     private User user;

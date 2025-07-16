@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="UTF-8">
         <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -38,7 +38,10 @@
                 <button type="submit">申請一覧</button>
             </form>
 
-            </div>
+            <form th:action="@{request/approval/list}" th:method="get" th:if="${session.loginUser.postId == 2 || session.loginUser.postId == 3}">
+                  <button type="submit">承認済申請一覧</button>
+            </form>
+
         </div>
 
         <span th:text="${year} + '年' + ${month} + '月'"></span>

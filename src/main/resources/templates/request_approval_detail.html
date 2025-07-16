@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/style.css}" rel="styleSheet">
+  <title>承認済申請詳細</title>
+</head>
+<body>
+<div class="header">
+  <h1>承認済申請詳細</h1>
+</div>
+<form th:action="@{/request/approval/cancel}" th:object="${attendanceList}" th:method="post">
+  <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
+    <thead>
+    <tr>
+      <th>日付</th>
+      <th>出社</th>
+      <th>退社</th>
+      <th>休憩開始</th>
+      <th>休憩終了</th>
+      <th>休憩時間</th>
+      <th>労働時間</th>
+      <th>メモ</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="i, st: ${dataNumList}">
+      <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(st.count,2)}"></td>
+      <div th:if="${i == 0}">
+        <td/><td/><td/><td/><td></td>
+        <td th:if="${session.loginUser.postId == 2 || session.loginUser.postId == 3}"/>
+      </div>
+
+      <div th:if="${i ge 1}">
+        <div th:each="row, stat : ${attendanceList.attendances}">
+          <div th:if="${#numbers.formatInteger(st.count,2) == #strings.substring(row.attendance, 8, 10)}">
+            <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
+            <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
+            <td></td><!--休憩開始-->
+            <td></td><!--休憩終了-->
+            <td></td><!--合計休憩時間-->
+            <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td><!--合計労働時間-->
+            <td th:text="${row.comment}"></td>
+          </div>
+        </div>
+      </div>
+    </tr>
+    </tbody>
+  </table>
+  <input type="hidden" name="requestId" th:value="${requestId}"/>
+  <button type="submit" onclick="return confirm('承認を取消してよろしいですか？')"
+          th:if="${session.loginUser.postId == 3}">承認取消
+  </button>
+</form>
+<form th:action="@{/request/approval/list}" th:method="get">
+  <div>
+    <button type="submit" class="submit-btn2">戻る</button>
+  </div>
+</form>
+
+</body>
+</html>

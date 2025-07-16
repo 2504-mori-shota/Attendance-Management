@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class RequestDetailController {
+public class RequestApprovalDetailController{
 
     @Autowired
     RequestService requestService;
@@ -33,7 +33,7 @@ public class RequestDetailController {
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/request/detail")
+    @GetMapping("/request/approval/detail")
     public String view (
             HttpServletRequest request,
             @RequestParam(value = "id", required = false) String id,
@@ -60,7 +60,8 @@ public class RequestDetailController {
         //権限チェック
         session = request.getSession();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        if (loginUser.getPostId() != 2 && loginUser.getId() != requestListData.get(0).getUserId()){
+        //機能追加で変更を加えた
+        if ((loginUser.getPostId() != 2 && loginUser.getPostId() != 3) && loginUser.getId() != requestListData.get(0).getUserId()){
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return "redirect:/home";
         }
@@ -98,66 +99,24 @@ public class RequestDetailController {
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
 
-        return "request_detail";
+        return "request_approval_detail";
     }
 
     // 申請情報更新
-    @PostMapping("/request/update")
+    @PostMapping("/request/approval/cancel")
     public String approval (@ModelAttribute("requestId") String id, Model model) throws ParseException {
         //requestの更新処理↓↓
         int requestId = Integer.parseInt(id);
         List<RequestForm> requests = requestService.findRequestById(requestId);
         RequestForm request = requests.get(0);
-        request.setState(2);
+        request.setState(3);
         //requestの更新処理
         requestService.updateRequest(request);
 
-        //attenddanceの更新処理↓↓
+        //attendanceの更新処理↓↓
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(request);
         attendanceService.saveAttendanceState(attendanceForms,3);
-        return "redirect:/request/list";
+        return "redirect:/request/approval/list";
     }
 
-    // 申請差戻機能
-    @PostMapping("/request/return")
-    public String returnRequest (@ModelAttribute("attendanceList") AttendanceListForm attendanceListForm,
-                                 @ModelAttribute("requestId") String strRequestId,
-                                 Model model) throws ParseException {
-        //attendanceの更新処理↓↓
-        List<AttendanceForm> attendanceForms = attendanceListForm.getAttendances();
-        for (AttendanceForm attendanceForm : attendanceForms){
-            int attendanceId = attendanceForm.getId();
-            AttendanceForm dbAttendanceForm = attendanceService.findById(attendanceId);
-            if (attendanceForm.getCheckbox()){
-                dbAttendanceForm.setState(5);
-            } else {
-                dbAttendanceForm.setState(4);
-            }
-            attendanceService.saveAttendance(dbAttendanceForm);
-        }
-
-        //requestの更新処理↓↓
-        int requestId = Integer.parseInt(strRequestId);
-        List<RequestForm> requests = requestService.findRequestById(requestId);
-        RequestForm request = requests.get(0);
-        //statusを差戻済み(1)に更新
-        request.setState(4);
-        //requestの更新処理
-        requestService.updateRequest(request);
-        return "redirect:/request/list";
-    }
-
-    @PostMapping("/myrequest/delete")
-    public String myRequestDelete (@ModelAttribute("requestId") String strRequestId, Model model) throws ParseException {
-        //requestIdのint化
-        int requestId = Integer.parseInt(strRequestId);
-        //ステータス変更のためにattendanceを取得
-        List<RequestForm> requestForms = requestService.findRequestById(requestId);
-        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForms.get(0));
-        //ステータスを未申請(0)に変更
-        attendanceService.saveAttendanceState(attendanceForms,0);
-        //requestの削除
-        requestService.deleteRequest(requestId);
-        return "redirect:/home";
-    }
 }
