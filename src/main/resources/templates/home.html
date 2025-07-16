@@ -10,6 +10,12 @@
             <div class="header">
                 <h1>勤怠管理</h1>
                 <p>本日: <span th:text="${#dates.format(#dates.createNow(), 'yyyy/MM/dd HH:mm:ss')}"></span></p>
+                <p>
+                     役職 : <span th:text="${session.loginUser.post.postName}"></span><br/>
+                    アカウント:　<span th:text="${session.loginUser.account}"></span><br/>
+                     氏名 : <span th:text="${session.loginUser.name}"></span>
+                </p>
+
                 <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert">
                     <strong th:text="${errorMessageForm}"></strong>
                 </div>
