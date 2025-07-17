@@ -33,6 +33,12 @@ public class Attendance {
     @Column
     private LocalDateTime leave;
 
+//    @Column(name ="rest_start")
+//    private LocalDateTime restStart;
+//
+//    @Column(name ="rest_end")
+//    private LocalDateTime restEnd;
+
     @Column
     private String comment;
 

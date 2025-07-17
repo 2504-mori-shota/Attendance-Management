@@ -55,6 +55,7 @@
                 <th>日付</th>
                 <th>出社</th>
                 <th>退社</th>
+                <th>休憩時間</th>
                 <th>メモ</th>
                 <th>労働時間</th>
                 <th>勤怠編集</th>
@@ -86,6 +87,7 @@
                         <div th:if="${#numbers.formatInteger(stat.count,2) == #strings.substring(row.attendance, 8, 10)}" >
                                 <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
                                 <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
+                                <td></td><!--合計休憩時間-->
                                 <td th:text="${row.comment}"></td>
                                 <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
 
