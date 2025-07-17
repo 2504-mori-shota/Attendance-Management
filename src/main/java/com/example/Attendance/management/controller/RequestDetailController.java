@@ -108,18 +108,18 @@ public class RequestDetailController {
         return "request_detail";
     }
 
-    // 申請情報更新
+    // 申請承認機能　　※ここでエラーが起きている可能性が高い
     @PostMapping("/request/update")
     public String approval (@ModelAttribute("requestId") String id, Model model) throws ParseException {
-        //requestの更新処理↓↓
+        //requestの承認処理↓↓
         int requestId = Integer.parseInt(id);
         List<RequestForm> requests = requestService.findRequestById(requestId);
         RequestForm request = requests.get(0);
         request.setState(2);
-        //requestの更新処理
+        //requestの承認処理
         requestService.updateRequest(request);
 
-        //attenddanceの更新処理↓↓
+        //attenddanceの承認処理↓↓
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(request);
         attendanceService.saveAttendanceState(attendanceForms,2);
         return "redirect:/request/list";
