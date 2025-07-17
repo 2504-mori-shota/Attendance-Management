@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
@@ -54,6 +55,12 @@ public class RequestDetailController {
         // 存在しないidをURLで直打ちされた場合
         if (requestListData == null) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return "redirect:/home";
+        }
+
+        //申請のステータスが申請中以外の時
+        if (requestListData.get(0).getState() != 1 ) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return "redirect:/home";
         }
 
