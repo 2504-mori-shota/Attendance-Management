@@ -114,7 +114,7 @@ public class RequestDetailController {
 
         //attenddanceの更新処理↓↓
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(request);
-        attendanceService.saveAttendanceState(attendanceForms,3);
+        attendanceService.saveAttendanceState(attendanceForms,2);
         return "redirect:/request/list";
     }
 
@@ -129,8 +129,10 @@ public class RequestDetailController {
             int attendanceId = attendanceForm.getId();
             AttendanceForm dbAttendanceForm = attendanceService.findById(attendanceId);
             if (attendanceForm.getCheckbox()){
+                //statusを差戻済みX(5)に更新
                 dbAttendanceForm.setState(5);
             } else {
+                //statusを差戻済み〇(4)に更新
                 dbAttendanceForm.setState(4);
             }
             attendanceService.saveAttendance(dbAttendanceForm);
@@ -140,7 +142,7 @@ public class RequestDetailController {
         int requestId = Integer.parseInt(strRequestId);
         List<RequestForm> requests = requestService.findRequestById(requestId);
         RequestForm request = requests.get(0);
-        //statusを差戻済み(1)に更新
+        //statusを差戻済み(4)に更新
         request.setState(4);
         //requestの更新処理
         requestService.updateRequest(request);
