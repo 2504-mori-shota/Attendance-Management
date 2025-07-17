@@ -56,6 +56,7 @@ public class RequestDetailController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
+        
 
         //権限チェック
         session = request.getSession();
