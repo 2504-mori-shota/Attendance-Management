@@ -57,6 +57,12 @@ public class RequestApprovalDetailController{
             return "redirect:/home";
         }
 
+        //申請のステータスが承認済み以外の時
+        if (requestListData.get(0).getState() != 2 ) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            return "redirect:/home";
+        }
+
         //権限チェック
         session = request.getSession();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
