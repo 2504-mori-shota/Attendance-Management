@@ -9,6 +9,7 @@ import com.example.Attendance.management.repository.entity.User;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -39,23 +40,38 @@ public class AttendanceService {
         if(reqAttendance.getDate() == null){
             LocalDateTime dtA = LocalDateTime.parse(reqAttendance.getAttendance(), formatter);
             LocalDateTime dtL = LocalDateTime.parse(reqAttendance.getLeave(), formatter);
+
+//            LocalDateTime dtRS = LocalDateTime.parse(reqAttendance.getRestStart(), formatter);
+//            LocalDateTime dtRL = LocalDateTime.parse(reqAttendance.getRestEnd(), formatter);
+
             attendance.setAttendance(dtA);
             attendance.setLeave(dtL);
             attendance.setId(reqAttendance.getId());
             attendance.setComment(reqAttendance.getComment());
             attendance.setUserId(reqAttendance.getUserId());
             attendance.setUpdatedDate(date);
+
+//            attendance.setRestStart(dtRS);
+//            attendance.setRestStart(dtRL);
             return attendance;
         }
         //指定の日付勤怠情報を取得できる
         String todayAttendance = reqAttendance.getDate() + " " + reqAttendance.getAttendance();
         String todayLeave = reqAttendance.getDate()  + " " + reqAttendance.getLeave();
 
+//        String todayRestStart = reqAttendance.getDate() + " " + reqAttendance.getRestStart();
+//        String todayRestEnd = reqAttendance.getDate() + " " + reqAttendance.getRestEnd();
 
         LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
         LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
+
+//        LocalDateTime dtRestStrat = LocalDateTime.parse(todayRestStart,formatter);
+//        LocalDateTime dtRestEnd = LocalDateTime.parse(todayRestEnd,formatter);
+
         attendance.setAttendance(dtAttendance);
         attendance.setLeave(dtLeave);
+//        attendance.setRestStart(dtRestStrat);
+//        attendance.setRestEnd(dtRestEnd);
 
         attendance.setId(reqAttendance.getId());
         attendance.setComment(reqAttendance.getComment());
@@ -72,7 +88,7 @@ public class AttendanceService {
     //月間の労働時間を合計するメソッド
     //Durationクラスは、時間の長さを表現するためのクラス。
     //LocalTimeを→Durationに。　LocalTimeは時間を加算できない。Durationにすることで複数の時間を合計することが可能に。
-    public Duration calculateTotalWorkingTime(List<AttendanceForm> attendances) {
+    public Duration TotalWorkingTime(List<AttendanceForm> attendances) {
         //ストリームを使うことで、リストの各要素に対して順番に処理を行うことができる
         return attendances.stream()
                 .map(AttendanceForm::getRestTime)
@@ -139,6 +155,10 @@ public class AttendanceService {
             attendance.setAttendance(attendanceString);
             attendance.setLeave(leaveString);
             attendance.setRestTime(restTime);
+
+//            attendance.setRestStart(attendance.getRestStart());
+//            attendance.setRestEnd(attendance.getRestEnd());
+
             attendance.setState(result.getState());
             attendance.setCreatedDate(result.getCreatedDate());
             attendance.setUpdatedDate(result.getUpdatedDate());
@@ -178,6 +198,10 @@ public class AttendanceService {
             attendance.setComment(result.getComment());
             attendance.setAttendance(attendanceString);
             attendance.setLeave(leaveString);
+
+//            attendance.setRestStart(attendance.getRestStart());
+//            attendance.setRestEnd(attendance.getRestEnd());
+
             attendance.setDate(date);
             attendance.setState(result.getState());
             attendance.setCreatedDate(result.getCreatedDate());

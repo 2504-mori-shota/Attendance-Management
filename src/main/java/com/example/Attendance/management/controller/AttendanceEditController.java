@@ -59,6 +59,10 @@ public class AttendanceEditController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return new ModelAndView("redirect:/home");
         }
+        if (attendanceForm.getState() != 5 && attendanceForm.getState() != 4 && attendanceForm.getState() != 0) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            return new ModelAndView("redirect:/home");
+        }
 
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備

@@ -73,7 +73,7 @@ public class HomeController {
         }
 
         //serviceで計算した労働時間合計を受け取る
-        Duration totalWorkingTime = attendanceService.calculateTotalWorkingTime(attendanceForms);
+        Duration totalWorkingTime = attendanceService.TotalWorkingTime(attendanceForms);
         // 時間と分に変換
         long hours = totalWorkingTime.toHours();
         long minutes = totalWorkingTime.toMinutes() % 60;
