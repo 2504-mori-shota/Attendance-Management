@@ -59,7 +59,7 @@ public class RequestDetailController {
         }
 
         //申請のステータスが申請中以外の時
-        if (requestListData.get(0).getState() != 1 ) {
+        if (requestListData.get(0).getState() != 1 || requestListData.get(0).getState() != 3) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return "redirect:/home";
         }
