@@ -62,8 +62,8 @@
                 <th>出社</th>
                 <th>退社</th>
                 <th>休憩時間</th>
-                <th>メモ</th>
                 <th>労働時間</th>
+                <th>メモ</th>
                 <th>勤怠編集</th>
                 <th>勤怠消去</th>
                 <th>ステータス</th>
@@ -94,9 +94,8 @@
                                 <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
                                 <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
                                 <td></td><!--合計休憩時間-->
-                                <td th:text="${row.comment}"></td>
                                 <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
-
+                                 <td th:text="${row.comment}"></td>
                                 <td class="buttons">
                                     <div th:if="${row.state == 0 || row.state == 4 || row.state == 5}">
                                         <form th:action="@{/attendanceedit}" th:method="get">

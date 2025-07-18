@@ -58,7 +58,7 @@ public class UserEditController {
         UserForm sessionUser = (UserForm) session.getAttribute("loginUser");
 
         //FilterConfig及びLoginFilterの機能の代替
-        //"userEdit/{id}"の{id}の部分がFilterConfigで記載方法がない
+        //"useredit/{id}"の{id}の部分がFilterConfigで記載方法がない
         if (sessionUser == null) {
             session.setAttribute("errorMessageForm", "ログインしてください");
             return new ModelAndView("redirect:/");
@@ -107,7 +107,7 @@ public class UserEditController {
         // パスワード確認チェック
         if (!result.hasFieldErrors("passwordConfirm") &&
                 !userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            result.rejectValue("passwordConfirm", null, "パスワードとパスワード確認が一致しません");
+            result.rejectValue("passwordConfirm", null, "パスワードと確認用パスワードが一致しません");
         }
         UserForm userPass = userService.findByAccount(userForm.getAccount());
         // アカウント重複チェック
