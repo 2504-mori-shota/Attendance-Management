@@ -42,7 +42,7 @@ public class AttendanceEditController {
         UserForm user = (UserForm) session.getAttribute("loginUser");
 
         //なぜかisBlankだけだとnullをひっかけてくれない
-        if (strId == null || strId.isBlank()) {
+        if (strId == null || strId.isBlank() || ! strId.matches("^[0-9]+$")) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
