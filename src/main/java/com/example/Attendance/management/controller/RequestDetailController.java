@@ -75,6 +75,7 @@ public class RequestDetailController {
         //requestをもとに勤怠情報を取得
         RequestForm requestForm = requestListData.get(0);
         int requestUserId = requestForm.getUserId();
+        int requestStatus = requestForm.getState();
         //申請されている勤怠情報取得
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForm);
         AttendanceListForm attendanceListForm = new AttendanceListForm();
@@ -102,6 +103,7 @@ public class RequestDetailController {
         model.addAttribute("dataNumList", dataNumList);
         model.addAttribute("requestId", requestId);
         model.addAttribute("requestUserId", requestUserId);
+        model.addAttribute("requestStatus", requestStatus);
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
 
