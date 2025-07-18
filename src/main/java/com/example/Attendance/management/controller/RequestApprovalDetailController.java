@@ -42,8 +42,17 @@ public class RequestApprovalDetailController{
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
 
+        //権限チェック
+        session = request.getSession();
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        //機能追加で変更を加えた
+        if (loginUser.getPostId() != 2 && loginUser.getPostId() != 3){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            return "redirect:/home";
+        }
+
         //引数チェック
-        if (id.isBlank() || !id.matches("^[0-9]+$")){
+        if (id == null || id.isBlank() || !id.matches("^[0-9]+$")){
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
@@ -59,18 +68,10 @@ public class RequestApprovalDetailController{
 
         //申請のステータスが承認済み以外の時
         if (requestListData.get(0).getState() != 2 ) {
-            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
 
-        //権限チェック
-        session = request.getSession();
-        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        //機能追加で変更を加えた
-        if ((loginUser.getPostId() != 2 && loginUser.getPostId() != 3) && loginUser.getId() != requestListData.get(0).getUserId()){
-            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
-            return "redirect:/home";
-        }
 
         //requestをもとに勤怠情報を取得
         RequestForm requestForm = requestListData.get(0);
