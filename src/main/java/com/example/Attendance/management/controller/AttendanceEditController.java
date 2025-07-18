@@ -60,7 +60,7 @@ public class AttendanceEditController {
             return new ModelAndView("redirect:/home");
         }
         if (attendanceForm.getState() != 5 && attendanceForm.getState() != 4 && attendanceForm.getState() != 0) {
-            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
 
