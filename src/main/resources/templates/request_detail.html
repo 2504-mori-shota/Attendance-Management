@@ -55,13 +55,13 @@
             </table>
             <input type="hidden" name="requestId" th:value="${requestId}"/>
             <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')"
-                    th:if="${session.loginUser.postId == 2}">差戻
+                    th:if="${session.loginUser.postId == 2 && session.loginUser.id != requestUserId}">差戻
             </button>
         </form>
         <form th:method="post" th:action="@{/request/update}">
             <input type="hidden" name="requestId" th:value="${requestId}"/>
             <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')"
-                    th:if="${session.loginUser.postId == 2 }">承認
+                    th:if="${session.loginUser.postId == 2 && session.loginUser.id != requestUserId}">承認
             </button>
         </form>
         <form th:action="@{/myrequest/delete}" th:method="post">
