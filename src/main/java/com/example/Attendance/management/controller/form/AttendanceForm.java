@@ -31,8 +31,12 @@ public class AttendanceForm {
     @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
     private String leave;
 
+    @Pattern(regexp = "^[^ ]*$", message = "スペースのみは入力できません")
+    @Pattern(regexp = "^[^　]*$", message = "スペースのみは入力できません")
     private String restStart;
 
+    @Pattern(regexp = "^[^ ]*$", message = "スペースのみは入力できません")
+    @Pattern(regexp = "^[^　]*$", message = "スペースのみは入力できません")
     private  String restEnd;
 
 

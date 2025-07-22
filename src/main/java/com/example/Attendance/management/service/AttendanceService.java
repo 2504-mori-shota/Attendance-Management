@@ -101,7 +101,7 @@ public class AttendanceService {
     public Duration TotalWorkingTime(List<AttendanceForm> attendances) {
         //ストリームを使うことで、リストの各要素に対して順番に処理を行うことができる
         return attendances.stream()
-                .map(AttendanceForm::getWorkTime)
+                .map(AttendanceForm::getTotalWorkRestTime)
                 //LocalTime 型の restTime を Duration 型に変換
                 .map(time -> Duration.ofHours(time.getHour()).plusMinutes(time.getMinute()))
                 //reduce はストリームの各要素を順番に処理し、最終的な結果を得るためのやつ
