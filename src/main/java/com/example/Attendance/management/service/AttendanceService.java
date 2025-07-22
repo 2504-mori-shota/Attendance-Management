@@ -70,7 +70,7 @@ public class AttendanceService {
         //休憩時間の整形（休憩時間が入力されたとき）
         LocalDateTime dtRestStrat = null;
         LocalDateTime dtRestEnd = null;
-        if(reqAttendance.getRestStart() != null && reqAttendance.getRestEnd() != null){
+        if(!(reqAttendance.getRestStart().isBlank() || reqAttendance.getRestEnd().isBlank())){
             String todayRestStart = reqAttendance.getDate() + " " + reqAttendance.getRestStart();
             String todayRestEnd = reqAttendance.getDate() + " " + reqAttendance.getRestEnd();
 
