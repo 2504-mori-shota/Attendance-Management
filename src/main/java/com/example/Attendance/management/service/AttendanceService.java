@@ -227,8 +227,12 @@ public class AttendanceService {
             //日付を取得
             String date = result.getAttendance().format(dateFormatter);
             //休憩開始時間、終了時間をLocalDateTime型 → String型に型変換
-            String restStartString = result.getRestStart().format(timeFormatter);
-            String restEndString = result.getRestEnd().format(timeFormatter);
+            String restStartString = null;
+            String restEndString = null;
+            if (result.getRestStart() != null && result.getRestEnd() != null){
+                restStartString = result.getRestStart().format(timeFormatter);
+                restEndString = result.getRestEnd().format(timeFormatter);
+            }
 
             attendance.setId(result.getId());
             attendance.setUserId(result.getUserId());
