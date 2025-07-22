@@ -120,6 +120,27 @@ public class AttendanceEditController {
         if (diff.isNegative()) {
             result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
         }
+
+        //休憩時間の入力値チェック
+        String todayRestStart = attendanceForm.getDate() + " " + attendanceForm.getRestStart();
+        String todayRestEnd = attendanceForm.getDate() + " " + attendanceForm.getRestEnd();
+        LocalDateTime dtRestStart = LocalDateTime.parse(todayRestStart, formatter);
+        LocalDateTime dtRestEnd = LocalDateTime.parse(todayRestEnd, formatter);
+        Duration RestDiff = Duration.between(dtRestStart,dtRestEnd);
+
+        if(RestDiff.isNegative()) {
+            result.rejectValue("RestStart", "duplicate","休憩開始時間は、終了時間よりも早い時間を入力してください");
+        }
+        //労働時間の間で休憩時間を取れているかチェック
+        Duration startWorkRestDiff = Duration.between(dtAttendance, dtRestStart);
+        if(startWorkRestDiff.isNegative()) {
+            result.rejectValue("restStart", "duplicate","休憩開始時間は、出勤時間より後に入力してください");
+        }
+        Duration endWorkRestDiff =Duration.between(dtRestEnd, dtLeave);
+        if(endWorkRestDiff.isNegative()) {
+            result.rejectValue("restEnd", "duplicate","休憩終了時間は、退勤時間より前に入力してください");
+        }
+
         if (result.hasErrors()) {
             ModelAndView mav = new ModelAndView("attendanceedit");
             mav.addObject("attendanceInfo", attendanceForm);
