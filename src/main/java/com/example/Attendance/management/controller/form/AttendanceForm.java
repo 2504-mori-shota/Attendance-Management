@@ -31,14 +31,8 @@ public class AttendanceForm {
     @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
     private String leave;
 
-    @NotBlank(message = "休憩開始時間を入力してください")
-    @Pattern(regexp = "^[^　]*$", message = "休憩開始時間を入力してください")
-    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
     private String restStart;
 
-    @NotBlank(message = "休憩終了時間を入力してください")
-    @Pattern(regexp = "^[^　]*$", message = "休憩終了時間を入力してください")
-    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
     private  String restEnd;
 
 

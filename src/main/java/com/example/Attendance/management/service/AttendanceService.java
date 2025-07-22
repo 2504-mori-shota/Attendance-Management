@@ -59,14 +59,19 @@ public class AttendanceService {
         String todayAttendance = reqAttendance.getDate() + " " + reqAttendance.getAttendance();
         String todayLeave = reqAttendance.getDate()  + " " + reqAttendance.getLeave();
 
-        String todayRestStart = reqAttendance.getDate() + " " + reqAttendance.getRestStart();
-        String todayRestEnd = reqAttendance.getDate() + " " + reqAttendance.getRestEnd();
-
         LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
         LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
 
-        LocalDateTime dtRestStrat = LocalDateTime.parse(todayRestStart,formatter);
-        LocalDateTime dtRestEnd = LocalDateTime.parse(todayRestEnd,formatter);
+        //休憩時間の整形（休憩時間が入力されたとき）
+        LocalDateTime dtRestStrat = null;
+        LocalDateTime dtRestEnd = null;
+        if(reqAttendance.getRestStart() != null && reqAttendance.getRestEnd() != null){
+            String todayRestStart = reqAttendance.getDate() + " " + reqAttendance.getRestStart();
+            String todayRestEnd = reqAttendance.getDate() + " " + reqAttendance.getRestEnd();
+
+            dtRestStrat = LocalDateTime.parse(todayRestStart,formatter);
+            dtRestEnd = LocalDateTime.parse(todayRestEnd,formatter);
+        }
 
         attendance.setAttendance(dtAttendance);
         attendance.setLeave(dtLeave);
@@ -146,8 +151,8 @@ public class AttendanceService {
             //出勤時間と退勤時間をLocalDateTime型 → String型に型変換
             String attendanceString = result.getAttendance().format(formatter);
             String leaveString = result.getLeave().format(formatter);
-            String restStartString = result.getRestStart().format(formatter);
-            String restEndString = result.getRestEnd().format(formatter);
+            String restStartString = null;
+            String restEndString = null;
 
             //出勤時間を計算
             //between(出勤, 退勤)→正しく出る
@@ -158,10 +163,18 @@ public class AttendanceService {
             //LocalTimeに型変換
             LocalTime workTime = LocalTime.of((int)hours, (int)minutes);
 
-            Duration restDiff = Duration.between(result.getRestStart(),result.getRestEnd());
-            long restHours = restDiff.toHoursPart();
-            long restMinutes = restDiff.toMinutesPart();
-            LocalTime totalRestTime = LocalTime.of((int)restHours,(int)restMinutes);
+            LocalTime totalRestTime = null;
+            if (result.getRestStart() == null || result.getRestEnd() == null){
+                totalRestTime = LocalTime.of(0,0);
+            }
+            if(result.getRestStart() != null && result.getRestEnd() != null){
+                restStartString = result.getRestStart().format(formatter);
+                restEndString = result.getRestEnd().format(formatter);
+                Duration restDiff = Duration.between(result.getRestStart(),result.getRestEnd());
+                long restHours = restDiff.toHoursPart();
+                long restMinutes = restDiff.toMinutesPart();
+                totalRestTime = LocalTime.of((int)restHours,(int)restMinutes);
+            }
 
             Duration workRestDiff = Duration.between(totalRestTime,workTime);
             long workRestHours = workRestDiff.toHoursPart();

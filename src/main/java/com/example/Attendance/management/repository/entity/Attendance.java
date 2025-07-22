@@ -33,10 +33,10 @@ public class Attendance {
     @Column
     private LocalDateTime leave;
 
-    @Column(name ="rest_start")
+    @Column(name ="rest_start", nullable = true)
     private LocalDateTime restStart;
 
-    @Column(name ="rest_end")
+    @Column(name ="rest_end", nullable = true)
     private LocalDateTime restEnd;
 
     @Column
