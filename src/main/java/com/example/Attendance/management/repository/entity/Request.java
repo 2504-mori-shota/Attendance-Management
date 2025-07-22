@@ -40,12 +40,6 @@ public class Request {
     @Column(insertable = false, name="updated_date")
     private Date updatedDate;
 
-//    @Column(name ="rest_start")
-//    private Date restStart;
-//
-//    @Column(name ="rest_end")
-//    private Date restEnd;
-
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private User user;

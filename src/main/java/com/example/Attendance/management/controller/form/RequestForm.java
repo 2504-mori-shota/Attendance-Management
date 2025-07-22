@@ -19,10 +19,6 @@ public class RequestForm {
 
     private Date endDate;
 
-//    private Date restStart;
-//
-//    private Date restEnd;
-
     private Date createdDate;
 
     private Date updatedDate;

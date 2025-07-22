@@ -28,8 +28,7 @@ public class RequestService {
         List<RequestForm> result = setRequestForm(requests);
         return result;
     }
-
-    //
+    
     public List<RequestForm> findRequestById(int id){
         List<Request> request = requestRepository.findById(id);
         List<RequestForm> result = setRequestForm(request);
@@ -68,9 +67,6 @@ public class RequestService {
             requestForm.setUpdatedDate(request.getUpdatedDate());
             requestForm.setUser(request.getUser());
 
-//            requestForm.setRestStart(request.getRestStart());
-//            requestForm.setRestEnd(request.getRestEnd());
-
             requestForms.add(requestForm);
         }
         return requestForms;
@@ -86,10 +82,6 @@ public class RequestService {
         request.setEndDate(requestForm.getEndDate());
         request.setCreatedDate(requestForm.getCreatedDate());
         request.setUpdatedDate(requestForm.getUpdatedDate());
-
-//        request.setRestStart(requestForm.getRestStart());
-//        request.setRestEnd(requestForm.getRestEnd());
-
 
         return request;
     }
