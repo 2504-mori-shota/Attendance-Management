@@ -37,10 +37,10 @@
           <div th:if="${#numbers.formatInteger(st.count,2) == #strings.substring(row.attendance, 8, 10)}">
             <td th:text="${#strings.substring(row.attendance, 11, 16)}"></td>
             <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
-            <td></td><!--休憩開始-->
-            <td></td><!--休憩終了-->
-            <td></td><!--合計休憩時間-->
-            <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td><!--合計労働時間-->
+            <td th:text="${#strings.substring(row.restStart, 11, 16)}"></td></td><!--休憩開始-->
+            <td th:text="${#strings.substring(row.restEnd, 11, 16)}"></td></td><!--休憩終了-->
+            <td th:text="${#temporals.format(row.totalRestTime, 'HH:mm')}"></td><!--休憩時間-->
+            <td th:text="${#temporals.format(row.totalWorkRestTime, 'HH:mm')}"></td>
             <td th:text="${row.comment}"></td>
           </div>
         </div>

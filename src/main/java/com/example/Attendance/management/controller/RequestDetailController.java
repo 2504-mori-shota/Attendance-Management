@@ -57,6 +57,7 @@ public class RequestDetailController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
+        
 
         //申請のステータスが申請中以外の時
         if (requestListData.get(0).getState() != 1 && requestListData.get(0).getState() != 3) {

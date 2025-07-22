@@ -30,6 +30,16 @@
     </label>
     <div th:if="${#fields.hasErrors('leave')}" style="color:red;" th:errors="*{leave}"></div>
 
+    <label>休憩開始時間
+      <input type="text" th:field="*{restStart}" placeholder="例)12:00"/><br/>
+    </label>
+    <div th:if="${#fields.hasErrors('restStart')}" style="color:red;" th:errors="*{restStart}"></div>
+
+    <label>休憩終了時間
+      <input type="text" th:field="*{restEnd}" placeholder="例)13:00"/><br/>
+    </label>
+    <div th:if="${#fields.hasErrors('restEnd')}" style="color:red;" th:errors="*{restEnd}"></div>
+
     <label>メモ</label><br/>
     <input type="text" class="comment" th:field="*{comment}" ></textarea><br/>
     <div th:if="${#fields.hasErrors('comment')}" style="color:red;" th:errors="*{comment}"></div>
