@@ -94,34 +94,34 @@ public class HomeController {
         return"home";
 }
 
-        @PostMapping("/application")
-        public ModelAndView application (
-                HttpServletRequest request,
-                @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,RedirectAttributes redirectAttributes,
-                Model model) throws ParseException {
-            session = request.getSession();
-            UserForm user = (UserForm) session.getAttribute("loginUser");
+    @PostMapping("/application")
+    public ModelAndView application (
+            HttpServletRequest request,
+            @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,RedirectAttributes redirectAttributes,
+            Model model) throws ParseException {
+        session = request.getSession();
+        UserForm user = (UserForm) session.getAttribute("loginUser");
 
-            if (attendanceForms.getAttendances() == null){
-                redirectAttributes.addFlashAttribute("errorMessageForm", "今月の勤怠情報がありません");
-                return new ModelAndView("redirect:/home");
-            }
-            List<AttendanceForm> list = attendanceForms.getAttendances();
-
-            for (AttendanceForm attendanceForm : list) {
-                if (attendanceForm.getState() == 1 || attendanceForm.getState() == 2 || attendanceForm.getState() == 3) {
-                    redirectAttributes.addFlashAttribute("errorMessageForm", "既に申請済みです");
-                    return new ModelAndView("redirect:/home");
-                }
-
-            }
-
-            attendanceService.saveAttendanceState(list,1);
-
-            requestService.saveRequest(list.get(0), list.get(list.size() - 1));
-
+        if (attendanceForms.getAttendances() == null){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "今月の勤怠情報がありません");
             return new ModelAndView("redirect:/home");
         }
+        List<AttendanceForm> list = attendanceForms.getAttendances();
+
+        for (AttendanceForm attendanceForm : list) {
+            if (attendanceForm.getState() == 1 || attendanceForm.getState() == 2 || attendanceForm.getState() == 3) {
+                redirectAttributes.addFlashAttribute("errorMessageForm", "既に申請済みです");
+                return new ModelAndView("redirect:/home");
+            }
+
+        }
+
+        attendanceService.saveAttendanceState(list,1);
+
+        requestService.saveRequest(list.get(0), list.get(list.size() - 1));
+
+        return new ModelAndView("redirect:/home");
+    }
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {

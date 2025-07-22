@@ -41,8 +41,13 @@ public class AttendanceService {
             LocalDateTime dtA = LocalDateTime.parse(reqAttendance.getAttendance(), formatter);
             LocalDateTime dtL = LocalDateTime.parse(reqAttendance.getLeave(), formatter);
 
-            LocalDateTime dtRS = LocalDateTime.parse(reqAttendance.getRestStart(), formatter);
-            LocalDateTime dtRL = LocalDateTime.parse(reqAttendance.getRestEnd(), formatter);
+            //休憩時間の型変換（休憩時間が入力されている場合のみ）
+            LocalDateTime dtRS = null;
+            LocalDateTime dtRL = null;
+            if (!(reqAttendance.getRestStart().isBlank() || reqAttendance.getRestEnd().isBlank())){
+                dtRS = LocalDateTime.parse(reqAttendance.getRestStart(), formatter);
+                dtRL = LocalDateTime.parse(reqAttendance.getRestEnd(), formatter);
+            }
 
             attendance.setAttendance(dtA);
             attendance.setLeave(dtL);
