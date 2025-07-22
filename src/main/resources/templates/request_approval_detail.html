@@ -40,7 +40,7 @@
             <td></td><!--休憩開始-->
             <td></td><!--休憩終了-->
             <td></td><!--合計休憩時間-->
-            <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td><!--合計労働時間-->
+            <td th:text="${#temporals.format(row.workTime, 'HH:mm')}"></td><!--合計労働時間-->
             <td th:text="${row.comment}"></td>
           </div>
         </div>

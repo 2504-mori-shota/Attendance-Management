@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -38,6 +39,12 @@ public class Request {
 
     @Column(insertable = false, name="updated_date")
     private Date updatedDate;
+
+//    @Column(name ="rest_start")
+//    private Date restStart;
+//
+//    @Column(name ="rest_end")
+//    private Date restEnd;
 
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)

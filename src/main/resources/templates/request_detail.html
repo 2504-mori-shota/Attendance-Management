@@ -41,7 +41,7 @@
                               <td></td><!--休憩開始-->
                               <td></td><!--休憩終了-->
                               <td></td><!--休憩時間-->
-                              <td th:text="${#temporals.format(row.restTime, 'HH:mm')}"></td>
+                              <td th:text="${#temporals.format(row.workTime, 'HH:mm')}"></td>
                               <td th:text="${row.comment}"></td>
                               <td class="checkbox" th:if="${session.loginUser.postId == 2}">
                                   <input type="hidden" th:field="*{attendances[__${stat.index}__].id}"/>

@@ -31,15 +31,15 @@ public class AttendanceForm {
     @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
     private String leave;
 
-//    @NotBlank(message = "休憩開始時間を入力してください")
-//    @Pattern(regexp = "^[^　]*$", message = "休憩開始時間を入力してください")
-//    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
-//    private String restStart;
-//
-//    @NotBlank(message = "休憩終了時間を入力してください")
-//    @Pattern(regexp = "^[^　]*$", message = "休憩終了時間を入力してください")
-//    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
-//    private  String restEnd;
+    @NotBlank(message = "休憩開始時間を入力してください")
+    @Pattern(regexp = "^[^　]*$", message = "休憩開始時間を入力してください")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
+    private String restStart;
+
+    @NotBlank(message = "休憩終了時間を入力してください")
+    @Pattern(regexp = "^[^　]*$", message = "休憩終了時間を入力してください")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
+    private  String restEnd;
 
 
     @Pattern(regexp = "^[^ ]*$", message = "スペースのみは入力できません")
@@ -57,7 +57,11 @@ public class AttendanceForm {
     @NotBlank(message = "日付を指定してください")
     private String date;
 
-    private LocalTime restTime;
+    private LocalTime workTime;
+
+    private LocalTime totalRestTime;
+
+    private LocalTime totalWorkRestTime;
 
     private Boolean checkbox;
 
