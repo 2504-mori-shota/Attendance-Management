@@ -37,7 +37,7 @@ public class AttendanceService {
         Date date = new Date();
         Attendance attendance = new Attendance();
         //申請用のsetEntity
-        if(reqAttendance.getDate() == null){
+        if (reqAttendance.getDate() == null) {
             LocalDateTime dtA = LocalDateTime.parse(reqAttendance.getAttendance(), formatter);
             LocalDateTime dtL = LocalDateTime.parse(reqAttendance.getLeave(), formatter);
 
