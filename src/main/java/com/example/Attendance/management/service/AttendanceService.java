@@ -52,7 +52,7 @@ public class AttendanceService {
             attendance.setUpdatedDate(date);
 
             attendance.setRestStart(dtRS);
-            attendance.setRestStart(dtRL);
+            attendance.setRestEnd(dtRL);
             return attendance;
         }
         //指定の日付勤怠情報を取得できる
