@@ -129,9 +129,18 @@ public class AttendanceController {
         if (diff.isNegative()) {
             result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
         }
-        if(!attendanceForm.getRestStart().isBlank()) {
+        if(!(attendanceForm.getRestStart().isBlank() || attendanceForm.getRestEnd().isBlank())) {
 
-            //休憩時間の入力値チェック
+            if(!(attendanceForm.getRestStart().matches("^([01]\\d|2[0-3]):[0-5]\\d$") && attendanceForm.getRestEnd().matches("^([01]\\d|2[0-3]):[0-5]\\d$"))) {
+                result.rejectValue("restStart", "duplicate", "半角数字かつ23：59以内で入力してください");
+                ModelAndView mav = new ModelAndView("attendance");
+                mav.addObject("attendanceInfo", attendanceForm);
+                mav.addObject("formModel", user);
+                // errorsはバインディング済みなので自動的にビューへ渡る
+                return mav;
+            }
+
+                //休憩時間の入力値チェック
             String todayRestStart = attendanceForm.getDate() + " " + attendanceForm.getRestStart();
             String todayRestEnd = attendanceForm.getDate() + " " + attendanceForm.getRestEnd();
             LocalDateTime dtRestStart = LocalDateTime.parse(todayRestStart, formatter);
