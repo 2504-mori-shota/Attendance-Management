@@ -8,13 +8,14 @@
 <body>
 <div class="header">
   <h1>承認済申請詳細</h1>
-  <h2>申請者情報</h2>
-  <p>
-    役職 : <span th:text="${user.post.postName}"></span><br/>
-    アカウント:　<span th:text="${user.account}"></span><br/>
-    氏名 : <span th:text="${user.name}"></span>
-  </p>
+
 </div>
+<h2>申請者情報</h2>
+<p>
+  役職 : <span th:text="${user.post.postName}"></span><br/>
+  アカウント:　<span th:text="${user.account}"></span><br/>
+  氏名 : <span th:text="${user.name}"></span>
+</p>
 <p>合計労働時間: <span th:text="${totalWorkingTime}">00:00</span></p>
 <form th:action="@{/request/approval/cancel}" th:object="${attendanceList}" th:method="post">
   <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
