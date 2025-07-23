@@ -33,7 +33,7 @@
           <td><span th:text="${statuses[request.state]}"/>
           <td>
             <form th:action="@{/request/approval/detail/id={id}(id=${request.id})}" th:method="get">
-              <input type="hidden" name="id" th:value="${request.id}">
+             <!-- <input type="hidden" name="id" th:value="${request.id}"> -->
               <button type="submit">詳細</button>
             </form>
           </td>
