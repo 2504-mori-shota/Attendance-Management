@@ -36,13 +36,20 @@ public class AttendanceService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Date date = new Date();
         Attendance attendance = new Attendance();
-        //申請用のsetEntity
+        // ↓申請用のsetEntity
         if (reqAttendance.getDate() == null) {
+            // dt -> DateTimeの略
+            // A -> attendance(出勤)の頭文字
             LocalDateTime dtA = LocalDateTime.parse(reqAttendance.getAttendance(), formatter);
+            // L -> leave(退勤)の頭文字
             LocalDateTime dtL = LocalDateTime.parse(reqAttendance.getLeave(), formatter);
 
-            //休憩時間の型変換（休憩時間が入力されている場合のみ）
+            // 休憩時間の型変換（休憩時間が入力されている場合のみ）
+            // RS -> rest_start(休憩開始)の意味
+            // dt -> 41行目を参照
             LocalDateTime dtRS = null;
+            // RE -> rest_end(休憩終了)の意味
+            // dt -> 41行目を参照
             LocalDateTime dtRL = null;
             if (!(reqAttendance.getRestStart() ==null || reqAttendance.getRestEnd() ==null )
                     &&!(reqAttendance.getRestStart().isBlank() || reqAttendance.getRestEnd().isBlank())){
@@ -62,18 +69,24 @@ public class AttendanceService {
             attendance.setRestEnd(dtRL);
             return attendance;
         }
-        //指定の日付勤怠情報を取得できる
+        // ↑ここまで申請用のsetEntity
+
+        // ↓ここから勤怠登録・編集用のsetEntity
+        // String型の「today～」は指定の日付の勤怠情報(例：2025/07/12 09:00)を取得している
         String todayAttendance = reqAttendance.getDate() + " " + reqAttendance.getAttendance();
         String todayLeave = reqAttendance.getDate()  + " " + reqAttendance.getLeave();
 
+        //出勤と退勤をString型からLocalDateTime型に型変換
         LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
         LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
 
         //休憩時間の整形（休憩時間が入力されたとき）
+        // dtの意味 -> 41行目を参照
         LocalDateTime dtRestStrat = null;
         LocalDateTime dtRestEnd = null;
         if (!(reqAttendance.getRestStart() ==null || reqAttendance.getRestEnd() ==null )
                 &&!(reqAttendance.getRestStart().isBlank() || reqAttendance.getRestEnd().isBlank())) {
+            // String型の「today～」の意味->75行目を参照
             String todayRestStart = reqAttendance.getDate() + " " + reqAttendance.getRestStart();
             String todayRestEnd = reqAttendance.getDate() + " " + reqAttendance.getRestEnd();
 
@@ -138,7 +151,7 @@ public class AttendanceService {
 
 
     public List<AttendanceForm> findAttendanceByRequest(RequestForm requestForm){
-        // Date → Localdatetime の変換
+        // Date → LocalDateTime の変換
         LocalDateTime start = LocalDateTime.ofInstant(requestForm.getStartDate().toInstant(), ZoneId.systemDefault());
         LocalDateTime end = LocalDateTime.ofInstant(requestForm.getEndDate().toInstant(), ZoneId.systemDefault());
 
@@ -162,15 +175,16 @@ public class AttendanceService {
             String restStartString = null;
             String restEndString = null;
 
-            //出勤時間を計算
+            //出勤時間(差:difference)を計算
             //between(出勤, 退勤)→正しく出る
             //between(退勤, 出勤）→計算がマイナスになる
             Duration diff = Duration.between(result.getAttendance(), result.getLeave());
             long hours = diff.toHours();
             long minutes = diff.toMinutes() % 60;
-            //LocalTimeに型変換
+            // LocalTimeに型変換　(workTime -> 出勤時間)
             LocalTime workTime = LocalTime.of((int)hours, (int)minutes);
 
+            // totalRestTime -> 休憩時間
             LocalTime totalRestTime = null;
             if (result.getRestStart() == null || result.getRestEnd() == null){
                 totalRestTime = LocalTime.of(0,0);
@@ -184,9 +198,11 @@ public class AttendanceService {
                 totalRestTime = LocalTime.of((int)restHours,(int)restMinutes);
             }
 
+            //　workRestDiff -> 出勤時間-休憩時間 = 労働時間(Duration型)
             Duration workRestDiff = Duration.between(totalRestTime,workTime);
             long workRestHours = workRestDiff.toHoursPart();
             long workRestMinutes = workRestDiff.toMinutesPart();
+            //　totalWorkRestTime -> 出勤時間-休憩時間 = 労働時間(LocalTime型)
             LocalTime totalWorkRestTime = LocalTime.of((int)workRestHours,(int)workRestMinutes);
 
 
@@ -292,13 +308,13 @@ public class AttendanceService {
     //前・登録済み情報　後・登録前情報
     public boolean findByTime(AttendanceForm attendanceList, AttendanceForm attendanceForm){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        //登録済み(already)の時間をLocalDateTime型に変換
+        //登録済み(already -> a)の時間をLocalDateTime型に変換
         String aStartTime = attendanceList.getDate() + " " + attendanceList.getAttendance();
         String aEndTime = attendanceList.getDate() + " " + attendanceList.getLeave();
         LocalDateTime aStart = LocalDateTime.parse(aStartTime, dateFormatter);
         LocalDateTime aEnd = LocalDateTime.parse(aEndTime, dateFormatter);
 
-        //登録前(still)の勤怠時間をLocalDateTime型に変換
+        //登録前(still -> s)の勤怠時間をLocalDateTime型に変換
         String sStartTime = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
         String sEndTime = attendanceForm.getDate() + " " + attendanceForm.getLeave();
         LocalDateTime sStart = LocalDateTime.parse(sStartTime, dateFormatter);
