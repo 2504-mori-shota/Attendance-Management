@@ -143,7 +143,7 @@ public class AttendanceEditController {
             Duration RestDiff = Duration.between(dtRestStart, dtRestEnd);
 
             if (RestDiff.isNegative()) {
-                result.rejectValue("RestStart", "duplicate", "休憩開始時間は、終了時間よりも早い時間を入力してください");
+                result.rejectValue("restStart", "duplicate", "休憩開始時間は、終了時間よりも早い時間を入力してください");
             }
             //労働時間の間で休憩時間を取れているかチェック
             Duration startWorkRestDiff = Duration.between(dtAttendance, dtRestStart);
