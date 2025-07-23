@@ -75,7 +75,7 @@
                 <button type="submit" class="submit-btn2" th:if="${session.loginUser.postId == 2}">戻る</button>
             </div>
         </form>
-        <form th:action="@{/myrequest/{id}(id=${session.loginUser.id})}" th:method="get">
+        <form th:action="@{/request/myself/{id}(id=${session.loginUser.id})}" th:method="get">
             <div>
                 <button type="submit" class="submit-btn2"
                         th:if="${session.loginUser.id == requestUserId && session.loginUser.postId != 2}">戻る
