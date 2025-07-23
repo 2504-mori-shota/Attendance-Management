@@ -154,14 +154,13 @@ public class AttendanceEditController {
             if (endWorkRestDiff.isNegative()) {
                 result.rejectValue("restEnd", "duplicate", "休憩終了時間は、退勤時間より前に入力してください");
             }
-
-            if (result.hasErrors()) {
-                ModelAndView mav = new ModelAndView("attendanceedit");
-                mav.addObject("attendanceInfo", attendanceForm);
-                mav.addObject("formModel", user);
-                // errorsはバインディング済みなので自動的にビューへ渡る
-                return mav;
-            }
+        }
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("attendanceedit");
+            mav.addObject("attendanceInfo", attendanceForm);
+            mav.addObject("formModel", user);
+            // errorsはバインディング済みなので自動的にビューへ渡る
+            return mav;
         }
 
         attendanceForm.setUserId(user.getId());
