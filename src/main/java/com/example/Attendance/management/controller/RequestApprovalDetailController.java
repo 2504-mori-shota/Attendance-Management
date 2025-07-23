@@ -6,6 +6,7 @@ import com.example.Attendance.management.controller.form.RequestForm;
 import com.example.Attendance.management.controller.form.UserForm;
 import com.example.Attendance.management.service.AttendanceService;
 import com.example.Attendance.management.service.RequestService;
+import com.example.Attendance.management.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class RequestApprovalDetailController{
     RequestService requestService;
     @Autowired
     AttendanceService attendanceService;
+    @Autowired
+    UserService userService;
     @Autowired
     private HttpSession session;
 
@@ -93,6 +97,12 @@ public class RequestApprovalDetailController{
             List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(requestUserId, day);
             dataNumList.add(dayAttendanceForms.size());
         }
+        UserForm userForm = userService.findById(requestListData.get(0).getUserId());
+        //serviceで計算した労働時間合計を受け取る
+        Duration totalWorkingTime = attendanceService.TotalWorkingTime(attendanceForms);
+        // 時間と分に変換
+        long hours = totalWorkingTime.toHours();
+        long minutes = totalWorkingTime.toMinutes() % 60;
 
         // modelにオブジェクト格納してreturnで返す
         model.addAttribute("month", month);
@@ -102,7 +112,8 @@ public class RequestApprovalDetailController{
         model.addAttribute("requestUserId", requestUserId);
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
-
+        model.addAttribute("user", userForm);
+        model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
         return "request_approval_detail";
     }
 
