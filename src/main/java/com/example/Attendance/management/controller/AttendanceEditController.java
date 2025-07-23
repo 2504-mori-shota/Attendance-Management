@@ -34,15 +34,15 @@ public class AttendanceEditController {
 
     @GetMapping("/attendanceedit")
     public ModelAndView newAttend(
-            @RequestParam(name="id", required = false) String strId,
-             HttpServletRequest request,
-             RedirectAttributes redirectAttributes) {
+            @RequestParam(name = "id", required = false) String strId,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
         // セッションからユーザーオブジェクトを取得
         session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser");
 
         //なぜかisBlankだけだとnullをひっかけてくれない
-        if (strId == null || strId.isBlank() || ! strId.matches("^[0-9]+$")) {
+        if (strId == null || strId.isBlank() || !strId.matches("^[0-9]+$")) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
@@ -50,7 +50,7 @@ public class AttendanceEditController {
         AttendanceForm attendanceForm = attendanceService.findById(Integer.parseInt(strId));
 
         //idが存在しない場合のバリデーション
-        if (attendanceForm == null){
+        if (attendanceForm == null) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
@@ -103,26 +103,31 @@ public class AttendanceEditController {
         for (int i = 0; i < attendanceFormList.size(); i++) {
             AttendanceForm attendance = attendanceFormList.get(i);
             //trueでifに入る
-            if (attendanceService.findByTime(attendance, attendanceForm)){
+            if (attendanceService.findByTime(attendance, attendanceForm)) {
                 result.rejectValue("attendance", "duplicate", "勤務時間が重複しています");
             }
         }
 
-            //勤怠の入力値チェック
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            String todayAttendance = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
-            String todayLeave = attendanceForm.getDate() + " " + attendanceForm.getLeave();
-            LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
-            LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
-            Duration diff = Duration.between(dtAttendance, dtLeave);
+        //勤怠の入力値チェック
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String todayAttendance = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
+        String todayLeave = attendanceForm.getDate() + " " + attendanceForm.getLeave();
+        LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
+        LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
+        Duration diff = Duration.between(dtAttendance, dtLeave);
 
-            if (diff.isNegative()) {
-                result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
-            }
-        if(!(attendanceForm.getRestStart().isBlank() || attendanceForm.getRestEnd().isBlank())) {
+        if (diff.isNegative()) {
+            result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
+        }
+        if (!(attendanceForm.getRestStart().isBlank() || attendanceForm.getRestEnd().isBlank())) {
 
-            if(!(attendanceForm.getRestStart().matches("^([01]\\d|2[0-3]):[0-5]\\d$") && attendanceForm.getRestEnd().matches("^([01]\\d|2[0-3]):[0-5]\\d$"))) {
+            if (!attendanceForm.getRestStart().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
                 result.rejectValue("restStart", "duplicate", "半角数字かつ23：59以内で入力してください");
+            }
+            if (!attendanceForm.getRestEnd().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
+                result.rejectValue("restEnd", "duplicate", "半角数字かつ23：59以内で入力してください");
+            }
+            if (result.hasErrors()) {
                 ModelAndView mav = new ModelAndView("attendanceedit");
                 mav.addObject("attendanceInfo", attendanceForm);
                 mav.addObject("formModel", user);

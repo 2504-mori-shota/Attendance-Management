@@ -28,7 +28,7 @@ public class RequestService {
         List<RequestForm> result = setRequestForm(requests);
         return result;
     }
-    
+
     public List<RequestForm> findRequestById(int id){
         List<Request> request = requestRepository.findById(id);
         List<RequestForm> result = setRequestForm(request);

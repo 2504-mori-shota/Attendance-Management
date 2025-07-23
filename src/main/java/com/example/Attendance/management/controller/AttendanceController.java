@@ -40,7 +40,7 @@ public class AttendanceController {
     @GetMapping("/attendance")
     public ModelAndView newAttend
             (HttpServletRequest request,
-             @RequestParam(value = "date", required = false)String date,
+             @RequestParam(value = "date", required = false) String date,
              Model model,
              RedirectAttributes redirectAttributes) {
         //引数チェック
@@ -75,7 +75,7 @@ public class AttendanceController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
-        date = String.format("%04d",year) + "-" + String.format("%02d",month) + "-" + String.format("%02d",day);
+        date = String.format("%04d", year) + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
         attendanceForm.setDate(date);
         // 画面遷移先を指定
         mav.setViewName("/attendance");
@@ -113,7 +113,7 @@ public class AttendanceController {
         for (int i = 0; i < attendanceFormList.size(); i++) {
             AttendanceForm attendance = attendanceFormList.get(i);
             //trueでifに入る
-            if (attendanceService.findByTime(attendance, attendanceForm)){
+            if (attendanceService.findByTime(attendance, attendanceForm)) {
                 result.rejectValue("attendance", "duplicate", "勤務時間が重複しています");
             }
         }
@@ -121,7 +121,7 @@ public class AttendanceController {
         //勤怠の入力値チェック
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String todayAttendance = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
-        String todayLeave = attendanceForm.getDate()  + " " + attendanceForm.getLeave();
+        String todayLeave = attendanceForm.getDate() + " " + attendanceForm.getLeave();
         LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
         LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
         Duration diff = Duration.between(dtAttendance, dtLeave);
@@ -129,10 +129,16 @@ public class AttendanceController {
         if (diff.isNegative()) {
             result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
         }
-        if(!(attendanceForm.getRestStart().isBlank() || attendanceForm.getRestEnd().isBlank())) {
+        if (!(attendanceForm.getRestStart().isBlank() || attendanceForm.getRestEnd().isBlank())) {
 
-            if(!(attendanceForm.getRestStart().matches("^([01]\\d|2[0-3]):[0-5]\\d$") && attendanceForm.getRestEnd().matches("^([01]\\d|2[0-3]):[0-5]\\d$"))) {
+            if (!attendanceForm.getRestStart().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
                 result.rejectValue("restStart", "duplicate", "半角数字かつ23：59以内で入力してください");
+            }
+
+            if (!attendanceForm.getRestEnd().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
+                result.rejectValue("restEnd", "duplicate", "半角数字かつ23：59以内で入力してください");
+            }
+            if (result.hasErrors()) {
                 ModelAndView mav = new ModelAndView("attendance");
                 mav.addObject("attendanceInfo", attendanceForm);
                 mav.addObject("formModel", user);
@@ -140,7 +146,7 @@ public class AttendanceController {
                 return mav;
             }
 
-                //休憩時間の入力値チェック
+            //休憩時間の入力値チェック
             String todayRestStart = attendanceForm.getDate() + " " + attendanceForm.getRestStart();
             String todayRestEnd = attendanceForm.getDate() + " " + attendanceForm.getRestEnd();
             LocalDateTime dtRestStart = LocalDateTime.parse(todayRestStart, formatter);
