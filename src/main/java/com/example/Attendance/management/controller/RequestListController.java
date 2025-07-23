@@ -42,7 +42,7 @@ public class RequestListController {
     }
 
     //自分の申請一覧が見れる画面
-    @GetMapping("/myrequest/{id}")
+    @GetMapping("/request/myself/{id}")
     public String myview(@PathVariable("id") String userId, Model model){
 //        UserForm user = (UserForm) session.getAttribute("loginUser");
         List<RequestForm> requestForms = requestService.findRequestByUserId(Integer.parseInt(userId));

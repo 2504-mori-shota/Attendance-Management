@@ -94,7 +94,7 @@ public class HomeController {
         return"home";
 }
 
-    @PostMapping("/application")
+    @PostMapping("/home/application")
     public ModelAndView application (
             HttpServletRequest request,
             @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,RedirectAttributes redirectAttributes,
@@ -131,7 +131,7 @@ public class HomeController {
         }
         return "redirect:/";
     }
-    @DeleteMapping("/Attendance/delete/{id}")
+    @DeleteMapping("/attendance/delete/{id}")
     public String deleteAttendance(@PathVariable int id){
         attendanceService.deleteAttendance(id);
         return "redirect:/home";

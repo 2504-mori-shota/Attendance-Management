@@ -16,7 +16,7 @@
 
     <div class="main-contents-register">
       <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
-      <form th:action="@{/update}" th:object="${formModel}" th:method="post">
+      <form th:action="@{/user/update}" th:object="${formModel}" th:method="post">
         <!--  ユーザー登録 -->
         <label>アカウント<br/>
           <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="form-control">

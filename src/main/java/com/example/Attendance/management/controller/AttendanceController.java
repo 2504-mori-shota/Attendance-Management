@@ -87,7 +87,7 @@ public class AttendanceController {
     }
 
 
-    @PostMapping("/addAttendance")
+    @PostMapping("/attendance/add")
     public ModelAndView addContent(
             HttpServletRequest request,
             @Valid

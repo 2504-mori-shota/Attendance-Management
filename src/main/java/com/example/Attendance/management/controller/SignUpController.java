@@ -32,7 +32,7 @@ public class SignUpController {
     @Autowired
     HttpSession session;
 
-    @GetMapping("/signup")
+    @GetMapping("/system/signup")
     public ModelAndView newContent(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -57,7 +57,7 @@ public class SignUpController {
         mav.addObject("postOptions", getPostOptions());
 
         // 画面遷移先を指定
-        mav.setViewName("/signup");
+        mav.setViewName("signup");
         return mav;
     }
 
@@ -80,7 +80,7 @@ public class SignUpController {
     /*
      * 新規登録処理
      */
-    @PostMapping("/insert")
+    @PostMapping("/system/register")
 
     public String addContent(@Validated(UserForm.SignUpGroup.class)
                              @Valid @ModelAttribute("formModel") UserForm userForm, BindingResult result,
@@ -100,7 +100,7 @@ public class SignUpController {
         if (result.hasErrors()) {
 
             model.addAttribute("postOptions", getPostOptions());
-            return "signup"; // フォワードで遷移
+            return "system/signup"; // フォワードで遷移
         }
         // 投稿をテーブルに格納
         userService.saveUser(userForm);

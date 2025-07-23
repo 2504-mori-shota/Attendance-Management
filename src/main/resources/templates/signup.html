@@ -16,7 +16,7 @@
 
 <div class="main-contents-register">
     <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
-    <form th:action="@{/insert}" th:object="${formModel}" th:method="post">
+    <form th:action="@{/system/register}" th:object="${formModel}" th:method="post">
         <!--  ユーザー登録 -->
         <label>アカウント<br/>
             <input type="text" th:field="*{account}" class="form-control"></label><br/>

@@ -64,7 +64,7 @@
                     th:if="${session.loginUser.postId == 2 && session.loginUser.id != requestUserId}">承認
             </button>
         </form>
-        <form th:action="@{/myrequest/delete}" th:method="post">
+        <form th:action="@{/request/myself/delete}" th:method="post">
             <input type="hidden" name="requestId" th:value="${requestId}"/>
             <button type="submit" th:if="${session.loginUser.id == requestUserId && requestStatus == 1}"
                     onclick="return confirm('取消しますか？');">取消

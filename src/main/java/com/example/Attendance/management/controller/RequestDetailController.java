@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,10 +31,10 @@ public class RequestDetailController {
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/request/detail")
+    @GetMapping("/request/detail/id={id}")
     public String view (
             HttpServletRequest request,
-            @RequestParam(value = "id", required = false) String id,
+            @PathVariable("id") String id,
             RedirectAttributes redirectAttributes, Model model){
 
         // エラーメッセージのリスト
@@ -159,7 +156,7 @@ public class RequestDetailController {
         return "redirect:/request/list";
     }
 
-    @PostMapping("/myrequest/delete")
+    @PostMapping("/request/myself/delete")
     public String myRequestDelete (@ModelAttribute("requestId") String strRequestId, Model model) throws ParseException {
         //requestIdのint化
         int requestId = Integer.parseInt(strRequestId);
