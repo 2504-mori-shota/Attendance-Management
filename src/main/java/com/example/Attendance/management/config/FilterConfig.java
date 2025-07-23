@@ -15,11 +15,12 @@ public class FilterConfig {
         bean.addUrlPatterns("/attendance/*");
         bean.addUrlPatterns("/home/*");
         bean.addUrlPatterns("/request/*");
-        bean.addUrlPatterns("/myrequest/*");
-        bean.addUrlPatterns("/signup/*");
+        //bean.addUrlPatterns("/myrequest/*");
+        //bean.addUrlPatterns("/signup/*");
         bean.addUrlPatterns("/system/*");
-        bean.addUrlPatterns("/useredit/*");
-        bean.addUrlPatterns("/attendanceedit/*");
+        bean.addUrlPatterns("/user/*");
+        //bean.addUrlPatterns("/useredit/*");
+        //bean.addUrlPatterns("/attendanceedit/*");
 
         bean.setOrder(1);
         return bean;

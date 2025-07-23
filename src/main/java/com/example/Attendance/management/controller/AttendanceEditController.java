@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -32,9 +29,9 @@ public class AttendanceEditController {
     @Autowired
     AttendanceService attendanceService;
 
-    @GetMapping("/attendanceedit")
+    @GetMapping("/attendance/edit/id={id}")
     public ModelAndView newAttend(
-            @RequestParam(name = "id", required = false) String strId,
+            @PathVariable("id") String strId,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
         // セッションからユーザーオブジェクトを取得
@@ -67,7 +64,7 @@ public class AttendanceEditController {
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
         // 画面遷移先を指定
-        mav.setViewName("/attendanceedit");
+        mav.setViewName("attendance_edit");
         mav.addObject("formModel", user);
         // Formに元の情報を保管
         mav.addObject("attendanceInfo", attendanceForm);
@@ -76,7 +73,7 @@ public class AttendanceEditController {
 
     }
 
-    @PostMapping("/updateAttendance")
+    @PostMapping("/attendance/update")
     public ModelAndView updateContent(
             HttpServletRequest request,
             @Valid
@@ -93,7 +90,7 @@ public class AttendanceEditController {
         List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView("attendanceedit");
+            ModelAndView mav = new ModelAndView("attendance_edit");
             mav.addObject("attendanceInfo", attendanceForm);
             mav.addObject("formModel", user);
             // errorsはバインディング済みなので自動的にビューへ渡る
@@ -128,7 +125,7 @@ public class AttendanceEditController {
                 result.rejectValue("restEnd", "duplicate", "半角数字かつ23：59以内で入力してください");
             }
             if (result.hasErrors()) {
-                ModelAndView mav = new ModelAndView("attendanceedit");
+                ModelAndView mav = new ModelAndView("attendance_edit");
                 mav.addObject("attendanceInfo", attendanceForm);
                 mav.addObject("formModel", user);
                 // errorsはバインディング済みなので自動的にビューへ渡る
@@ -156,7 +153,7 @@ public class AttendanceEditController {
             }
         }
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView("attendanceedit");
+            ModelAndView mav = new ModelAndView("attendance_edit");
             mav.addObject("attendanceInfo", attendanceForm);
             mav.addObject("formModel", user);
             // errorsはバインディング済みなので自動的にビューへ渡る

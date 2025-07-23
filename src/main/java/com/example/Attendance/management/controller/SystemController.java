@@ -58,7 +58,7 @@ public class SystemController {
         return mav;
     }
 
-    @PostMapping("/updateStatus")
+    @PostMapping("/user/status/update")
     public String updateStatus(@RequestParam Integer id, @RequestParam int status){
         userService.updateStatus(id, status);
         return "redirect:/system";
