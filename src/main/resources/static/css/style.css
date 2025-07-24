@@ -35,6 +35,44 @@ body {
   z-index: 10;
 }
 
+ /* 勤怠登録、編集のエラー文 */
+.errors {
+  white-space: normal;
+  word-break: break-word;/* 枠超えたら強制改行 */
+  white-space:normal;　/* 切りよく改行してくれる */
+  font-size: 0.9em;
+  padding-top: 4px;
+}
+/* 画面右から左へ移動（亀1） */
+.emoji-turtle {
+  position: fixed;
+  bottom: 5px;
+  left: -60px;
+  font-size: 4rem;
+  animation: turtleWalkReverse 7s linear infinite;
+  transform: scaleX(-1); /* 左向きに反転 */
+}
+
+@keyframes turtleWalkReverse {
+  0% { right: -60px; }
+  100% { right: 100vw; }
+}
+
+/* 画面左から右へ移動（亀2） */
+.emoji-turtle2 {
+  position: fixed;
+  bottom: 5px;
+  right: -60px;
+  font-size: 4rem;
+  animation: turtleWalkForward 7s linear infinite;
+}
+
+@keyframes turtleWalkForward {
+  0% { left: -60px; }
+  100% { left: 100vw; }
+}
+
+
 
 
 
