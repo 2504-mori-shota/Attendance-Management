@@ -24,11 +24,11 @@
 
         <div class="button-rightTop">
             <form th:action="@{/logout}">
-                <button type="submit">ログアウト</button>
+                <button type="submit" class="btn">ログアウト</button>
             </form>
 
             <form th:action="@{/system}" th:method="get" th:object="${user}" th:if="${session.loginUser.postId == 3}">
-                <button type="submit">ユーザー管理</button>
+                <button type="submit" class="btn">ユーザー管理</button>
             </form>
 
 
@@ -58,21 +58,21 @@
         <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
             <thead>
             <tr>
-                <th>日付</th>
-                <th>出勤</th>
-                <th>退勤</th>
-                <th>休憩時間</th>
-                <th>労働時間</th>
-                <th>メモ</th>
-                <th>勤怠編集</th>
-                <th>勤怠消去</th>
-                <th>ステータス</th>
+                <th width="5%">日付</th>
+                <th width="5%">出勤</th>
+                <th width="5%">退勤</th>
+                <th width="8%">休憩時間</th>
+                <th width="8%">労働時間</th>
+                <th width="49%">メモ</th>
+                <th width="5%">編集</th>
+                <th width="5%">消去</th>
+                <th width="10%">ステータス</th>
 
             </tr>
             </thead>
             <tbody>
 
-            <tr th:each="i, stat: ${dataNumList}">
+            <tr th:each="i, stat: ${dataNumList}" align="center">
                 <div th:if="${i == 0}">
                     <td>
                         <a th:href="${'/attendance?date=' + year + '-' + #numbers.formatInteger(month,2) + '-' + #numbers.formatInteger(stat.count,2)}"
@@ -95,7 +95,7 @@
                                 <td th:text="${#strings.substring(row.leave, 11, 16)}"></td>
                                 <td th:text="${#temporals.format(row.totalRestTime, 'HH:mm')}"></td><!--合計休憩時間-->
                                 <td th:text="${#temporals.format(row.totalWorkRestTime, 'HH:mm')}"></td>
-                                 <td th:text="${row.comment}"></td>
+                                 <td th:text="${row.comment}" align="left"></td>
                                 <td class="buttons">
                                     <div th:if="${row.state == 0 || row.state == 4 || row.state == 5}">
                                         <form th:action="@{/attendance/edit/id={id}(id=${row.id})}" th:method="get">
