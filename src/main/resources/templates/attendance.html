@@ -20,42 +20,64 @@
         <!--<label>日付選択
           <input type="date" name="date" th:field="*{date}"/><br/>
         </label>-->
-        <label>日付
-          <input type="date" name="date" th:field="*{date}" readonly/><br/>
-        </label>
-        <div th:if="${#fields.hasErrors('date')}" style="color:red;" th:errors="*{date}"></div>
-        <label>出勤時間
-          <input type="text" th:field="*{attendance}" placeholder="例)09:00"/><br/>
-        </label>
-        <div th:if="${#fields.hasErrors('attendance')}" style="color:red;" th:errors="*{attendance}"></div>
+        <table border="1" style="border-collapse: collapse;">
+          <thead>
+          <tr>
+            <th>日付</th>
+            <th>出勤</th>
+            <th>退勤</th>
+            <th>休憩開始</th>
+            <th>休憩終了</th>
+            <th>メモ</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 入力欄の行 -->
+          <tr>
+            <td><input type="date" th:field="*{date}" readonly /></td>
+            <td><input type="text" th:field="*{attendance}" placeholder="例)09:00" /></td>
+            <td><input type="text" th:field="*{leave}" placeholder="例)18:00" /></td>
+            <td><input type="text" th:field="*{restStart}" placeholder="例)12:00" /></td>
+            <td><input type="text" th:field="*{restEnd}" placeholder="例)13:00" /></td>
+            <td><input type="text" th:field="*{comment}" placeholder="備考" /></td>
+          </tr>
 
-        <label>退勤時間
-          <input type="text" th:field="*{leave}" placeholder="例)18:00"/><br/>
-        </label>
-        <div th:if="${#fields.hasErrors('leave')}" style="color:red;" th:errors="*{leave}"></div>
+          <!-- エラー表示の行 -->
+          <tr>
+            <td>
+              <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" style="color:red;" class= "errors"></div>
+            </td>
+            <td>
+              <div th:if="${#fields.hasErrors('attendance')}" th:errors="*{attendance}" style="color:red;" class= "errors"></div>
+            </td>
+            <td>
+              <div th:if="${#fields.hasErrors('leave')}" th:errors="*{leave}" style="color:red;" class= "errors"></div>
+            </td>
+            <td>
+              <div th:if="${#fields.hasErrors('restStart')}" th:errors="*{restStart}" style="color:red;" class= "errors"></div>
+            </td>
+            <td>
+              <div th:if="${#fields.hasErrors('restEnd')}" th:errors="*{restEnd}" style="color:red;" class= "errors"></div>
+            </td>
+            <td>
+              <div th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" style="color:red;" class= "errors"></div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
-        <label>休憩開始時間
-          <input type="text" th:field="*{restStart}" placeholder="例)12:00"/><br/>
-        </label>
-        <div th:if="${#fields.hasErrors('restStart')}" style="color:red;" th:errors="*{restStart}"></div>
-
-        <label>休憩終了時間
-          <input type="text" th:field="*{restEnd}" placeholder="例)13:00"/><br/>
-        </label>
-        <div th:if="${#fields.hasErrors('restEnd')}" style="color:red;" th:errors="*{restEnd}"></div>
-
-        <label>メモ</label><br/>
-        <input type="text" class="comment" th:field="*{comment}" ></textarea><br/>
-        <div th:if="${#fields.hasErrors('comment')}" style="color:red;" th:errors="*{comment}"></div>
         <input type="hidden" name="Year" th:value="${Year}"/>
         <input type="hidden" name="Month" th:value="${Month}"/>
-        <input type="submit" value="登録" class="message-button1"/>
+        <input type="submit" value="登録" class="ok-btn"/>
 
       </form>
       <form th:action="@{/home}">
-        <input type="submit" value="戻る" class="message-button2"/>
+        <input type="submit" value="戻る" class="btn"/>
         <!---->
       </form>
+      <div class="emoji-turtle2">🐢</div> <div class="emoji-turtle">🐢</div>
+
+
     </div>
   </body>
 </html>
