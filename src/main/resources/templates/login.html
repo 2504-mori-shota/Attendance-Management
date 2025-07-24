@@ -21,6 +21,7 @@
     <!--  ログイン情報をコントローラーに渡す-->
     <form th:method="post" th:action="@{/login}" th:object="${userForm}">
         <div class="form-area">
+            <h1>ログイン</h1>
             <label>アカウント</label>
             <!--      入力されたアカウント名をコントローラーに渡す-->
             <input type="text" name="account" th:field="*{account}"  class="select1" placeholder="アカウント名を入力">
