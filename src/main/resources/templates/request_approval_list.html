@@ -34,7 +34,7 @@
           <td>
             <form th:action="@{/request/approval/detail/id={id}(id=${request.id})}" th:method="get">
              <!-- <input type="hidden" name="id" th:value="${request.id}"> -->
-              <button type="submit">詳細</button>
+              <button type="submit" class="btn">詳細</button>
             </form>
           </td>
         </tr>
@@ -44,7 +44,7 @@
   </table>
   <form th:action="@{/home}" th:method="get">
     <div>
-      <button type="submit" class="submit-btn2">戻る</button>
+      <button type="submit" class="btn">戻る</button>
     </div>
   </form>
   </body>

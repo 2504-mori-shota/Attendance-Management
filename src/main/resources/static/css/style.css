@@ -437,3 +437,62 @@ visibility: visible;
     transform: translateY(3px);
     border-bottom-width: 2px;
 }
+
+.btn {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	min-width: 60px;
+	padding: auto;
+	font-size: 14px;
+	font-weight: bold;
+	border: 2px solid #2f7160;
+	color: #2f7160;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.btn:hover {
+	color: #fff;
+	background: #2f7160;
+	text-decoration: none;
+}
+
+.delete-btn {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	min-width: 60px;
+	padding: auto;
+	font-size: 14px;
+	font-weight: bold;
+	border: 2px solid #FA8072;
+	color: #FA8072;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.delete-btn:hover {
+	color: #fff;
+	background: #FA8072;
+}
+
+.ok-btn {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	min-width: 60px;
+	padding: auto;
+	font-size: 14px;
+	font-weight: bold;
+	border: 2px solid #0c73dd;
+	color: #0c73dd;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.ok-btn:hover {
+	color: #fff;
+	background: #0c73dd;
+	text-decoration: none;
+}
