@@ -15,49 +15,50 @@
     </div>
 
     <div class="main-contents-register">
+      <h1>変更後情報</h1>
       <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
       <form th:action="@{/user/update}" th:object="${formModel}" th:method="post">
         <!--  ユーザー登録 -->
-        <label>アカウント<br/>
-          <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="form-control">
-          <input th:unless="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="form-control" readonly>
+        <label class="label1">アカウント<br/>
+          <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="select1">
+          <input th:unless="${session.loginUser.postId == 3}" type="text" th:field="*{account}" class="select1" readonly>
         </label><br/>
         <div th:if="${#fields.hasErrors('account')}" style="color:red;" th:errors="*{account}"></div>
 
-        <label>パスワード<br/>
-          <input type="password" th:field="*{password}" class="form-control"></label><br/>
+        <label class="label1">パスワード<br/>
+          <input type="password" th:field="*{password}" class="select1"></label><br/>
         <div th:if="${#fields.hasErrors('password')}" style="color:red;" th:errors="*{password}"></div>
 
-        <label>パスワード確認<br/>
-          <input type="password" th:field="*{passwordConfirm}"/></label><br/>
+        <label class="label1">パスワード確認<br/>
+          <input type="password" th:field="*{passwordConfirm}" class="select1"/></label><br/>
         <div th:if="${#fields.hasErrors('passwordConfirm')}" style="color:red;" th:errors="*{passwordConfirm}"></div>
 
-        <label>氏名<br/>
-          <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{name}" class="form-control">
-          <input th:unless="${session.loginUser.postId == 3}" type="text" th:field="*{name}" class="form-control" readonly>
+        <label class="label1">氏名<br/>
+          <input th:if="${session.loginUser.postId == 3}" type="text" th:field="*{name}" class="select1">
+          <input th:unless="${session.loginUser.postId == 3}" type="text" th:field="*{name}" class="select1" readonly>
         </label><br/>
         <div th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}"></div>
 
-          <label>役職<br/>
-            <select th:if="${session.loginUser.postId == 3 && (formModel.id != session.loginUser.id)}" th:field="*{postId}" class="form-control">
+          <label class="label1">役職<br/>
+            <select th:if="${session.loginUser.postId == 3 && (formModel.id != session.loginUser.id)}" th:field="*{postId}" class="select1">
               <option value="" disabled selected>選択してください</option>
               <option th:each="entry : ${postOptions}"
                       th:value="${entry.key}"
                       th:text="${entry.value}"></option>
             </select>
-            <input th:unless="${session.loginUser.postId == 3 && (formModel.id != session.loginUser.id)}" type="text" th:value="${postName}" class="form-control" readonly>
+            <input th:unless="${session.loginUser.postId == 3 && (formModel.id != session.loginUser.id)}" type="text" th:value="${postName}" class="select1" readonly>
             <input type="hidden" th:field="*{postId}"/>
           </label><br/>
 
           <input th:type="hidden" name="id" th:value="${formModel.id}"/>
           <input th:type="hidden" name="isStopped" th:value="${formModel.isStopped}"/>
-          <button type="submit" class="submit-btn2">変更</button>
+          <button type="submit" class="button-signup">変更</button>
       </form>
       <form th:action="@{/system}" th:if="${session.loginUser.postId == 3}">
-        <button type="submit" class="submit-btn2">戻る</button>
+        <button type="submit" class="button-signup">戻る</button>
       </form>
       <form th:action="@{/home}" th:if="${session.loginUser.postId != 3}">
-        <button type="submit" class="submit-btn2">戻る</button>
+        <button type="submit" class="button-signup">戻る</button>
       </form>
 
     </div>
