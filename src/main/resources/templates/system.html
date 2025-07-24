@@ -20,6 +20,7 @@
     <button type="submit" class="submit-btn2">戻る</button>
   </form>
 </div>
+
 <!--  新規タスク -->
 <div th:each="user : ${users}" th:object="${users}" class="main-management">
   ID　　:　<span class="wrap-text" th:text="${user.id}"></span><br/>

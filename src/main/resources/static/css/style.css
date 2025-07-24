@@ -43,34 +43,33 @@ body {
   font-size: 0.9em;
   padding-top: 4px;
 }
-/* 画面右から左へ移動（亀1） */
-.emoji-turtle {
+
+/* 共通スタイル */
+.animal {
   position: fixed;
-  bottom: 5px;
-  left: -60px;
+  bottom: 10px;
+  left: -80px;
   font-size: 4rem;
-  animation: turtleWalkReverse 7s linear infinite;
-  transform: scaleX(-1); /* 左向きに反転 */
+  animation-timing-function: linear;
+  transform: scaleX(-1);
 }
 
-@keyframes turtleWalkReverse {
-  0% { right: -60px; }
-  100% { right: 100vw; }
+/* カメ */
+.turtle {
+  animation: walkRight 15s infinite;
 }
 
-/* 画面左から右へ移動（亀2） */
-.emoji-turtle2 {
-  position: fixed;
-  bottom: 5px;
-  right: -60px;
-  font-size: 4rem;
-  animation: turtleWalkForward 7s linear infinite;
+/* ウサギ */
+.rabbit {
+  animation: walkRight 6s infinite;
 }
 
-@keyframes turtleWalkForward {
-  0% { left: -60px; }
+/* 左から右へのアニメーション定義 */
+@keyframes walkRight {
+  0% { left: -80px; }
   100% { left: 100vw; }
 }
+
 
 
 
