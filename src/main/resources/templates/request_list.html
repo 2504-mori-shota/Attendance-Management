@@ -15,18 +15,18 @@
     <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>申請者</th>
-            <th>期間(開始)</th>
-            <th>期間(終了)</th>
-            <th>ステータス</th>
-            <th>詳細</th>
+            <th width="10%">ID</th>
+            <th width="20%">申請者</th>
+            <th width="20%">期間(開始)</th>
+            <th width="20%">期間(終了)</th>
+            <th width="20%">ステータス</th>
+            <th width="10%">詳細</th>
         </tr>
         </thead>
         <tbody>
         <div th:each="request : ${requests}">
             <div th:if="${request.state == 1 || request.state == 3}">
-                <tr>
+                <tr align="center">
                     <td><span th:text="${request.id}"/>
                     <td><span th:text="${request.user.name}"/>
                     <td><span th:text="${request.startDate}"/>
@@ -35,7 +35,7 @@
                     <td>
                         <form th:action="@{/request/detail/id={id}(id=${request.id})}" th:method="get">
                            <!-- <input type="hidden" name="id" th:value="${request.id}">-->
-                            <button type="submit">詳細</button>
+                            <button type="submit" class="btn">詳細</button>
                         </form>
                     </td>
                 </tr>
@@ -45,7 +45,7 @@
     </table>
     <form th:action="@{/home}" th:method="get">
         <div>
-            <button type="submit" class="submit-btn2">戻る</button>
+            <button type="submit" class="btn">戻る</button>
         </div>
     </form>
 <div class="animal turtle">🐢</div>

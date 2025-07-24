@@ -14,10 +14,10 @@
 </div>
 <div class="button-management">
   <form th:action="@{/system/signup}">
-    <button type="submit" class="submit-btn2">ユーザー登録画面</button>
+    <button type="submit" class="btn">ユーザー登録画面</button>
   </form>
   <form th:action="@{/home}">
-    <button type="submit" class="submit-btn2">戻る</button>
+    <button type="submit" class="btn">戻る</button>
   </form>
 </div>
 
@@ -40,7 +40,7 @@
     <button type="submit" onclick="return confirm('変更しますか？');">変更</button>
   </form>
   <form th:action="@{/user/edit/id={id}(id=${user.id})}" >
-    <input type="submit" value="編集"/>
+    <input type="submit" value="編集" class="btn"/>
   </form>
 </div>
 </body>

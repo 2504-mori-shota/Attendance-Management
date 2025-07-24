@@ -20,20 +20,20 @@
             <table id="scheduleTable" class="list" border="1" style="border-collapse: collapse">
                 <thead>
                 <tr>
-                    <th>日付</th>
-                    <th>出勤</th>
-                    <th>退勤</th>
-                    <th>休憩開始</th>
-                    <th>休憩終了</th>
-                    <th>休憩時間</th>
-                    <th>労働時間</th>
-                    <th>メモ</th>
-                    <th th:if="${session.loginUser.postId == 2}">ステータス</th>
+                    <th width="5%">日付</th>
+                    <th width="5%">出勤</th>
+                    <th width="5%">退勤</th>
+                    <th width="8%">休憩開始</th>
+                    <th width="8%">休憩終了</th>
+                    <th width="8%">休憩時間</th>
+                    <th width="8%">労働時間</th>
+                    <th width="48%">メモ</th>
+                    <th th:if="${session.loginUser.postId == 2}" width="5%">NG</th>
                 </tr>
                 </thead>
                 <tbody>
 
-              <tr th:each="i, st: ${dataNumList}">
+              <tr th:each="i, st: ${dataNumList}" align="center">
                 <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(st.count,2)}"></td>
                   <div th:if="${i == 0}">
                       <td/><td/><td/><td/><td/><td/>
@@ -49,7 +49,7 @@
                               <td th:text="${#strings.substring(row.restEnd, 11, 16)}"></td></td><!--休憩終了-->
                               <td th:text="${#temporals.format(row.totalRestTime, 'HH:mm')}"></td><!--休憩時間-->
                               <td th:text="${#temporals.format(row.totalWorkRestTime, 'HH:mm')}"></td>
-                              <td th:text="${row.comment}"></td>
+                              <td th:text="${row.comment}" align="left"></td>
                               <td class="checkbox" th:if="${session.loginUser.postId == 2}">
                                   <input type="hidden" th:field="*{attendances[__${stat.index}__].id}"/>
                                   <input type="checkbox" th:field="*{attendances[__${stat.index}__].checkbox}"/>
@@ -61,30 +61,30 @@
               </tbody>
             </table>
             <input type="hidden" name="requestId" th:value="${requestId}"/>
-            <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')"
+            <button type="submit" onclick="return confirm('差戻してもよろしいでしょうか？')" class="delete-btn"
                     th:if="${session.loginUser.postId == 2 && session.loginUser.id != requestUserId}">差戻
             </button>
         </form>
         <form th:method="post" th:action="@{/request/update}">
             <input type="hidden" name="requestId" th:value="${requestId}"/>
-            <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')"
+            <button type="submit" onclick="return confirm('承認してもよろしいでしょうか？')" class="ok-btn"
                     th:if="${session.loginUser.postId == 2 && session.loginUser.id != requestUserId}">承認
             </button>
         </form>
         <form th:action="@{/request/myself/delete}" th:method="post">
             <input type="hidden" name="requestId" th:value="${requestId}"/>
             <button type="submit" th:if="${session.loginUser.id == requestUserId && requestStatus == 1}"
-                    onclick="return confirm('取消しますか？');">取消
+                    onclick="return confirm('取消しますか？');" class="delete-btn">取消
             </button>
         </form>
         <form th:action="@{/request/list}" th:method="get">
             <div>
-                <button type="submit" class="submit-btn2" th:if="${session.loginUser.postId == 2}">戻る</button>
+                <button type="submit" class="btn" th:if="${session.loginUser.postId == 2}">戻る</button>
             </div>
         </form>
         <form th:action="@{/request/myself/{id}(id=${session.loginUser.id})}" th:method="get">
             <div>
-                <button type="submit" class="submit-btn2"
+                <button type="submit" class="btn"
                         th:if="${session.loginUser.id == requestUserId && session.loginUser.postId != 2}">戻る
                 </button>
             </div>
