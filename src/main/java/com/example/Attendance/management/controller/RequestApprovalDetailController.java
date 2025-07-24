@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class RequestDetailController {
+public class RequestApprovalDetailController{
 
     @Autowired
     RequestService requestService;
@@ -35,7 +34,7 @@ public class RequestDetailController {
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/request/detail/id={id}")
+    @GetMapping("/request/approval/detail/id={id}")
     public String view (
             HttpServletRequest request,
             @PathVariable("id") String id,
@@ -44,8 +43,17 @@ public class RequestDetailController {
         // エラーメッセージのリスト
         List<String> errorMessages = new ArrayList<String>();
 
+        //権限チェック
+        session = request.getSession();
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        //機能追加で変更を加えた
+        if (loginUser.getPostId() != 2 && loginUser.getPostId() != 3){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+            return "redirect:/home";
+        }
+
         //引数チェック
-        if (id.isBlank() || !id.matches("^[0-9]+$")){
+        if (id == null || id.isBlank() || !id.matches("^[0-9]+$")){
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
@@ -58,26 +66,17 @@ public class RequestDetailController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
-        
 
-        //申請のステータスが申請中以外の時
-        if (requestListData.get(0).getState() != 1 && requestListData.get(0).getState() != 3) {
-            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
+        //申請のステータスが承認済み以外の時
+        if (requestListData.get(0).getState() != 2 ) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return "redirect:/home";
         }
 
-        //権限チェック
-        session = request.getSession();
-        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        if (loginUser.getPostId() != 2 && loginUser.getId() != requestListData.get(0).getUserId()){
-            redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
-            return "redirect:/home";
-        }
 
         //requestをもとに勤怠情報を取得
         RequestForm requestForm = requestListData.get(0);
         int requestUserId = requestForm.getUserId();
-        int requestStatus = requestForm.getState();
         //申請されている勤怠情報取得
         List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForm);
         AttendanceListForm attendanceListForm = new AttendanceListForm();
@@ -98,7 +97,6 @@ public class RequestDetailController {
             List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(requestUserId, day);
             dataNumList.add(dayAttendanceForms.size());
         }
-
         UserForm userForm = userService.findById(requestListData.get(0).getUserId());
         //serviceで計算した労働時間合計を受け取る
         Duration totalWorkingTime = attendanceService.TotalWorkingTime(attendanceForms);
@@ -112,73 +110,28 @@ public class RequestDetailController {
         model.addAttribute("dataNumList", dataNumList);
         model.addAttribute("requestId", requestId);
         model.addAttribute("requestUserId", requestUserId);
-        model.addAttribute("requestStatus", requestStatus);
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
         model.addAttribute("user", userForm);
         model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
-        return "request_detail";
+        return "request_approval_detail";
     }
 
-    // 申請承認機能　　※ここでエラーが起きている可能性が高い
-    @PostMapping("/request/update")
+    // 申請情報更新
+    @PostMapping("/request/approval/cancel")
     public String approval (@ModelAttribute("requestId") String id, Model model) throws ParseException {
-        //requestの承認処理↓↓
+        //requestの更新処理↓↓
         int requestId = Integer.parseInt(id);
         List<RequestForm> requests = requestService.findRequestById(requestId);
         RequestForm request = requests.get(0);
-        request.setState(2);
-        //requestの承認処理
-        requestService.updateRequest(request);
-
-        //attenddanceの承認処理↓↓
-        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(request);
-        attendanceService.saveAttendanceState(attendanceForms,2);
-        return "redirect:/request/list";
-    }
-
-    // 申請差戻機能
-    @PostMapping("/request/return")
-    public String returnRequest (@ModelAttribute("attendanceList") AttendanceListForm attendanceListForm,
-                                 @ModelAttribute("requestId") String strRequestId,
-                                 Model model) throws ParseException {
-        //attendanceの更新処理↓↓
-        List<AttendanceForm> attendanceForms = attendanceListForm.getAttendances();
-        for (AttendanceForm attendanceForm : attendanceForms){
-            int attendanceId = attendanceForm.getId();
-            AttendanceForm dbAttendanceForm = attendanceService.findById(attendanceId);
-            if (attendanceForm.getCheckbox()){
-                //statusを差戻済みX(5)に更新
-                dbAttendanceForm.setState(5);
-            } else {
-                //statusを差戻済み〇(4)に更新
-                dbAttendanceForm.setState(4);
-            }
-            attendanceService.saveAttendance(dbAttendanceForm);
-        }
-
-        //requestの更新処理↓↓
-        int requestId = Integer.parseInt(strRequestId);
-        List<RequestForm> requests = requestService.findRequestById(requestId);
-        RequestForm request = requests.get(0);
-        //statusを差戻済み(4)に更新
-        request.setState(4);
+        request.setState(3);
         //requestの更新処理
         requestService.updateRequest(request);
-        return "redirect:/request/list";
+
+        //attendanceの更新処理↓↓
+        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(request);
+        attendanceService.saveAttendanceState(attendanceForms,3);
+        return "redirect:/request/approval/list";
     }
 
-    @PostMapping("/request/myself/delete")
-    public String myRequestDelete (@ModelAttribute("requestId") String strRequestId, Model model) throws ParseException {
-        //requestIdのint化
-        int requestId = Integer.parseInt(strRequestId);
-        //ステータス変更のためにattendanceを取得
-        List<RequestForm> requestForms = requestService.findRequestById(requestId);
-        List<AttendanceForm> attendanceForms = attendanceService.findAttendanceByRequest(requestForms.get(0));
-        //ステータスを未申請(0)に変更
-        attendanceService.saveAttendanceState(attendanceForms,0);
-        //requestの削除
-        requestService.deleteRequest(requestId);
-        return "redirect:/home";
-    }
 }

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/style.css}" rel="stylesheet">
-    <title>sing_Up</title>
+    <title>ユーザ登録</title>
 </head>
 <body>
 <div class="header">
-    <h1>-New Registration-</h1>
+    <h1>新規ユーザ登録</h1>
 </div><br/>
 
 <div th:if="${errorMessageForm}" class="alert-error" role="alert">
@@ -16,7 +16,7 @@
 
 <div class="main-contents-register">
     <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
-    <form th:action="@{/insert}" th:object="${formModel}" th:method="post">
+    <form th:action="@{/system/register}" th:object="${formModel}" th:method="post">
         <!--  ユーザー登録 -->
         <label>アカウント<br/>
             <input type="text" th:field="*{account}" class="form-control"></label><br/>
