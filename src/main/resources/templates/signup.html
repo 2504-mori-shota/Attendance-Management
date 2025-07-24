@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-    <title>ユーザ登録</title>
-</head>
-<body>
-<div class="header">
-    <h1>新規ユーザ登録</h1>
-</div><br/>
+    <head>
+        <meta charset="UTF-8">
+        <link th:href="@{/css/style.css}" rel="stylesheet">
+        <title>ユーザ登録</title>
+    </head>
+    <body>
+        <div class="header">
+            <h1>新規ユーザ登録</h1>
+        </div><br/>
 
-<div th:if="${errorMessageForm}" class="alert-error" role="alert">
-    <strong style="color:red;" th:text="${errorMessageForm}"></strong>
-</div>
-
-<div class="main-contents-register">
-    <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
-    <form th:action="@{/system/register}" th:object="${formModel}" th:method="post">
-        <!--  ユーザー登録 -->
-        <label>アカウント<br/>
-            <input type="text" th:field="*{account}" class="form-control"></label><br/>
-        <div th:if="${#fields.hasErrors('account')}" style="color:red;" th:errors="*{account}"></div>
-
-        <label>パスワード<br/>
-            <input type="password" th:field="*{password}" class="form-control"></label><br/>
-        <div th:if="${#fields.hasErrors('password')}" style="color:red;" th:errors="*{password}"></div>
-
-        <label>パスワード確認<br/>
-            <input type="password" th:field="*{passwordConfirm}" />
-        </label><br/>
-        <div th:if="${#fields.hasErrors('passwordConfirm')}" style="color:red;" th:errors="*{passwordConfirm}"></div>
-
-        <label>氏名<br/>
-            <input type="text" th:field="*{name}" class="form-control"></label><br/>
-        <div th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}"></div>
-
-        <label>役職<br/>
-            <select th:field="*{postId}" class="form-control">
-                <option value="" disabled selected>選択してください</option>
-                <option th:each="entry : ${postOptions}"
-                        th:value="${entry.key}"
-                        th:text="${entry.value}"></option>
-            </select>
-        </label><br/>
-        <div th:if="${#fields.hasErrors('postId')}" style="color:red;" th:errors="*{postId}"></div>
-
-        <div class="button-signup">
-            <button type="submit" class="submit-btn2">決定</button>
+        <div th:if="${errorMessageForm}" class="alert-error" role="alert">
+            <strong style="color:red;" th:text="${errorMessageForm}"></strong>
         </div>
-    </form>
-    <form th:action="@{/system}">
-        <div class="button-signup">
-            <button type="submit" class="submit-btn2">戻る</button>
+
+        <div class="main-contents-register">
+            <h1>新規ユーザー情報</h1>
+            <!-- actionのURLがPOSTMappingと違うと上手くいかない -->
+            <form th:action="@{/system/register}" th:object="${formModel}" th:method="post">
+                <!--  ユーザー登録 -->
+                <label class="label1">アカウント<br/>
+                    <input type="text" th:field="*{account}"  class="select1"></label><br/>
+                <div th:if="${#fields.hasErrors('account')}" style="color:red;" th:errors="*{account}"></div>
+
+                <label class="label1">パスワード<br/>
+                    <input type="password" th:field="*{password}"  class="select1"></label><br/>
+                <div th:if="${#fields.hasErrors('password')}" style="color:red;" th:errors="*{password}"></div>
+
+                <label class="label1">パスワード確認<br/>
+                    <input type="password" th:field="*{passwordConfirm}"  class="select1"/>
+                </label><br/>
+                <div th:if="${#fields.hasErrors('passwordConfirm')}" style="color:red;" th:errors="*{passwordConfirm}"></div>
+
+                <label class="label1">氏名<br/>
+                    <input type="text" th:field="*{name}"  class="select1"></label><br/>
+                <div th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}"></div>
+
+                <label class="label1">役職<br/>
+                    <select th:field="*{postId}" class="select1" >
+                        <option value="" disabled selected>選択してください</option>
+                        <option th:each="entry : ${postOptions}"
+                                th:value="${entry.key}"
+                                th:text="${entry.value}"></option>
+                    </select>
+                </label><br/>
+                <div th:if="${#fields.hasErrors('postId')}" style="color:red;" th:errors="*{postId}"></div>
+
+                <div class="button-signup-group">
+                    <button type="submit" class="button-signup">決定</button>
+                </div>
+            </form>
+            <form th:action="@{/system}">
+                <div class="button-signup-group">
+                    <button type="submit" class="button-signup">戻る</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-</body>
+    </body>
 </html>

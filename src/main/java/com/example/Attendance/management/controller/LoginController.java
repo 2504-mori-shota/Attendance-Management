@@ -55,7 +55,7 @@ public class LoginController {
         // アカウントが存在しない場合と停止状態のときにバリデーション
         if (user == null || user.getIsStopped() == 1) {
             errorMessages.add("ログインに失敗しました");
-            model.addAttribute("errorMessages",errorMessages);
+            model.addAttribute("errorMessageForm",errorMessages);
             return "/login";
         }
         // セッションにログインユーザー情報を格納

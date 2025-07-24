@@ -35,6 +35,43 @@ body {
   z-index: 10;
 }
 
+ /* 勤怠登録、編集のエラー文 */
+.errors {
+  white-space: normal;
+  word-break: break-word;/* 枠超えたら強制改行 */
+  white-space:normal;　/* 切りよく改行してくれる */
+  font-size: 0.9em;
+  padding-top: 4px;
+}
+
+/* 共通スタイル */
+.animal {
+  position: fixed;
+  bottom: 10px;
+  left: -80px;
+  font-size: 4rem;
+  animation-timing-function: linear;
+  transform: scaleX(-1);
+}
+
+/* カメ */
+.turtle {
+  animation: walkRight 15s infinite;
+}
+
+/* ウサギ */
+.rabbit {
+  animation: walkRight 6s infinite;
+}
+
+/* 左から右へのアニメーション定義 */
+@keyframes walkRight {
+  0% { left: -80px; }
+  100% { left: 100vw; }
+}
+
+
+
 
 
 
@@ -336,28 +373,28 @@ display: block;
   color: #f5f5f0;
 }
 
-		.submit-btn {
-        			background-color: rgba(0,0,0,0.4);
-        			color: rgba(256,256,256,0.7);
-        			border:0;
-        			border-radius: 15px;
-        			display: block;
-        			margin: 15px auto;
-        			padding: 15px 45px;
-        			width: 100%;
-        			font-size: 13px;
-        			font-weight: bold;
-        			cursor: pointer;
-        			opacity: 1;
-        			visibility: visible;
-        			-webkit-transition: all .3s ease;
+.submit-btn {
+background-color: rgba(0,0,0,0.4);
+color: rgba(256,256,256,0.7);
+border:0;
+border-radius: 15px;
+display: block;
+margin: 15px auto;
+padding: 15px 45px;
+width: 100%;
+font-size: 13px;
+font-weight: bold;
+cursor: pointer;
+opacity: 1;
+visibility: visible;
+-webkit-transition: all .3s ease;
 
-        			&:hover {
-        				transition: all .3s ease;
-        				background-color: rgba(0,0,0,0.8);
-        			}
-        		}
-        	}
+ &:hover {
+ transition: all .3s ease;
+ background-color: rgba(0,0,0,0.8);
+  }
+}
+
 
         	.center {
             			position: absolute;
@@ -380,3 +417,119 @@ display: block;
             				  -webkit-transition: all .3s ease;
             				}
             			}
+            }
+
+
+.main-contents-register {
+  border: 15px solid #a1c4ae;
+  padding: 30px;
+  width: 45%;
+  height: 100%;
+  margin: 15px auto;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 8px rgba(47,79,63,0.2);
+  font-size: 1rem;
+  line-height: 2;
+}
+
+.select1 {
+    color: #333;
+    width: 40%;
+    padding: 8px 10px;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    background: #f7f7f7;
+    font-size: 1em;
+    line-height: 1.5;
+    width: 400px;
+
+}
+
+.label1 {
+      align-self: flex-start; /* ラベルだけ左揃えに */
+      margin-bottom: 5px;
+}
+
+.button-signup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    margin: 10px auto;
+    padding: .9em 2em;
+    border: none;
+    border-bottom: solid 5px #0059a0;
+    border-radius: 5px;
+    background-color: #2589d0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    transition: .5s ease;
+}
+.button-signup:hover {
+    transform: translateY(3px);
+    border-bottom-width: 2px;
+}
+
+.btn {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	min-width: 60px;
+	padding: auto;
+	font-size: 14px;
+	font-weight: bold;
+	border: 2px solid #2f7160;
+	color: #2f7160;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.btn:hover {
+	color: #fff;
+	background: #2f7160;
+	text-decoration: none;
+}
+
+.delete-btn {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	min-width: 60px;
+	padding: auto;
+	font-size: 14px;
+	font-weight: bold;
+	border: 2px solid #FA8072;
+	color: #FA8072;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.delete-btn:hover {
+	color: #fff;
+	background: #FA8072;
+}
+
+.ok-btn {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	min-width: 60px;
+	padding: auto;
+	font-size: 14px;
+	font-weight: bold;
+	border: 2px solid #0c73dd;
+	color: #0c73dd;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.ok-btn:hover {
+	color: #fff;
+	background: #0c73dd;
+	text-decoration: none;
+}
