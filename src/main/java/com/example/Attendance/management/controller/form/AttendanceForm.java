@@ -26,10 +26,19 @@ public class AttendanceForm {
     //@Size(max = 5, message = "アカウントは6文字以上20文字以内で入力してください")
     private String attendance;
 
-    @NotBlank(message = "出勤時間を入力してください")
-    @Pattern(regexp = "^[^　]*$", message = "出勤時間を入力してください")
+    @NotBlank(message = "退勤時間を入力してください")
+    @Pattern(regexp = "^[^　]*$", message = "退勤時間を入力してください")
     @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "半角数字かつ23：59以内で入力してください")
     private String leave;
+
+    @Pattern(regexp = "^[^ ]*$", message = "スペースのみは入力できません")
+    @Pattern(regexp = "^[^　]*$", message = "スペースのみは入力できません")
+    private String restStart;
+
+    @Pattern(regexp = "^[^ ]*$", message = "スペースのみは入力できません")
+    @Pattern(regexp = "^[^　]*$", message = "スペースのみは入力できません")
+    private  String restEnd;
+
 
     @Pattern(regexp = "^[^ ]*$", message = "スペースのみは入力できません")
     @Pattern(regexp = "^[^　]*$", message = "スペースのみは入力できません")
@@ -46,12 +55,16 @@ public class AttendanceForm {
     @NotBlank(message = "日付を指定してください")
     private String date;
 
-    private LocalTime restTime;
+    private LocalTime workTime;
+
+    private LocalTime totalRestTime;
+
+    private LocalTime totalWorkRestTime;
 
     private Boolean checkbox;
 
     public enum Status {
-        未申請, 申請中, 差戻済み〇, 差戻済みX, 承認済み
+        未申請, 申請中, 承認済み, 承認取消済,  差戻済み〇, 差戻済みX,
     }
 
 

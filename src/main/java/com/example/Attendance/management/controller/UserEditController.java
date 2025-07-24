@@ -34,7 +34,7 @@ public class UserEditController {
     /*("/userEdit/id={id}")の（id=）をつけずに｛"/userEdit/{id}"｝にしてしまうと
     　 if(!StringUtils.isBlank(strId) && strId.matches("^[0-9]*$"))が機能しなくなる
      */
-    @GetMapping("/useredit/id={id}")
+    @GetMapping("/user/edit/id={id}")
     public ModelAndView newContent(
             @PathVariable("id") String strId,
             HttpServletRequest request,
@@ -58,7 +58,7 @@ public class UserEditController {
         UserForm sessionUser = (UserForm) session.getAttribute("loginUser");
 
         //FilterConfig及びLoginFilterの機能の代替
-        //"userEdit/{id}"の{id}の部分がFilterConfigで記載方法がない
+        //"user/edit/{id}"の{id}の部分がFilterConfigで記載方法がない
         if (sessionUser == null) {
             session.setAttribute("errorMessageForm", "ログインしてください");
             return new ModelAndView("redirect:/");
@@ -71,7 +71,7 @@ public class UserEditController {
         UserForm userInfoForm = users.get(0);
 
         // 画面遷移先を指定
-        mav.setViewName("/useredit");
+        mav.setViewName("user_edit");
         // 準備した空のFormを保管
         mav.addObject("postOptions", getPostOptions());
         model.addAttribute("postName", userInfoForm.getPost().getPostName());
@@ -95,7 +95,7 @@ public class UserEditController {
     }
 
 
-    @PostMapping("/update")
+    @PostMapping("/user/update")
     public String updateUser(
             @Validated(UserForm.EditGroup.class)
             @Valid @ModelAttribute("formModel") UserForm userForm,
@@ -107,7 +107,7 @@ public class UserEditController {
         // パスワード確認チェック
         if (!result.hasFieldErrors("passwordConfirm") &&
                 !userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            result.rejectValue("passwordConfirm", null, "パスワードとパスワード確認が一致しません");
+            result.rejectValue("passwordConfirm", null, "パスワードと確認用パスワードが一致しません");
         }
         UserForm userPass = userService.findByAccount(userForm.getAccount());
         // アカウント重複チェック
@@ -129,7 +129,7 @@ public class UserEditController {
         if (result.hasErrors()) {
             model.addAttribute("postOptions", getPostOptions());
             model.addAttribute("postName", sessionUser.getPost().getPostName());
-            return "useredit"; // フォワードで遷移
+            return "user_edit"; // フォワードで遷移
         }
 
         userService.saveUser(userForm);

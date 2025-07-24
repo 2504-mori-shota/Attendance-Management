@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -62,8 +63,17 @@ public class HomeController {
         LocalDate target = LocalDate.of(year, month, 1);
         List<AttendanceForm> attendanceForms = attendanceService.getMonthlyAttendance(user.getId(), target);
         int totalDays = target.lengthOfMonth();
+
+        //改行、空欄縦線のためにリストを作成
+        List<Integer> dataNumList = new ArrayList<Integer>();
+        for (int i = 0; i < totalDays; i++){
+            LocalDate day = LocalDate.of(year, month, i+1);
+            List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(user.getId(), day);
+            dataNumList.add(dayAttendanceForms.size());
+        }
+
         //serviceで計算した労働時間合計を受け取る
-        Duration totalWorkingTime = attendanceService.calculateTotalWorkingTime(attendanceForms);
+        Duration totalWorkingTime = attendanceService.TotalWorkingTime(attendanceForms);
         // 時間と分に変換
         long hours = totalWorkingTime.toHours();
         long minutes = totalWorkingTime.toMinutes() % 60;
@@ -76,6 +86,7 @@ public class HomeController {
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
+        model.addAttribute("dataNumList", dataNumList);
         model.addAttribute("attendances", attendanceForms);
         model.addAttribute("statuses", AttendanceForm.Status.values());
         model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
@@ -83,34 +94,34 @@ public class HomeController {
         return"home";
 }
 
-        @PostMapping("/application")
-        public ModelAndView application (
-                HttpServletRequest request,
-                @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,RedirectAttributes redirectAttributes,
-                Model model) throws ParseException {
-            session = request.getSession();
-            UserForm user = (UserForm) session.getAttribute("loginUser");
+    @PostMapping("/home/application")
+    public ModelAndView application (
+            HttpServletRequest request,
+            @ModelAttribute("attendanceList") AttendanceListForm attendanceForms,RedirectAttributes redirectAttributes,
+            Model model) throws ParseException {
+        session = request.getSession();
+        UserForm user = (UserForm) session.getAttribute("loginUser");
 
-            if (attendanceForms.getAttendances() == null){
-                redirectAttributes.addFlashAttribute("errorMessageForm", "今月の勤怠情報がありません");
-                return new ModelAndView("redirect:/home");
-            }
-            List<AttendanceForm> list = attendanceForms.getAttendances();
-
-            for (AttendanceForm attendanceForm : list) {
-                if (attendanceForm.getState() == 1 || attendanceForm.getState() == 4) {
-                    redirectAttributes.addFlashAttribute("errorMessageForm", "既に申請済みです");
-                    return new ModelAndView("redirect:/home");
-                }
-
-            }
-
-            attendanceService.saveAttendanceState(list,1);
-
-            requestService.saveRequest(list.get(0), list.get(list.size() - 1));
-
+        if (attendanceForms.getAttendances() == null){
+            redirectAttributes.addFlashAttribute("errorMessageForm", "今月の勤怠情報がありません");
             return new ModelAndView("redirect:/home");
         }
+        List<AttendanceForm> list = attendanceForms.getAttendances();
+
+        for (AttendanceForm attendanceForm : list) {
+            if (attendanceForm.getState() == 1 || attendanceForm.getState() == 2 || attendanceForm.getState() == 3) {
+                redirectAttributes.addFlashAttribute("errorMessageForm", "既に申請済みです");
+                return new ModelAndView("redirect:/home");
+            }
+
+        }
+
+        attendanceService.saveAttendanceState(list,1);
+
+        requestService.saveRequest(list.get(0), list.get(list.size() - 1));
+
+        return new ModelAndView("redirect:/home");
+    }
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
@@ -120,7 +131,7 @@ public class HomeController {
         }
         return "redirect:/";
     }
-    @DeleteMapping("/Attendance/delete/{id}")
+    @DeleteMapping("/attendance/delete/{id}")
     public String deleteAttendance(@PathVariable int id){
         attendanceService.deleteAttendance(id);
         return "redirect:/home";

@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -29,17 +29,17 @@ public class AttendanceEditController {
     @Autowired
     AttendanceService attendanceService;
 
-    @GetMapping("/attendanceedit")
+    @GetMapping("/attendance/edit/id={id}")
     public ModelAndView newAttend(
-            @RequestParam(name="id", required = false) String strId,
-             HttpServletRequest request,
-             RedirectAttributes redirectAttributes) {
+            @PathVariable("id") String strId,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
         // セッションからユーザーオブジェクトを取得
         session = request.getSession();
         UserForm user = (UserForm) session.getAttribute("loginUser");
 
         //なぜかisBlankだけだとnullをひっかけてくれない
-        if (strId == null || strId.isBlank()) {
+        if (strId == null || strId.isBlank() || !strId.matches("^[0-9]+$")) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
@@ -47,7 +47,7 @@ public class AttendanceEditController {
         AttendanceForm attendanceForm = attendanceService.findById(Integer.parseInt(strId));
 
         //idが存在しない場合のバリデーション
-        if (attendanceForm == null){
+        if (attendanceForm == null) {
             redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
             return new ModelAndView("redirect:/home");
         }
@@ -56,11 +56,15 @@ public class AttendanceEditController {
             redirectAttributes.addFlashAttribute("errorMessageForm", "無効なアクセスです");
             return new ModelAndView("redirect:/home");
         }
+        if (attendanceForm.getState() != 5 && attendanceForm.getState() != 4 && attendanceForm.getState() != 0) {
+            redirectAttributes.addFlashAttribute("errorMessageForm", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/home");
+        }
 
         ModelAndView mav = new ModelAndView();
         // form用の空のentityを準備
         // 画面遷移先を指定
-        mav.setViewName("/attendanceedit");
+        mav.setViewName("attendance_edit");
         mav.addObject("formModel", user);
         // Formに元の情報を保管
         mav.addObject("attendanceInfo", attendanceForm);
@@ -69,7 +73,7 @@ public class AttendanceEditController {
 
     }
 
-    @PostMapping("/updateAttendance")
+    @PostMapping("/attendance/update")
     public ModelAndView updateContent(
             HttpServletRequest request,
             @Valid
@@ -86,7 +90,7 @@ public class AttendanceEditController {
         List<AttendanceForm> attendanceFormList = attendanceService.findAllByUserId(user.getId(), attendanceForm.getDate());
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView("attendanceedit");
+            ModelAndView mav = new ModelAndView("attendance_edit");
             mav.addObject("attendanceInfo", attendanceForm);
             mav.addObject("formModel", user);
             // errorsはバインディング済みなので自動的にビューへ渡る
@@ -96,13 +100,60 @@ public class AttendanceEditController {
         for (int i = 0; i < attendanceFormList.size(); i++) {
             AttendanceForm attendance = attendanceFormList.get(i);
             //trueでifに入る
-            if (attendanceService.findByTime(attendance, attendanceForm)){
+            if (attendanceService.findByTime(attendance, attendanceForm)) {
                 result.rejectValue("attendance", "duplicate", "勤務時間が重複しています");
             }
         }
 
+        //勤怠の入力値チェック
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String todayAttendance = attendanceForm.getDate() + " " + attendanceForm.getAttendance();
+        String todayLeave = attendanceForm.getDate() + " " + attendanceForm.getLeave();
+        LocalDateTime dtAttendance = LocalDateTime.parse(todayAttendance, formatter);
+        LocalDateTime dtLeave = LocalDateTime.parse(todayLeave, formatter);
+        Duration diff = Duration.between(dtAttendance, dtLeave);
+
+        if (diff.isNegative()) {
+            result.rejectValue("attendance", "duplicate", "出勤時間は退勤時間よりも早い時間を入力してください");
+        }
+        if (!(attendanceForm.getRestStart().isBlank() || attendanceForm.getRestEnd().isBlank())) {
+
+            if (!attendanceForm.getRestStart().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
+                result.rejectValue("restStart", "duplicate", "半角数字かつ23：59以内で入力してください");
+            }
+            if (!attendanceForm.getRestEnd().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
+                result.rejectValue("restEnd", "duplicate", "半角数字かつ23：59以内で入力してください");
+            }
+            if (result.hasErrors()) {
+                ModelAndView mav = new ModelAndView("attendance_edit");
+                mav.addObject("attendanceInfo", attendanceForm);
+                mav.addObject("formModel", user);
+                // errorsはバインディング済みなので自動的にビューへ渡る
+                return mav;
+            }
+
+            //休憩時間の入力値チェック
+            String todayRestStart = attendanceForm.getDate() + " " + attendanceForm.getRestStart();
+            String todayRestEnd = attendanceForm.getDate() + " " + attendanceForm.getRestEnd();
+            LocalDateTime dtRestStart = LocalDateTime.parse(todayRestStart, formatter);
+            LocalDateTime dtRestEnd = LocalDateTime.parse(todayRestEnd, formatter);
+            Duration RestDiff = Duration.between(dtRestStart, dtRestEnd);
+
+            if (RestDiff.isNegative()) {
+                result.rejectValue("restStart", "duplicate", "休憩開始時間は、終了時間よりも早い時間を入力してください");
+            }
+            //労働時間の間で休憩時間を取れているかチェック
+            Duration startWorkRestDiff = Duration.between(dtAttendance, dtRestStart);
+            if (startWorkRestDiff.isNegative()) {
+                result.rejectValue("restStart", "duplicate", "休憩開始時間は、出勤時間より後に入力してください");
+            }
+            Duration endWorkRestDiff = Duration.between(dtRestEnd, dtLeave);
+            if (endWorkRestDiff.isNegative()) {
+                result.rejectValue("restEnd", "duplicate", "休憩終了時間は、退勤時間より前に入力してください");
+            }
+        }
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView("attendanceedit");
+            ModelAndView mav = new ModelAndView("attendance_edit");
             mav.addObject("attendanceInfo", attendanceForm);
             mav.addObject("formModel", user);
             // errorsはバインディング済みなので自動的にビューへ渡る

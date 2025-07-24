@@ -19,13 +19,13 @@
             <th>申請者</th>
             <th>期間(開始)</th>
             <th>期間(終了)</th>
-            <th>状態</th>
+            <th>ステータス</th>
             <th>詳細</th>
         </tr>
         </thead>
         <tbody>
         <div th:each="request : ${requests}">
-            <div th:if="${request.state == 0}">
+            <div th:if="${request.state == 1 || request.state == 3}">
                 <tr>
                     <td><span th:text="${request.id}"/>
                     <td><span th:text="${request.user.name}"/>
@@ -33,8 +33,8 @@
                     <td><span th:text="${request.endDate}"/>
                     <td><span th:text="${statuses[request.state]}"/>
                     <td>
-                        <form th:action="@{/request/detail}" th:method="get">
-                            <input type="hidden" name="id" th:value="${request.id}">
+                        <form th:action="@{/request/detail/id={id}(id=${request.id})}" th:method="get">
+                           <!-- <input type="hidden" name="id" th:value="${request.id}">-->
                             <button type="submit">詳細</button>
                         </form>
                     </td>

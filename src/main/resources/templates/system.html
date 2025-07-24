@@ -7,13 +7,13 @@
 </head>
 <body>
 <div class="header">
-  <h1>-User Management-</h1>
+  <h1>ユーザー管理</h1>
 </div>
 <div th:if="${errorMessageForm}" class="alert alert-error alert-dismissible fade show" role="alert" style="color:red;">
   <strong th:text="${errorMessageForm}"></strong>
 </div>
 <div class="button-management">
-  <form th:action="@{/signup}">
+  <form th:action="@{/system/signup}">
     <button type="submit" class="submit-btn2">ユーザー登録画面</button>
   </form>
   <form th:action="@{/home}">
@@ -27,7 +27,7 @@
   氏名 ：　<span class="wrap-text" th:text="${user.name}"></span><br/>
   役職　:　<span class="wrap-text" th:text="${user.post.postName}"></span><br/>
 
-  <form th:action="@{/updateStatus}" th:method="post" th:if="${session.loginUser.id != user.id}">
+  <form th:action="@{/user/status/update}" th:method="post" th:if="${session.loginUser.id != user.id}">
     <input type="hidden" name="id" th:value="${user.id}" />
     <select name="status">
       <option th:each="status : ${statuses}"
@@ -38,7 +38,7 @@
     </select>
     <button type="submit" onclick="return confirm('変更しますか？');">変更</button>
   </form>
-  <form th:action="@{/useredit/id={id}(id=${user.id})}" >
+  <form th:action="@{/user/edit/id={id}(id=${user.id})}" >
     <input type="submit" value="編集"/>
   </form>
 </div>
