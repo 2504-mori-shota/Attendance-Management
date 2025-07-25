@@ -33,10 +33,10 @@
                 </thead>
                 <tbody>
 
-              <tr th:each="i, st: ${dataNumList}" align="center">
+              <tr th:each="i, st: ${dataNumList}" align="center" th:style="${dayNumList[st.index] == 6}? 'background-color: #ffe5e9;'" th:styleappend="${dayNumList[st.index] == 5}? 'background-color: #b9e3ef;'">
                 <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(st.count,2) + ' (' + days[dayNumList[st.index]] + ')'}"></td>
                   <div th:if="${i == 0}">
-                      <td/><td/><td/><td/><td/><td/>
+                      <td/><td/><td/><td/><td/><td/><td/>
                       <td th:if="${session.loginUser.postId == 2}"/>
                   </div>
 

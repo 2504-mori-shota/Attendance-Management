@@ -72,14 +72,14 @@
             </thead>
             <tbody>
 
-            <tr th:each="i, stat: ${dataNumList}" align="center">
+            <tr th:each="i, stat: ${dataNumList}" align="center" th:style="${dayNumList[stat.index] == 6}? 'background-color: #ffe5e9;'" th:styleappend="${dayNumList[stat.index] == 5}? 'background-color: #b9e3ef;'">
                 <div th:if="${i == 0}">
                     <td>
                         <a th:href="${'/attendance?date=' + year + '-' + #numbers.formatInteger(month,2) + '-' + #numbers.formatInteger(stat.count,2)}"
                            th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(stat.count,2) + ' (' + days[dayNumList[stat.index]] + ')'}">
                         </a>
                     </td>
-                    <td/><td/><td/><td/><td/><td/><td/>
+                    <td/><td/><td/><td/><td/><td/><td/><td/>
                 </div>
 
                 <div th:if="${i ge 1}">
