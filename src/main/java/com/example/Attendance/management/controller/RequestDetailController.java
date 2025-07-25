@@ -90,6 +90,10 @@ public class RequestDetailController {
         //指定した月のデータを表示
         int year = attendanceLocalDate.getYear();
         int month = attendanceLocalDate.getMonthValue();
+        //指定した月の一日の曜日を取得する
+        LocalDate target = LocalDate.of(year, month, 1);
+        //getValueは１から始まるため、1を引く
+        int dayNum = target.getDayOfWeek().getValue() - 1;
 
         //改行、空欄縦線のためにリストを作成
         List<Integer> dataNumList = new ArrayList<Integer>();
@@ -97,6 +101,14 @@ public class RequestDetailController {
             LocalDate day = LocalDate.of(year, month, i+1);
             List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(requestUserId, day);
             dataNumList.add(dayAttendanceForms.size());
+        }
+
+        //曜日の情報を持ったリストを作成
+        List<Integer> dayNumList = new ArrayList<Integer>();
+        for (int i = 0; i < totalDays; i++){
+            dayNum = dayNum % 7;
+            dayNumList.add(dayNum);
+            dayNum++;
         }
 
         UserForm userForm = userService.findById(requestListData.get(0).getUserId());
@@ -110,11 +122,13 @@ public class RequestDetailController {
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
         model.addAttribute("dataNumList", dataNumList);
+        model.addAttribute("dayNumList", dayNumList);
         model.addAttribute("requestId", requestId);
         model.addAttribute("requestUserId", requestUserId);
         model.addAttribute("requestStatus", requestStatus);
         model.addAttribute("attendanceList", attendanceListForm);
         model.addAttribute("statuses",AttendanceForm.Status.values());
+        model.addAttribute("days", AttendanceForm.Day.values());
         model.addAttribute("user", userForm);
         model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
         return "request_detail";

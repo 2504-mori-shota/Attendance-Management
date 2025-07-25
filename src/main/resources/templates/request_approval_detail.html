@@ -34,7 +34,7 @@
     <tbody>
 
     <tr th:each="i, st: ${dataNumList}">
-      <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(st.count,2)}"></td>
+      <td th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(st.count,2)+ ' (' + days[dayNumList[st.index]] + ')'}"></td>
       <div th:if="${i == 0}">
         <td/><td/><td/><td/><td></td>
         <td th:if="${session.loginUser.postId == 2 || session.loginUser.postId == 3}"/>

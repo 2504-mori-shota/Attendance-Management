@@ -76,7 +76,7 @@
                 <div th:if="${i == 0}">
                     <td>
                         <a th:href="${'/attendance?date=' + year + '-' + #numbers.formatInteger(month,2) + '-' + #numbers.formatInteger(stat.count,2)}"
-                           th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(stat.count,2)}">
+                           th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(stat.count,2) + ' (' + days[dayNumList[stat.index]] + ')'}">
                         </a>
                     </td>
                     <td/><td/><td/><td/><td/><td/><td/>
@@ -85,7 +85,7 @@
                 <div th:if="${i ge 1}">
                     <td>
                         <a th:href="${'/attendance?date=' + year + '-' + #numbers.formatInteger(month,2) + '-' + #numbers.formatInteger(stat.count,2)}"
-                           th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(stat.count,2)}">
+                           th:text="${#numbers.formatInteger(month,2) + '/' + #numbers.formatInteger(stat.count,2) + ' (' + days[dayNumList[stat.index]] + ')'}">
                         </a>
                     </td>
                     <!--ここまでが正常-->
