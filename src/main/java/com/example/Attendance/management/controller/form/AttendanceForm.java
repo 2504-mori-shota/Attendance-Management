@@ -67,6 +67,8 @@ public class AttendanceForm {
         未申請, 申請中, 承認済み, 承認取消済,  差戻済み〇, 差戻済みX,
     }
 
-
+    public enum Day {
+        月, 火, 水, 木, 金, 土, 日
+    }
 
 }

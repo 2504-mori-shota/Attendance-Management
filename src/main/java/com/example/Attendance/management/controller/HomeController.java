@@ -63,6 +63,8 @@ public class HomeController {
         LocalDate target = LocalDate.of(year, month, 1);
         List<AttendanceForm> attendanceForms = attendanceService.getMonthlyAttendance(user.getId(), target);
         int totalDays = target.lengthOfMonth();
+        //getValueは１から始まるため、1を引く
+        int dayNum = target.getDayOfWeek().getValue() - 1;
 
         //改行、空欄縦線のためにリストを作成
         List<Integer> dataNumList = new ArrayList<Integer>();
@@ -70,6 +72,14 @@ public class HomeController {
             LocalDate day = LocalDate.of(year, month, i+1);
             List<AttendanceForm> dayAttendanceForms = attendanceService.getDailyAttendance(user.getId(), day);
             dataNumList.add(dayAttendanceForms.size());
+        }
+
+        //曜日の情報を持ったリストを作成
+        List<Integer> dayNumList = new ArrayList<Integer>();
+        for (int i = 0; i < totalDays; i++){
+            dayNum = dayNum % 7;
+            dayNumList.add(dayNum);
+            dayNum++;
         }
 
         //serviceで計算した労働時間合計を受け取る
@@ -87,8 +97,10 @@ public class HomeController {
         model.addAttribute("month", month);
         model.addAttribute("totalDays", totalDays);
         model.addAttribute("dataNumList", dataNumList);
+        model.addAttribute("dayNumList", dayNumList);
         model.addAttribute("attendances", attendanceForms);
         model.addAttribute("statuses", AttendanceForm.Status.values());
+        model.addAttribute("days", AttendanceForm.Day.values());
         model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
 
         return"home";
