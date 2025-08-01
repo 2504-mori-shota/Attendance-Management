@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class HomeController {
 
         }
 
+
         //指定した月のデータを表示
         LocalDate target = LocalDate.of(year, month, 1);
         List<AttendanceForm> attendanceForms = attendanceService.getMonthlyAttendance(user.getId(), target);
@@ -82,11 +84,31 @@ public class HomeController {
             dayNum++;
         }
 
+        //所定労働時間の計算
+        int workDayCount = 0;
+        for (int i = 0; i < totalDays; i++) {
+            LocalDate day = LocalDate.of(year, month, i + 1);
+            DayOfWeek dayOfWeek = day.getDayOfWeek();
+
+            //土日以外をカウントする式
+            if(!(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY)){
+                workDayCount++;
+            }
+        }
+        int standardWorkHours = workDayCount * 8;
+        int standardWorkDays = workDayCount;
+
         //serviceで計算した労働時間合計を受け取る
         Duration totalWorkingTime = attendanceService.TotalWorkingTime(attendanceForms);
         // 時間と分に変換
         long hours = totalWorkingTime.toHours();
         long minutes = totalWorkingTime.toMinutes() % 60;
+
+        Duration totalRestTime =attendanceService.TotalRestTime(attendanceForms);
+
+        long restHours = totalRestTime.toHours();
+        long restMinutes =totalRestTime.toMinutes() % 60;
+
 
         AttendanceListForm attendanceListForm = new AttendanceListForm();
         attendanceListForm.setAttendances(attendanceForms);
@@ -102,6 +124,10 @@ public class HomeController {
         model.addAttribute("statuses", AttendanceForm.Status.values());
         model.addAttribute("days", AttendanceForm.Day.values());
         model.addAttribute("totalWorkingTime", String.format("%02d:%02d", hours, minutes));
+        model.addAttribute("totalRestTime",String.format("%02d:%02d", restHours,restMinutes));
+        model.addAttribute("standardWorkHours", standardWorkHours);
+        model.addAttribute("standardWorkDays", standardWorkDays);
+
 
         return"home";
 }
